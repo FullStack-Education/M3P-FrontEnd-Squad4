@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MenuLateralComponent } from './shared/components/menu-lateral/menu-lateral.component';
+import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, MenuLateralComponent, ToolbarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'senai-fullstack-education-projeto-final-modulo02';
+  title = 'LabPCP - Sistema de Gestão Educacional';
 }
