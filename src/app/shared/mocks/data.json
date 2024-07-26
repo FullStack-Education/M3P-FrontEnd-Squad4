@@ -1,0 +1,84 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "email": "scheila@mail.com.br",
+      "senha": "teste123",
+      "nome": "Scheila Stihler",
+      "avatar": "",
+      "perfil": "admin"
+    },
+    {
+      "id": "2",
+      "email": "eduardo@mail.com.br",
+      "senha": "teste123",
+      "nome": "Eduardo",
+      "avatar": "",
+      "perfil": "docente"
+    },
+    {
+      "id": "3",
+      "email": "rayane@mail.com.br",
+      "senha": "teste123",
+      "nome": "Rayane",
+      "avatar": "",
+      "perfil": "docente"
+    },
+    {
+      "id": "4",
+      "email": "andre@mail.com.br",
+      "senha": "teste123",
+      "nome": "André Santana",
+      "avatar": "",
+      "perfil": "docente"
+    },
+    {
+      "id": "5",
+      "email": "gabriel@mail.com.br",
+      "senha": "teste123",
+      "nome": "Gabriel Augustin",
+      "avatar": "",
+      "perfil": "docente"
+    },
+    {
+      "id": "6",
+      "email": "leandro@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
+      "perfil": "aluno"
+    },
+    {
+      "id": "7",
+      "email": "suene@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
+      "perfil": "aluno"
+    },
+    {
+      "id": "8",
+      "email": "barbara@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
+      "perfil": "aluno"
+    },
+    {
+      "id": "9",
+      "email": "gustavo@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
+      "perfil": "aluno"
+    },
+    {
+      "id": "10",
+      "email": "rodrigo@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
+      "perfil": "aluno"
+    }
+  ]
+}
