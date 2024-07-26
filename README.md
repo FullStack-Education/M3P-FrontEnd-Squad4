@@ -1,1 +1,1 @@
-# senai-fullstack-education-projeto-final-modulo02
+# LabPCP: Sistema Web para Gestão Educacional
