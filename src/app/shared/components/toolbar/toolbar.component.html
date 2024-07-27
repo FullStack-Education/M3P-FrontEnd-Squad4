@@ -1,3 +1,10 @@
 <header class="toolbar">
-  <p>toolbar works!</p>
+  <h1><i class="pi pi-graduation-cap"></i> LabPCP | {{ pagina }}</h1>
+  <div class="dados">
+    <img [src]="usuarioAtivo.avatar" [alt]="usuarioAtivo.nome" />
+    <span>{{ usuarioAtivo.nome }}</span>
+    <button type="button" (click)="sair()">
+      <i class="pi pi-sign-out"></i>
+    </button>
+  </div>
 </header>
