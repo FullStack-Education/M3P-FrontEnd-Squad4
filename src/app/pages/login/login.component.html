@@ -1,1 +1,27 @@
-<p>login works!</p>
+<h1>Login</h1>
+
+<form [formGroup]="formLogin">
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" formControlName="email" />
+    <span
+      *ngIf="(formLogin.controls['email'].touched || formLogin.controls['email'].dirty) && formLogin.controls['email'].errors?.['required']"
+      >Email obrigatório</span
+    >
+  </div>
+  <div>
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" name="senha" formControlName="senha" />
+    <span
+      *ngIf="(formLogin.controls['senha'].touched || formLogin.controls['senha'].dirty) && formLogin.controls['senha'].errors?.['required']"
+      >Senha obrigatória</span
+    >
+  </div>
+  <div class="botoes">
+    <button type="button" (click)="criarConta()">Criar conta</button>
+    <button type="button" (click)="recuperarSenha()">Esqueci a senha</button>
+    <button type="submit" (click)="entrar()" [disabled]="!formLogin.valid">
+      Entrar
+    </button>
+  </div>
+</form>
