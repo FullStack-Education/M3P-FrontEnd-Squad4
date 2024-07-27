@@ -1,1 +1,159 @@
-<p>cadastro-docentes works!</p>
+<!-- ng-container admin -->
+<div class="titulo">
+  <h2>Cadastro de Docente</h2>
+  <div class="botoes">
+    <button type="button">Editar</button>
+    <button type="button">Excluir</button>
+  </div>
+</div>
+<form [formGroup]="formDocente" (ngSubmit)="submitForm()">
+  <div>
+    <label for="nome">Nome Completo</label>
+    <input type="text" name="nome" id="nome" formControlName="nomeCompleto" />
+  </div>
+
+  <div>
+    <label for="genero">Gênero</label>
+    <select name="genero" id="genero" formControlName="genero">
+      <option value="">Selecione...</option>
+      <option value="">Feminino</option>
+      <option value="">Masculino</option>
+      <option value="">Prefiro não informar</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="nascimento">Data de Nascimento</label>
+    <input
+      type="date"
+      name="nascimento"
+      id="nascimento"
+      formControlName="nascimento"
+    />
+  </div>
+
+  <div>
+    <label for="cpf">CPF</label>
+    <input type="text" name="cpf" id="cpf" formControlName="cpf" />
+  </div>
+
+  <div>
+    <label for="rg">RG com Órgão Expeditor</label>
+    <input type="text" name="rg" id="rg" formControlName="rg" />
+  </div>
+
+  <div>
+    <label for="estado">Estado Civil</label>
+    <select name="estado" id="estado" formControlName="estadoCivil">
+      <option value="">Selecione...</option>
+      <option value="">Solteiro</option>
+      <option value="">Casado</option>
+      <option value="">Divorciado</option>
+      <option value="">União estável</option>
+      <option value="">Prefiro não informar</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="telefone">Telefone</label>
+    <input
+      type="tel"
+      name="telefone"
+      id="telefone"
+      formControlName="telefone"
+    />
+  </div>
+
+  <div>
+    <label for="email">E-mail</label>
+    <input type="email" name="email" id="email" formControlName="email" />
+  </div>
+
+  <div>
+    <label for="senha">Senha</label>
+    <input type="password" name="senha" id="senha" formControlName="senha" />
+  </div>
+
+  <div>
+    <label for="naturalidade">Naturalidade</label>
+    <input
+      type="text"
+      name="naturalidade"
+      id="naturalidade"
+      formControlName="naturalidade"
+    />
+  </div>
+
+  <div>
+    <label for="cep">CEP</label>
+    <input
+      type="text"
+      name="cep"
+      id="cep"
+      formControlName="cep"
+      (blur)="buscarCep()"
+    />
+  </div>
+  <div>
+    <label for="localidade">Cidade</label>
+    <input
+      type="text"
+      name="localidade"
+      id="localidade"
+      formControlName="localidade"
+    />
+  </div>
+  <div>
+    <label for="uf">Estado</label>
+    <input type="text" name="uf" id="uf" formControlName="uf" />
+  </div>
+  <div>
+    <label for="logradouro">Logradouro</label>
+    <input
+      type="text"
+      name="logradouro"
+      id="logradouro"
+      formControlName="logradouro"
+    />
+  </div>
+  <div>
+    <label for="numero">Número</label>
+    <input type="text" name="numero" id="numero" formControlName="numero" />
+  </div>
+  <div>
+    <label for="complemento">Complemento</label>
+    <input
+      type="text"
+      name="complemento"
+      id="complemento"
+      formControlName="complemento"
+    />
+  </div>
+  <div>
+    <label for="bairro">Bairro</label>
+    <input type="text" name="bairro" id="bairro" formControlName="bairro" />
+  </div>
+  <div>
+    <label for="referencia">Ponto de Referência</label>
+    <input
+      type="text"
+      name="referencia"
+      id="referencia"
+      formControlName="referencia"
+    />
+  </div>
+
+  <div>
+    <label for="materias">Matérias</label>
+    <textarea
+      name="materias"
+      id="materias"
+      formControlName="materias"
+    ></textarea>
+  </div>
+
+  <div class="botoes">
+    <button type="button" (click)="cancelar()">Cancelar</button>
+    <button type="submit" [disabled]="!formDocente.valid">Salvar</button>
+  </div>
+</form>
