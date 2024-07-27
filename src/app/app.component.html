@@ -1,5 +1,7 @@
 <div class="container">
-  <app-menu-lateral *ngIf="showMenuLateral"></app-menu-lateral>
+  <ng-container *ngIf="showMenuLateral">
+    <app-menu-lateral></app-menu-lateral>
+  </ng-container>
   <div class="content">
     <app-toolbar *ngIf="showToolbar"></app-toolbar>
     <main>
