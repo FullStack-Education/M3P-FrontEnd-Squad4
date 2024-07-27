@@ -10,7 +10,7 @@ import { ListagemNotasComponent } from './pages/listagem-notas/listagem-notas.co
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomeComponent,
   },
   {
@@ -40,10 +40,5 @@ export const routes: Routes = [
   {
     path: 'listagem-notas',
     component: ListagemNotasComponent,
-  },
-  {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full',
   },
 ];

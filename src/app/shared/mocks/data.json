@@ -2,170 +2,82 @@
   "usuarios": [
     {
       "id": "1",
-      "email": "scheila@email.com",
-      "senha": "abc123",
+      "email": "scheila@mail.com.br",
+      "senha": "teste123",
       "nome": "Scheila Stihler",
-      "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+      "avatar": "",
       "perfil": "admin"
     },
     {
       "id": "2",
-      "email": "eduardo@email.com",
-      "senha": "abc123",
-      "nome": "Eduardo Silva",
-      "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
+      "email": "eduardo@mail.com.br",
+      "senha": "teste123",
+      "nome": "Eduardo",
+      "avatar": "",
       "perfil": "docente"
     },
     {
       "id": "3",
-      "email": "rayane@email.com",
-      "senha": "abc123",
-      "nome": "Rayane Cristina",
-      "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "email": "rayane@mail.com.br",
+      "senha": "teste123",
+      "nome": "Rayane",
+      "avatar": "",
       "perfil": "docente"
     },
     {
       "id": "4",
-      "email": "andre@email.com",
-      "senha": "abc123",
+      "email": "andre@mail.com.br",
+      "senha": "teste123",
       "nome": "André Santana",
-      "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
+      "avatar": "",
       "perfil": "docente"
     },
     {
       "id": "5",
-      "email": "gabriel@email.com",
-      "senha": "abc123",
+      "email": "gabriel@mail.com.br",
+      "senha": "teste123",
       "nome": "Gabriel Augustin",
-      "avatar": "https://randomuser.me/api/portraits/men/3.jpg",
+      "avatar": "",
       "perfil": "docente"
     },
     {
       "id": "6",
-      "email": "leandro@email.com",
-      "senha": "abc123",
-      "nome": "Leandro da Silveria Dias",
-      "avatar": "https://randomuser.me/api/portraits/men/4.jpg",
+      "email": "leandro@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
       "perfil": "aluno"
     },
     {
       "id": "7",
-      "email": "suene@email.com",
-      "senha": "abc123",
-      "nome": "Suene Souza",
-      "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+      "email": "suene@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
       "perfil": "aluno"
     },
     {
       "id": "8",
-      "email": "barbara@email.com",
-      "senha": "abc123",
-      "nome": "Barbara Idaerla Santos Calderon",
-      "avatar": "https://randomuser.me/api/portraits/women/4.jpg",
+      "email": "barbara@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
       "perfil": "aluno"
     },
     {
       "id": "9",
-      "email": "gustavo@email.com",
-      "senha": "abc123",
-      "nome": "Gustavo Rafael dos Santos",
-      "avatar": "https://randomuser.me/api/portraits/men/5.jpg",
+      "email": "gustavo@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
       "perfil": "aluno"
     },
     {
       "id": "10",
-      "email": "gabriel@email.com",
-      "senha": "abc123",
-      "nome": "Gabriel Ferreira",
-      "avatar": "https://randomuser.me/api/portraits/men/6.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "11",
-      "email": "ana@email.com",
-      "senha": "abc123",
-      "nome": "Ana Helena Fernandes Peres",
-      "avatar": "https://randomuser.me/api/portraits/women/5.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "12",
-      "email": "gabriela@email.com",
-      "senha": "abc123",
-      "nome": "Gabriela Silva",
-      "avatar": "https://randomuser.me/api/portraits/women/6.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "13",
-      "email": "pamela@email.com",
-      "senha": "abc123",
-      "nome": "Pamela Vieira da Silva",
-      "avatar": "https://randomuser.me/api/portraits/women/7.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "14",
-      "email": "arthur@email.com",
-      "senha": "abc123",
-      "nome": "Arthur Ferreira Borba",
-      "avatar": "https://randomuser.me/api/portraits/men/7.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "15",
-      "email": "cheryl@email.com",
-      "senha": "abc123",
-      "nome": "Cheryl Henkels",
-      "avatar": "https://randomuser.me/api/portraits/women/8.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "16",
-      "email": "daniel@email.com",
-      "senha": "abc123",
-      "nome": "Daniel Alan Steinheisen",
-      "avatar": "https://randomuser.me/api/portraits/men/8.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "17",
-      "email": "ketlen@email.com",
-      "senha": "abc123",
-      "nome": "Ketlen Possoli",
-      "avatar": "https://randomuser.me/api/portraits/women/9.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "18",
-      "email": "lucas@email.com",
-      "senha": "abc123",
-      "nome": "Lucas Antônio Carnuccio",
-      "avatar": "https://randomuser.me/api/portraits/men/9.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "19",
-      "email": "suzi@email.com",
-      "senha": "abc123",
-      "nome": "Suzi Fortunata Harima",
-      "avatar": "https://randomuser.me/api/portraits/women/10.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "20",
-      "email": "michel@email.com",
-      "senha": "abc123",
-      "nome": "Michel da Rocha Vieira",
-      "avatar": "https://randomuser.me/api/portraits/men/10.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "21",
-      "email": "heverton@email.com",
-      "senha": "abc123",
-      "nome": "Heverton Luan Roieski",
-      "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+      "email": "rodrigo@mail.com.br",
+      "senha": "teste123",
+      "nome": "",
+      "avatar": "",
       "perfil": "aluno"
     }
   ]
