@@ -1,1 +1,14 @@
-<p>menu-lateral works!</p>
+<nav class="sidebar">
+  <ul>
+    <ng-container *ngFor="let item of itensMenu">
+      <li *ngIf="validarPermissao(item)">
+        <button type="button" [routerLink]="[item.rota]">
+          {{ item.rotulo }}
+        </button>
+      </li>
+    </ng-container>
+    <li>
+      <button type="button" (click)="sair()">Sair do Sistema</button>
+    </li>
+  </ul>
+</nav>

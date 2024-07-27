@@ -8,6 +8,7 @@ import { UsuariosService } from './usuarios.service';
 export class LoginService {
   usuarioLogado: UsuarioInterface | null = null;
   listaUsuarios: Array<UsuarioInterface> = [];
+  perfilUsuarioAtivo!: string;
 
   constructor(private usuariosService: UsuariosService) {
     this.obterUsuarios();
@@ -20,6 +21,7 @@ export class LoginService {
 
     if (matchUser) {
       this.usuarioLogado = matchUser;
+      this.perfilUsuarioAtivo = matchUser.perfil;
       sessionStorage.setItem(
         'usuarioLogado',
         JSON.stringify(this.usuarioLogado)

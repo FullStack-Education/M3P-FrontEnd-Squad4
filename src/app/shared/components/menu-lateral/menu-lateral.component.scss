@@ -1,0 +1,11 @@
+.sidebar {
+  background: #eaeaea;
+  width: 280px;
+  height: 100%;
+  padding: 20px;
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
