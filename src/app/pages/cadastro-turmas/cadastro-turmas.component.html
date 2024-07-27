@@ -1,1 +1,53 @@
-<p>cadastro-turmas works!</p>
+<!-- ng-container admin -->
+<div class="titulo">
+  <h2>Cadastro de Turma</h2>
+  <div class="botoes">
+    <button type="button">Editar</button>
+    <button type="button">Excluir</button>
+  </div>
+</div>
+<form [formGroup]="formTurma" (ngSubmit)="submitForm()">
+  <div>
+    <label for="nome">Nome da Turma</label>
+    <input type="text" name="nome" id="nome" formControlName="nomeTurma" />
+  </div>
+
+  <div>
+    <label for="dataInicio">Data de Início</label>
+    <input
+      type="date"
+      name="dataInicio"
+      id="dataInicio"
+      formControlName="dataInicio"
+    />
+  </div>
+
+  <div>
+    <label for="dataTermino">Data de Término</label>
+    <input
+      type="date"
+      name="dataTermino"
+      id="dataTermino"
+      formControlName="dataTermino"
+    />
+  </div>
+
+  <div>
+    <label for="horario">Horário</label>
+    <input type="time" name="horario" id="horario" formControlName="horario" />
+  </div>
+
+  <div>
+    <label for="professor">Professor</label>
+    <select name="professor" id="professor" formControlName="professor">
+      <option value="">Selecione...</option>
+      <option value="">Gabriel Augustin</option>
+      <option value="">André Santana</option>
+    </select>
+  </div>
+
+  <div class="botoes">
+    <button type="button" (click)="cancelar()">Cancelar</button>
+    <button type="submit" [disabled]="!formTurma.valid">Salvar</button>
+  </div>
+</form>
