@@ -26,7 +26,7 @@ export const routes: Routes = [
     component: CadastroAlunosComponent,
   },
   {
-    path: 'cadastro-turma',
+    path: 'cadastro-turmas',
     component: CadastroTurmasComponent,
   },
   {

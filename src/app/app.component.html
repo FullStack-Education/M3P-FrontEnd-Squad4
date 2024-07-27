@@ -1,7 +1,9 @@
-<app-menu-lateral></app-menu-lateral>
-<div>
-  <app-toolbar></app-toolbar>
-  <main>
-    <router-outlet></router-outlet>
-  </main>
+<div class="container">
+  <app-menu-lateral *ngIf="showMenuLateral"></app-menu-lateral>
+  <div class="content">
+    <app-toolbar *ngIf="showToolbar"></app-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
