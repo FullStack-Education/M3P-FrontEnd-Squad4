@@ -1,1 +1,47 @@
-<p>listagem-docentes works!</p>
+<!-- ng-container admin -->
+<section class="busca-docentes">
+  <div class="pesquisar">
+    <label for="pesquisar">Pesquisar docente:</label>
+    <input
+      type="text"
+      id="pesquisar"
+      name="pesquisar"
+      placeholder="Buscar por nome ou código"
+    />
+    <button type="button" (click)="pesquisar()">
+      <i class="pi pi-search"></i>
+      Pesquisar
+    </button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nome Completo</th>
+        <th>Contatos</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>00</td>
+        <td>Gabriel Augustin</td>
+        <td>gabriel-email.com<br />(00) 00000-0000</td>
+        <td><button type="button">Ver mais</button></td>
+      </tr>
+      <tr>
+        <td>00</td>
+        <td>Eduadro Silva</td>
+        <td>eduardo-email.com<br />(00) 00000-0000</td>
+        <td><button type="button">Ver mais</button></td>
+      </tr>
+      <tr>
+        <td>00</td>
+        <td>André Santana</td>
+        <td>andre-email.com<br />(00) 00000-0000</td>
+        <td><button type="button">Ver mais</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>

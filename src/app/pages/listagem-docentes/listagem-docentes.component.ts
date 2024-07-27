@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './listagem-docentes.component.html',
-  styleUrl: './listagem-docentes.component.scss'
+  styleUrl: './listagem-docentes.component.scss',
 })
 export class ListagemDocentesComponent {
-
+  pesquisar() {}
 }
