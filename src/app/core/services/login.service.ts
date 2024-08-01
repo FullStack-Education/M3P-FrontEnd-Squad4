@@ -12,6 +12,7 @@ export class LoginService {
 
   constructor(private usuariosService: UsuariosService) {
     this.obterUsuarios();
+    this.carregarUsuarioLogado();
   }
 
   logar(usuario: { email: string; senha: string }): boolean {
@@ -26,16 +27,25 @@ export class LoginService {
         'usuarioLogado',
         JSON.stringify(this.usuarioLogado)
       );
-      window.alert('Usuário logado com sucesso!');
+
       return true;
     } else {
-      window.alert('Usuário ou senha incorretos!');
       return false;
     }
   }
 
   deslogar() {
     sessionStorage.removeItem('usuarioLogado');
+  }
+
+  private carregarUsuarioLogado() {
+    const usuarioLogadoJson = sessionStorage.getItem('usuarioLogado');
+    if (usuarioLogadoJson) {
+      this.usuarioLogado = JSON.parse(usuarioLogadoJson);
+      if (this.usuarioLogado) {
+        this.perfilUsuarioAtivo = this.usuarioLogado.perfil;
+      }
+    }
   }
 
   private obterUsuarios() {

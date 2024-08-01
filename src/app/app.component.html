@@ -1,11 +1,12 @@
-<div class="container">
-  <ng-container *ngIf="showMenuLateral">
+<mat-sidenav-container class="container">
+  <mat-sidenav mode="side" [(opened)]="opened" *ngIf="showMenuLateral">
     <app-menu-lateral></app-menu-lateral>
-  </ng-container>
-  <div class="content">
+  </mat-sidenav>
+
+  <mat-sidenav-content>
     <app-toolbar *ngIf="showToolbar"></app-toolbar>
-    <main>
+    <main class="content">
       <router-outlet></router-outlet>
     </main>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

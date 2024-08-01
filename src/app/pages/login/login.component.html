@@ -1,6 +1,6 @@
 <h1>Login</h1>
 
-<form [formGroup]="formLogin">
+<form [formGroup]="formLogin" (ngSubmit)="entrar()">
   <div>
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" formControlName="email" />
@@ -18,9 +18,13 @@
     >
   </div>
   <div class="botoes">
-    <button type="button" (click)="criarConta()">Criar conta</button>
-    <button type="button" (click)="recuperarSenha()">Esqueci a senha</button>
-    <button type="submit" (click)="entrar()" [disabled]="!formLogin.valid">
+    <button mat-flat-button type="button" (click)="criarConta()">
+      Criar conta
+    </button>
+    <button mat-flat-button type="button" (click)="recuperarSenha()">
+      Esqueci a senha
+    </button>
+    <button mat-flat-button type="submit" [disabled]="!formLogin.valid">
       Entrar
     </button>
   </div>

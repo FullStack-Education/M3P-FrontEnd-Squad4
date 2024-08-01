@@ -1,14 +1,20 @@
-<nav class="sidebar">
-  <ul>
-    <ng-container *ngFor="let item of itensMenu">
-      <li *ngIf="validarPermissao(item)">
-        <button type="button" [routerLink]="[item.rota]">
-          {{ item.rotulo }}
-        </button>
-      </li>
-    </ng-container>
-    <li>
-      <button type="button" (click)="sair()">Sair do Sistema</button>
-    </li>
-  </ul>
-</nav>
+<div class="logo">
+  <img src="../../../../assets/labpcp.jpg" alt="LabPCP" />
+  <h2>LabPCP</h2>
+</div>
+
+<mat-nav-list class="menu">
+  <a
+    mat-list-item
+    [routerLink]="[item.rota]"
+    *ngFor="let item of itensMenuFiltrado"
+  >
+    <mat-icon matListItemIcon>{{ item.icone }}</mat-icon>
+    <span matListItemTitle>{{ item.rotulo }}</span>
+  </a>
+
+  <a mat-list-item (click)="sair()">
+    <mat-icon matListItemIcon>logout</mat-icon>
+    <span matListItemTitle>Sair do Sistema</span>
+  </a>
+</mat-nav-list>

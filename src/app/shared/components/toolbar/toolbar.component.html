@@ -1,10 +1,18 @@
-<header class="toolbar">
-  <h1><i class="pi pi-graduation-cap"></i> LabPCP | {{ pagina }}</h1>
-  <div class="dados">
+<mat-toolbar class="toolbar">
+  <button
+    mat-icon-button
+    (click)="toggleSidenav()"
+    aria-label="Exibir/ocultar menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1>LabPCP</h1>
+  <span class="spacer"></span>
+  <div class="avatar">
     <img [src]="usuarioAtivo.avatar" [alt]="usuarioAtivo.nome" />
     <span>{{ usuarioAtivo.nome }}</span>
-    <button type="button" (click)="sair()">
-      <i class="pi pi-sign-out"></i>
-    </button>
   </div>
-</header>
+  <button mat-icon-button (click)="sair()" aria-label="Sair do Sistema">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
