@@ -2,8 +2,8 @@
 <div class="titulo">
   <h2>Cadastro de Avaliação/Nota</h2>
   <div class="botoes">
-    <button type="button">Editar</button>
-    <button type="button">Excluir</button>
+    <button mat-flat-button type="button">Editar</button>
+    <button mat-flat-button type="button">Excluir</button>
   </div>
 </div>
 <form [formGroup]="formNota" (ngSubmit)="submitForm()">
@@ -54,7 +54,9 @@
   </div>
 
   <div class="botoes">
-    <button type="button" (click)="cancelar()">Cancelar</button>
-    <button type="submit" [disabled]="!formNota.valid">Salvar</button>
+    <button mat-flat-button type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-flat-button type="submit" [disabled]="!formNota.valid">
+      Salvar
+    </button>
   </div>
 </form>

@@ -1,41 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioInterface } from '../../../core/interfaces/usuario.interface';
 import { LoginService } from '../../../core/services/login.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface';
+import { Router } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { SidenavService } from '../../../core/services/sidenav.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',
 })
 export class ToolbarComponent implements OnInit {
-  paginas = [
-    { titulo: 'Dashboard', rota: '/home' },
-    { titulo: 'Cadastro de Docente', rota: '/cadastro-docentes' },
-    { titulo: 'Cadastro de Aluno', rota: '/cadastro-alunos' },
-    { titulo: 'Cadastro de Turma', rota: '/cadastro-turmas' },
-    { titulo: 'Cadastro de Avaliação', rota: '/cadastro-notas' },
-    { titulo: 'Listagem de Docentes', rota: '/listagem-docentes' },
-    { titulo: 'Listagem de Notas', rota: '/listagem-notas' },
-  ];
-
-  pagina = '';
-
   usuarioAtivo = {
     nome: '',
     avatar: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router) {
-    this.router.events.subscribe((evento) => {
-      if (evento instanceof NavigationEnd) {
-        this.atualizarTitulo(evento.urlAfterRedirects);
-      }
-    });
-  }
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private sidenavService: SidenavService
+  ) {}
 
   ngOnInit(): void {
     const usuarioLogado = this.loginService.usuarioLogado;
@@ -43,16 +31,10 @@ export class ToolbarComponent implements OnInit {
       this.usuarioAtivo.nome = usuarioLogado.nome;
       this.usuarioAtivo.avatar = usuarioLogado.avatar;
     }
-    this.atualizarTitulo(this.router.url);
   }
 
-  atualizarTitulo(url: string): void {
-    const paginaEncontrada = this.paginas.find((pagina) => pagina.rota === url);
-    if (paginaEncontrada) {
-      this.pagina = paginaEncontrada.titulo;
-    } else {
-      this.pagina = 'Página não encontrada';
-    }
+  toggleSidenav(): void {
+    this.sidenavService.toggle();
   }
 
   sair() {

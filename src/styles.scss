@@ -4,6 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Noto Sans", "Helvetica Neue", sans-serif;
 }
 ul {
   list-style: none;
@@ -13,8 +14,10 @@ button {
   cursor: pointer;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: midnightblue;
-  color: white;
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
 }
