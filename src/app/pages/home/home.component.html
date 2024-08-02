@@ -1,5 +1,4 @@
-<!-- ng-container admin -->
-<section class="estatisticas">
+<section class="estatisticas" *ngIf="perfilAtivo === 'admin'">
   <h2>Estatísticas Gerais</h2>
   <ul>
     <li>
@@ -17,8 +16,10 @@
   </ul>
 </section>
 
-<!-- ng-container admin/docente -->
-<section class="busca-alunos">
+<section
+  class="busca-alunos"
+  *ngIf="perfilAtivo === 'admin' || perfilAtivo === 'docente'"
+>
   <div class="pesquisar">
     <label for="pesquisar">Pesquisar aluno:</label>
     <input
@@ -39,74 +40,99 @@
       <strong>Nome do aluno</strong>
       <span>idade</span>
       <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button">Ver detalhes</button>
-      <button mat-flat-button type="button">Lançar nota</button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
+        Ver detalhes
+      </button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
+        Lançar nota
+      </button>
     </li>
     <li>
       <i class="pi pi-user"></i>
       <strong>Nome do aluno</strong>
       <span>idade</span>
       <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button">Ver detalhes</button>
-      <button mat-flat-button type="button">Lançar nota</button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
+        Ver detalhes
+      </button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
+        Lançar nota
+      </button>
     </li>
     <li>
       <i class="pi pi-user"></i>
       <strong>Nome do aluno</strong>
       <span>idade</span>
       <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button">Ver detalhes</button>
-      <button mat-flat-button type="button">Lançar nota</button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
+        Ver detalhes
+      </button>
+      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
+        Lançar nota
+      </button>
     </li>
     <li>
       <i class="pi pi-user"></i>
       <strong>Nome do aluno</strong>
       <span>idade</span>
       <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button">Ver detalhes</button>
-      <button mat-flat-button type="button">Lançar nota</button>
+      <button
+        mat-flat-button
+        type="button"
+        *ngIf="perfilAtivo === 'admin'"
+        click="verDetalhes()"
+      >
+        Ver detalhes
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        *ngIf="perfilAtivo === 'docente'"
+        click="lançarNota()"
+      >
+        Lançar nota
+      </button>
     </li>
   </ul>
 </section>
 
-<!-- ng-container aluno -->
-<section class="minhas-avaliacoes">
-  <h2>Minhas Avaliações</h2>
-  <ul>
-    <li>
-      <strong>Nome da avaliação</strong>
-      <span>Matéria</span>
-      <span>00/00/0000</span>
-    </li>
-    <li>
-      <strong>Nome da avaliação</strong>
-      <span>Matéria</span>
-      <span>00/00/0000</span>
-    </li>
-    <li>
-      <strong>Nome da avaliação</strong>
-      <span>Matéria</span>
-      <span>00/00/0000</span>
-    </li>
-  </ul>
-</section>
+<ng-container *ngIf="perfilAtivo === 'aluno'">
+  <section class="minhas-avaliacoes">
+    <h2>Minhas Avaliações</h2>
+    <ul>
+      <li>
+        <strong>Nome da avaliação</strong>
+        <span>Matéria</span>
+        <span>00/00/0000</span>
+      </li>
+      <li>
+        <strong>Nome da avaliação</strong>
+        <span>Matéria</span>
+        <span>00/00/0000</span>
+      </li>
+      <li>
+        <strong>Nome da avaliação</strong>
+        <span>Matéria</span>
+        <span>00/00/0000</span>
+      </li>
+    </ul>
+  </section>
 
-<!-- ng-container aluno -->
-<section class="minhas-materias">
-  <h2>Minhas Matérias</h2>
-  <ul>
-    <li>Nome da matéria</li>
-    <li>Nome da matéria</li>
-    <li>Nome da matéria</li>
-  </ul>
-</section>
+  <section class="minhas-materias">
+    <h2>Minhas Matérias</h2>
+    <ul>
+      <li>Nome da matéria</li>
+      <li>Nome da matéria</li>
+      <li>Nome da matéria</li>
+    </ul>
+  </section>
 
-<!-- ng-container aluno -->
-<section class="cursos-extras">
-  <h2>Cursos Extras</h2>
-  <ul>
-    <li>Nome do curso extra</li>
-    <li>Nome do curso extra</li>
-    <li>Nome do curso extra</li>
-  </ul>
-</section>
+  <section class="cursos-extras">
+    <h2>Cursos Extras</h2>
+    <ul>
+      <li>Nome do curso extra</li>
+      <li>Nome do curso extra</li>
+      <li>Nome do curso extra</li>
+    </ul>
+  </section>
+</ng-container>
