@@ -1,9 +1,25 @@
 <!-- ng-container admin -->
 <div class="titulo">
-  <h2>Cadastro de Turma</h2>
+  <h2>{{ !idTurma ? "Cadastro" : "Edição" }} de Turma</h2>
   <div class="botoes">
-    <button mat-flat-button type="button">Editar</button>
-    <button mat-flat-button type="button">Excluir</button>
+    <button
+      mat-flat-button
+      type="button"
+      [disabled]="!idTurma"
+      (click)="habilitarEdicao()"
+    >
+      <mat-icon>edit</mat-icon>
+      Editar
+    </button>
+    <button
+      mat-flat-button
+      type="button"
+      [disabled]="!idTurma"
+      (click)="excluirTurma(formTurma.value)"
+    >
+      <mat-icon>delete</mat-icon>
+      Excluir
+    </button>
   </div>
 </div>
 <form [formGroup]="formTurma" (ngSubmit)="submitForm()">
@@ -39,17 +55,20 @@
 
   <div>
     <label for="professor">Professor</label>
-    <select name="professor" id="professor" formControlName="professor">
-      <option value="">Selecione...</option>
-      <option value="">Gabriel Augustin</option>
-      <option value="">André Santana</option>
-    </select>
+    <ng-select [(ngModel)]="listaProfessores" formControlName="professor">
+      @for (professor of listaProfessores; track professor.id) {
+      <ng-option [value]="professor.id">{{ professor.nomeCompleto }}</ng-option>
+      }
+    </ng-select>
   </div>
 
   <div class="botoes">
-    <button mat-flat-button type="button" (click)="cancelar()">Cancelar</button>
+    <button mat-flat-button type="button" (click)="cancelar()">
+      <mat-icon>close</mat-icon>Cancelar
+    </button>
     <button mat-flat-button type="submit" [disabled]="!formTurma.valid">
-      Salvar
+      <mat-icon>check</mat-icon>
+      {{ !idTurma ? "Salvar Turma" : "Salvar Alterações" }}
     </button>
   </div>
 </form>
