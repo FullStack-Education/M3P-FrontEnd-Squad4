@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { LoginService } from '../../../core/services/login.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Inject,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogTitle,
+  MatDialogActions,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog',
@@ -26,19 +30,33 @@ import { MatButtonModule } from '@angular/material/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogComponent {
-  constructor(
-    private loginService: LoginService,
-    private router: Router,
-    private dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  titulo!: string;
+  mensagem!: string;
+  btConfirmar!: string;
+  btCancelar!: string;
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  @Output() confirmar = new EventEmitter<void>();
+  @Output() cancelar = new EventEmitter<void>();
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (data) {
+      this.titulo = data.titulo;
+      this.mensagem = data.mensagem;
+      this.btConfirmar = data.btConfirmar;
+      this.btCancelar = data.btCancelar;
+    }
   }
 
-  sair() {
-    this.loginService.deslogar();
-    this.router.navigate(['/login']);
+  confirmarAcao(): void {
+    this.confirmar.emit();
+    this.dialogRef.close(true);
+  }
+
+  cancelarAcao(): void {
+    this.cancelar.emit();
+    this.dialogRef.close(false);
   }
 }

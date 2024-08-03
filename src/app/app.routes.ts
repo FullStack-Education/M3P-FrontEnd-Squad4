@@ -7,39 +7,59 @@ import { CadastroAlunosComponent } from './pages/cadastro-alunos/cadastro-alunos
 import { CadastroTurmasComponent } from './pages/cadastro-turmas/cadastro-turmas.component';
 import { CadastroNotasComponent } from './pages/cadastro-notas/cadastro-notas.component';
 import { ListagemNotasComponent } from './pages/listagem-notas/listagem-notas.component';
+import { usuarioLogadoGuard } from './core/guards/usuario-logado.guard';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent,
-  },
   {
     path: 'login',
     component: LoginComponent,
   },
   {
-    path: 'cadastro-docentes',
-    component: CadastroDocentesComponent,
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [usuarioLogadoGuard],
   },
   {
-    path: 'cadastro-alunos',
-    component: CadastroAlunosComponent,
+    path: 'docente',
+    children: [
+      { path: '', component: CadastroDocentesComponent },
+      { path: ':id', component: CadastroDocentesComponent },
+    ],
+    canActivate: [usuarioLogadoGuard],
   },
   {
-    path: 'cadastro-turmas',
-    component: CadastroTurmasComponent,
+    path: 'aluno',
+    children: [
+      { path: '', component: CadastroAlunosComponent },
+      { path: ':id', component: CadastroAlunosComponent },
+    ],
+    canActivate: [usuarioLogadoGuard],
   },
   {
-    path: 'cadastro-notas',
-    component: CadastroNotasComponent,
+    path: 'turma',
+    children: [
+      { path: '', component: CadastroTurmasComponent },
+      { path: ':id', component: CadastroTurmasComponent },
+    ],
+    canActivate: [usuarioLogadoGuard],
   },
   {
-    path: 'listagem-docentes',
+    path: 'nota',
+    children: [
+      { path: '', component: CadastroNotasComponent },
+      { path: ':id', component: CadastroNotasComponent },
+    ],
+    canActivate: [usuarioLogadoGuard],
+  },
+  {
+    path: 'docentes',
     component: ListagemDocentesComponent,
+    canActivate: [usuarioLogadoGuard],
   },
   {
-    path: 'listagem-notas',
+    path: 'notas',
     component: ListagemNotasComponent,
+    canActivate: [usuarioLogadoGuard],
   },
   {
     path: '',
