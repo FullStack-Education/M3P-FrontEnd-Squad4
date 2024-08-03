@@ -2,36 +2,141 @@ import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DocenteInterface } from '../../core/interfaces/docente.interface';
+import { DocenteService } from '../../core/services/docente.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { V } from '@angular/cdk/keycodes';
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { TurmaService } from '../../core/services/turma.service';
+import { TurmaInterface } from '../../core/interfaces/turma.interface';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-cadastro-turmas',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgSelectModule,
+    FormsModule,
+    MatIconModule,
+  ],
   templateUrl: './cadastro-turmas.component.html',
   styleUrl: './cadastro-turmas.component.scss',
 })
 export class CadastroTurmasComponent {
   formTurma!: FormGroup;
+  idTurma: string | undefined;
+  listaProfessores: DocenteInterface[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private turmaService: TurmaService,
+    private docenteService: DocenteService,
+    private toastr: ToastrService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
+    this.idTurma = this.activatedRoute.snapshot.params['id'];
+
     this.formTurma = new FormGroup({
-      nomeTurma: new FormControl('', Validators.required),
+      nomeTurma: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(64),
+      ]),
       dataInicio: new FormControl('', Validators.required),
       dataTermino: new FormControl('', Validators.required),
       horario: new FormControl('', Validators.required),
       professor: new FormControl('', Validators.required),
     });
+
+    const now = new Date();
+    const dataFormatada = now.toISOString().split('T')[0];
+    const horaFormatada = now.toTimeString().split(' ')[0].slice(0, 5);
+    this.formTurma.get('dataInicio')?.setValue(dataFormatada);
+    this.formTurma.get('dataTermino')?.setValue(dataFormatada);
+    this.formTurma.get('horario')?.setValue(horaFormatada);
+
+    this.docenteService.getDocentes().subscribe((retorno) => {
+      retorno.forEach((docente) => {
+        this.listaProfessores.push(docente);
+      });
+
+      if (this.idTurma) {
+        this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
+          if (retorno) {
+            this.formTurma.disable();
+            this.formTurma.patchValue(retorno);
+          }
+        });
+      }
+    });
   }
 
   submitForm() {
-    window.alert('Dados gravados com sucesso!');
+    if (this.formTurma.valid) {
+      if (this.idTurma) {
+        this.editarTurma(this.formTurma.value);
+      } else {
+        this.cadastrarTurma(this.formTurma.value);
+      }
+    } else {
+      this.formTurma.markAllAsTouched();
+    }
+  }
+
+  habilitarEdicao() {
+    this.formTurma.enable();
+  }
+
+  cadastrarTurma(turma: TurmaInterface) {
+    this.turmaService.postTurma(turma).subscribe(() => {
+      this.toastr.success('Turma cadastrada com sucesso!');
+      this.router.navigate(['/home']);
+    });
+  }
+
+  editarTurma(turma: TurmaInterface) {
+    turma.id = this.idTurma!;
+    this.turmaService.putTurma(turma).subscribe(() => {
+      this.toastr.success('Turma alterada com sucesso!');
+      this.router.navigate(['/home']);
+    });
+  }
+
+  excluirTurma(turma: TurmaInterface) {
+    turma.id = this.idTurma!;
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        titulo: 'Excluir Turma',
+        mensagem: 'Você tem certeza que deseja prosseguir com a exclusão?',
+        btConfirmar: 'Confirmar',
+        btCancelar: 'Cancelar',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((retorno) => {
+      if (retorno) {
+        this.turmaService.deleteTurma(turma).subscribe(() => {
+          this.toastr.success('Turma excluído com sucesso!');
+          this.router.navigate(['/home']);
+        });
+      } else {
+        return;
+      }
+    });
   }
 
   cancelar() {
