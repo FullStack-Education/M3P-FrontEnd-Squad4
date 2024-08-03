@@ -5,6 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { SidenavService } from '../../../core/services/sidenav.service';
 import { MatButtonModule } from '@angular/material/button';
+import { DialogComponent } from '../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,7 +24,8 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -38,11 +41,22 @@ export class ToolbarComponent implements OnInit {
   }
 
   sair() {
-    if (window.confirm('Deseja sair do sistema?')) {
-      this.loginService.deslogar();
-      this.router.navigate(['/login']);
-    } else {
-      return;
-    }
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        titulo: 'Sair do Sistema',
+        mensagem: 'Você tem certeza que deseja sair do sistema?',
+        btConfirmar: 'Confirmar',
+        btCancelar: 'Cancelar',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((retorno) => {
+      if (retorno) {
+        this.loginService.deslogar();
+        this.router.navigate(['/login']);
+      } else {
+        return;
+      }
+    });
   }
 }

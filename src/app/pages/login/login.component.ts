@@ -11,6 +11,7 @@ import { LoginService } from '../../core/services/login.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -40,31 +42,13 @@ export class LoginComponent implements OnInit {
       const retorno = this.loginService.logar(this.formLogin.value);
       if (retorno) {
         this.router.navigate(['/home']);
-        this.dialog.open(DialogComponent, {
-          data: {
-            titulo: 'Sucesso',
-            mensagem: 'Usuário logado com sucesso!',
-            btCancelar: 'Fechar',
-          },
-        });
+        this.toastr.success('Login efetuado com sucesso!');
       } else {
         this.formLogin.reset();
-        this.dialog.open(DialogComponent, {
-          data: {
-            titulo: 'Login Inválido',
-            mensagem: 'Usuário ou senha incorretos!',
-            btCancelar: 'Fechar',
-          },
-        });
+        this.toastr.error('Usuário ou senha incorretos!');
       }
     } else {
-      this.dialog.open(DialogComponent, {
-        data: {
-          titulo: 'Dados Incompletos',
-          mensagem: 'Por favor, preencha os campos.',
-          btCancelar: 'Fechar',
-        },
-      });
+      this.toastr.warning('Por favor, preencha todos os campos!');
     }
   }
 
