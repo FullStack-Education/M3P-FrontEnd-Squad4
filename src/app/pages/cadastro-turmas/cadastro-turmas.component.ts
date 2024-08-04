@@ -11,13 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { DocenteService } from '../../core/services/docente.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { V } from '@angular/cdk/keycodes';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { TurmaService } from '../../core/services/turma.service';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -44,7 +44,8 @@ export class CadastroTurmasComponent {
     private turmaService: TurmaService,
     private docenteService: DocenteService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -142,6 +143,6 @@ export class CadastroTurmasComponent {
 
   cancelar() {
     this.formTurma.reset();
-    this.router.navigate(['/home']);
+    this.location.back();
   }
 }

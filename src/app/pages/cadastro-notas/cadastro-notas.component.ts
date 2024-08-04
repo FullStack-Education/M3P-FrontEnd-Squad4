@@ -21,6 +21,7 @@ import { AlunoService } from '../../core/services/aluno.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { MateriaService } from '../../core/services/materia.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -53,7 +54,8 @@ export class CadastroNotasComponent {
     private alunoService: AlunoService,
     private materiaService: MateriaService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -157,6 +159,6 @@ export class CadastroNotasComponent {
 
   cancelar() {
     this.formNota.reset();
-    this.router.navigate(['/home']);
+    this.location.back();
   }
 }

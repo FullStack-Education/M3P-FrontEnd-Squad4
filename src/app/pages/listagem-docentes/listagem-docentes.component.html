@@ -7,9 +7,10 @@
       id="pesquisar"
       name="pesquisar"
       placeholder="Buscar por nome ou código"
+      [(ngModel)]="textoPesquisa"
     />
     <button mat-flat-button type="button" (click)="pesquisar()">
-      <i class="pi pi-search"></i>
+      <mat-icon>search</mat-icon>
       Pesquisar
     </button>
   </div>
@@ -20,27 +21,23 @@
         <th>Código</th>
         <th>Nome Completo</th>
         <th>Contatos</th>
-        <th></th>
+        <th>Detalhes</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>00</td>
-        <td>Gabriel Augustin</td>
-        <td>gabriel-email.com<br />(00) 00000-0000</td>
-        <td><button mat-flat-button type="button">Ver mais</button></td>
-      </tr>
-      <tr>
-        <td>00</td>
-        <td>Eduadro Silva</td>
-        <td>eduardo-email.com<br />(00) 00000-0000</td>
-        <td><button mat-flat-button type="button">Ver mais</button></td>
-      </tr>
-      <tr>
-        <td>00</td>
-        <td>André Santana</td>
-        <td>andre-email.com<br />(00) 00000-0000</td>
-        <td><button mat-flat-button type="button">Ver mais</button></td>
+      <tr *ngFor="let docente of pesquisaDocentes">
+        <td>{{ docente.id }}</td>
+        <td>{{ docente.nomeCompleto }}</td>
+        <td>{{ docente.email }}<br />{{ docente.telefone }}</td>
+        <td>
+          <button
+            mat-flat-button
+            type="button"
+            (click)="verDetalhes(docente.id)"
+          >
+            <mat-icon>edit</mat-icon>Ver mais
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

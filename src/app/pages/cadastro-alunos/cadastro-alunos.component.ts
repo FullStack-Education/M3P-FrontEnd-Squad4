@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -48,7 +49,8 @@ export class CadastroAlunosComponent {
     private alunoService: AlunoService,
     private cepService: CepService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -172,6 +174,6 @@ export class CadastroAlunosComponent {
 
   cancelar() {
     this.formAluno.reset();
-    this.router.navigate(['/home']);
+    this.location.back();
   }
 }

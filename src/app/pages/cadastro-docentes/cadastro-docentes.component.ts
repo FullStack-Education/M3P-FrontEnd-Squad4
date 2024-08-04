@@ -18,6 +18,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { MateriaService } from '../../core/services/materia.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -46,7 +47,8 @@ export class CadastroDocentesComponent implements OnInit {
     private materiaService: MateriaService,
     private cepService: CepService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -176,6 +178,6 @@ export class CadastroDocentesComponent implements OnInit {
 
   cancelar() {
     this.formDocente.reset();
-    this.router.navigate(['/home']);
+    this.location.back();
   }
 }
