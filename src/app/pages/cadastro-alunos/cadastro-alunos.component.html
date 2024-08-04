@@ -162,7 +162,7 @@
     <label for="turmas">Turmas</label>
     <ng-select [multiple]="true" [(ngModel)]="turmas" formControlName="turmas">
       @for (turma of listaTurmas; track turma.id) {
-      <ng-option [value]="turma.id">{{ turma.nome }}</ng-option>
+      <ng-option [value]="turma.id">{{ turma.nomeTurma }}</ng-option>
       }
     </ng-select>
   </div>
