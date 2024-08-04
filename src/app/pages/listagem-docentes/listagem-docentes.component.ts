@@ -36,10 +36,12 @@ export class ListagemDocentesComponent implements OnInit {
 
   pesquisar() {
     if (this.textoPesquisa) {
-      this.pesquisaDocentes = this.listaDocentes.filter((docente) =>
-        docente.nomeCompleto
-          .toUpperCase()
-          .includes(this.textoPesquisa!.toUpperCase())
+      this.pesquisaDocentes = this.listaDocentes.filter(
+        (docente) =>
+          docente.nomeCompleto
+            .toUpperCase()
+            .includes(this.textoPesquisa!.toUpperCase()) ||
+          docente.id.toUpperCase().includes(this.textoPesquisa!.toUpperCase())
       );
     } else {
       this.pesquisaDocentes = this.listaDocentes;
