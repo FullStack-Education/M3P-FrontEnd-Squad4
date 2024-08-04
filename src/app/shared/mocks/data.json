@@ -265,7 +265,7 @@
       "nomeTurma": "Turma A",
       "dataInicio": "2024-08-15",
       "dataTermino": "2024-12-15",
-      "horario": "08:00 - 10:00",
+      "horario": "10:00",
       "professor": "João da Silva"
     },
     {
@@ -273,7 +273,7 @@
       "nomeTurma": "Turma B",
       "dataInicio": "2024-08-15",
       "dataTermino": "2024-12-15",
-      "horario": "10:00 - 12:00",
+      "horario": "18:00",
       "professor": "Maria Oliveira"
     }
   ],
@@ -676,9 +676,7 @@
       "complemento": "",
       "bairro": "Trindade",
       "referencia": "",
-      "turmas": [
-        2
-      ]
+      "turmas": [2]
     },
     {
       "id": "f4b4",
@@ -700,9 +698,36 @@
       "complemento": "",
       "bairro": "Trindade",
       "referencia": "",
-      "turmas": [
-        2
-      ]
+      "turmas": [2]
+    }
+  ],
+  "notas": [
+    {
+      "id": "90bc",
+      "professor": "3",
+      "materia": "3",
+      "avaliacao": "asasdf",
+      "data": "2024-08-04",
+      "aluno": "6",
+      "nota": 10
+    }
+  ],
+  "materias": [
+    {
+      "id": "1",
+      "nome": "Português"
+    },
+    {
+      "id": "2",
+      "nome": "Matemática"
+    },
+    {
+      "id": "3",
+      "nome": "História"
+    },
+    {
+      "id": "4",
+      "nome": "Geografia"
     }
   ]
 }

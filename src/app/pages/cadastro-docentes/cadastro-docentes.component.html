@@ -160,8 +160,12 @@
 
   <div>
     <label for="materias">Matérias</label>
-    <ng-select [multiple]="true" [(ngModel)]="materias">
-      @for (materia of listaMaterias; track materia) {
+    <ng-select
+      [multiple]="true"
+      [(ngModel)]="materias"
+      formControlName="materias"
+    >
+      @for (materia of listaMaterias; track materia.id) {
       <ng-option [value]="materia.id">{{ materia.nome }}</ng-option>
       }
     </ng-select>
