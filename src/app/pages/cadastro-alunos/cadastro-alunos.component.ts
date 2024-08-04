@@ -4,7 +4,6 @@ import { CepService } from '../../core/services/cep.service';
 import {
   FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -16,9 +15,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { TurmaService } from '../../core/services/turma.service';
+import { Genero } from '../../core/enums/genero.enum';
+import { EstadoCivil } from '../../core/enums/estado-civil.enum';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -28,7 +29,7 @@ import { TurmaService } from '../../core/services/turma.service';
     MatButtonModule,
     MatIconModule,
     NgSelectModule,
-    FormsModule,
+    CommonModule,
   ],
   templateUrl: './cadastro-alunos.component.html',
   styleUrl: './cadastro-alunos.component.scss',
@@ -36,9 +37,9 @@ import { TurmaService } from '../../core/services/turma.service';
 export class CadastroAlunosComponent {
   formAluno!: FormGroup;
   idAluno: string | undefined;
-
-  turmas!: [];
   listaTurmas: TurmaInterface[] = [];
+  generos = Genero;
+  estadoCivil = EstadoCivil;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -87,11 +88,9 @@ export class CadastroAlunosComponent {
       turmas: new FormControl('', Validators.required),
     });
 
-    this.turmaService.getTurmas().subscribe((retorno) => {
-      retorno.forEach((turma) => {
-        this.listaTurmas.push(turma);
-      });
-    });
+    this.turmaService
+      .getTurmas()
+      .subscribe((retorno) => (this.listaTurmas = retorno));
 
     if (this.idAluno) {
       this.alunoService.getAluno(this.idAluno).subscribe((retorno) => {

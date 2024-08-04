@@ -50,10 +50,9 @@
   <div>
     <label for="genero">Gênero</label>
     <select name="genero" id="genero" formControlName="genero">
-      <option value="">Selecione...</option>
-      <option value="feminino">Feminino</option>
-      <option value="masculino">Masculino</option>
-      <option value="desconhecido">Prefiro não informar</option>
+      <option *ngFor="let genero of generos | keyvalue" [value]="genero.value">
+        {{ genero.value }}
+      </option>
     </select>
   </div>
 
@@ -70,12 +69,12 @@
   <div>
     <label for="estado">Estado Civil</label>
     <select name="estado" id="estado" formControlName="estadoCivil">
-      <option value="">Selecione...</option>
-      <option value="solteiro">Solteiro</option>
-      <option value="casado">Casado</option>
-      <option value="divorciado">Divorciado</option>
-      <option value="uniao">União estável</option>
-      <option value="desconhecido">Prefiro não informar</option>
+      <option
+        *ngFor="let estado of estadoCivil | keyvalue"
+        [value]="estado.value"
+      >
+        {{ estado.value }}
+      </option>
     </select>
   </div>
 
@@ -91,7 +90,13 @@
 
   <div>
     <label for="email">E-mail</label>
-    <input type="email" name="email" id="email" formControlName="email" />
+    <input
+      type="email"
+      name="email"
+      id="email"
+      autocomplete="username"
+      formControlName="email"
+    />
   </div>
 
   <div>
@@ -166,10 +171,15 @@
 
   <div>
     <label for="turmas">Turmas</label>
-    <ng-select [multiple]="true" [(ngModel)]="turmas" formControlName="turmas">
-      @for (turma of listaTurmas; track turma.id) {
-      <ng-option [value]="turma.id">{{ turma.nomeTurma }}</ng-option>
-      }
+    <ng-select
+      [items]="listaTurmas"
+      bindLabel="nomeTurma"
+      bindValue="id"
+      labelForId="turmas"
+      [multiple]="true"
+      placeholder="Selecione..."
+      formControlName="turmas"
+    >
     </ng-select>
   </div>
 

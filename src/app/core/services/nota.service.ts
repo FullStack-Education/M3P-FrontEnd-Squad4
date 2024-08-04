@@ -18,6 +18,18 @@ export class NotaService {
     return this.httpClient.get<NotaInterface>(this.url + `/${id}`);
   }
 
+  getNotasByProfessor(idProfessor: string) {
+    return this.httpClient.get<Array<NotaInterface>>(
+      this.url + `?professor=${idProfessor}`
+    );
+  }
+
+  getNotasByAluno(idAluno: string) {
+    return this.httpClient.get<Array<NotaInterface>>(
+      this.url + `?aluno=${idAluno}`
+    );
+  }
+
   postNota(nota: NotaInterface) {
     return this.httpClient.post<any>(this.url, nota);
   }

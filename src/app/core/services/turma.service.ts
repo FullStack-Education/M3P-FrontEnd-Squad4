@@ -18,6 +18,12 @@ export class TurmaService {
     return this.httpClient.get<TurmaInterface>(this.url + `/${id}`);
   }
 
+  getTurmasByProfessor(idProfessor: string) {
+    return this.httpClient.get<Array<TurmaInterface>>(
+      this.url + `?professor=${idProfessor}`
+    );
+  }
+
   postTurma(turma: TurmaInterface) {
     return this.httpClient.post<any>(this.url, turma);
   }

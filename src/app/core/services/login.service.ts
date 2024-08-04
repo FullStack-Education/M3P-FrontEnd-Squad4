@@ -6,7 +6,7 @@ import { UsuariosService } from './usuarios.service';
   providedIn: 'root',
 })
 export class LoginService {
-  usuarioLogado: UsuarioInterface | null = null;
+  usuarioLogado!: UsuarioInterface;
   listaUsuarios: Array<UsuarioInterface> = [];
   perfilUsuarioAtivo!: string;
 

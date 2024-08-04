@@ -55,10 +55,14 @@
 
   <div>
     <label for="professor">Professor</label>
-    <ng-select [(ngModel)]="professor" formControlName="professor">
-      @for (professor of listaProfessores; track professor.id) {
-      <ng-option [value]="professor.id">{{ professor.nomeCompleto }}</ng-option>
-      }
+    <ng-select
+      [items]="listaProfessores"
+      bindLabel="nomeCompleto"
+      bindValue="id"
+      labelForId="professor"
+      placeholder="Selecione..."
+      formControlName="professor"
+    >
     </ng-select>
   </div>
 

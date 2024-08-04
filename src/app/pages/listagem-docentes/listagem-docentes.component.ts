@@ -23,10 +23,7 @@ export class ListagemDocentesComponent implements OnInit {
 
   ngOnInit(): void {
     this.docenteService.getDocentes().subscribe((retorno) => {
-      retorno.forEach((docente) => {
-        this.listaDocentes.push(docente);
-      });
-      this.pesquisaDocentes = this.listaDocentes;
+      this.listaDocentes = retorno;
     });
   }
 
@@ -36,15 +33,19 @@ export class ListagemDocentesComponent implements OnInit {
 
   pesquisar() {
     if (this.textoPesquisa) {
-      this.pesquisaDocentes = this.listaDocentes.filter(
-        (docente) =>
-          docente.nomeCompleto
-            .toUpperCase()
-            .includes(this.textoPesquisa!.toUpperCase()) ||
-          docente.id.toUpperCase().includes(this.textoPesquisa!.toUpperCase())
-      );
+      this.docenteService.getDocentes().subscribe((retorno) => {
+        this.listaDocentes = retorno.filter(
+          (docente) =>
+            docente.nomeCompleto
+              .toUpperCase()
+              .includes(this.textoPesquisa!.toUpperCase()) ||
+            docente.id.toUpperCase().includes(this.textoPesquisa!.toUpperCase())
+        );
+      });
     } else {
-      this.pesquisaDocentes = this.listaDocentes;
+      this.docenteService.getDocentes().subscribe((retorno) => {
+        this.listaDocentes = retorno;
+      });
     }
   }
 }

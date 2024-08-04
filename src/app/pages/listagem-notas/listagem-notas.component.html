@@ -1,51 +1,52 @@
-<!-- ng-container aluno -->
 <div class="notas-aluno">
   <section>
     <h2>Informações do Aluno</h2>
     <ul>
       <li>
         <span>Nome:</span>
-        <strong>Scheila Stihler</strong>
+        <strong>{{ alunoAtivo.nomeCompleto }}</strong>
       </li>
       <li>
         <span>CPF:</span>
-        <strong>000.000.000-00</strong>
+        <strong>{{ alunoAtivo.cpf }}</strong>
       </li>
       <li>
         <span>Data de Nascimento:</span>
-        <strong>00/00/0000</strong>
+        <strong>{{ alunoAtivo.nascimento }}</strong>
       </li>
       <li>
         <span>Email:</span>
-        <strong>scheila-email.com</strong>
+        <strong>{{ alunoAtivo.email }}</strong>
       </li>
       <li>
         <span>Telefone:</span>
-        <strong>(00) 00000-0000</strong>
+        <strong>{{ alunoAtivo.telefone }}</strong>
       </li>
     </ul>
   </section>
 
   <section>
     <h2>Informações da Turma</h2>
+    @for (turma of listaTurmas; track turma.id) {
     <ul>
       <li>
         <span>Nome da Turma:</span>
-        <strong>Education</strong>
+        <strong>{{ turma.nomeTurma }}</strong>
       </li>
       <li>
         <span>Professor:</span>
-        <strong>Gabriel Augustin</strong>
+        <strong>{{ getNomeProfessorTurma(turma.professor) }}</strong>
       </li>
       <li>
         <span>Período:</span>
-        <strong>00/00/0000 a 00/00/0000</strong>
+        <strong>{{ turma.dataInicio }} a {{ turma.dataTermino }}</strong>
       </li>
       <li>
         <span>Horário:</span>
-        <strong>00:00h</strong>
+        <strong>{{ turma.horario }}h</strong>
       </li>
     </ul>
+    }
   </section>
 
   <section>
@@ -61,27 +62,15 @@
         </tr>
       </thead>
       <tbody>
+        @for (nota of listaNotas; track nota.id) {
         <tr>
-          <td>00</td>
-          <td>Teste AV1</td>
-          <td>00/00/0000</td>
-          <td>Português</td>
-          <td><span>00.00</span></td>
+          <td>{{ nota.id }}</td>
+          <td>{{ nota.avaliacao }}</td>
+          <td>{{ nota.data }}</td>
+          <td>{{ nota.materia }}</td>
+          <td>{{ nota.nota | number : "1.2-2" }}</td>
         </tr>
-        <tr>
-          <td>00</td>
-          <td>Teste AV2</td>
-          <td>00/00/0000</td>
-          <td>Matemática</td>
-          <td><span>00.00</span></td>
-        </tr>
-        <tr>
-          <td>00</td>
-          <td>Teste AV3</td>
-          <td>00/00/0000</td>
-          <td>Ciências</td>
-          <td><span>00.00</span></td>
-        </tr>
+        }
       </tbody>
     </table>
   </section>
