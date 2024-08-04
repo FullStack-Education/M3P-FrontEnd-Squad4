@@ -36,6 +36,7 @@ export class CadastroTurmasComponent {
   formTurma!: FormGroup;
   idTurma: string | undefined;
   listaProfessores: DocenteInterface[] = [];
+  professor!: number;
 
   constructor(
     private router: Router,
@@ -72,16 +73,16 @@ export class CadastroTurmasComponent {
       retorno.forEach((docente) => {
         this.listaProfessores.push(docente);
       });
-
-      if (this.idTurma) {
-        this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
-          if (retorno) {
-            this.formTurma.disable();
-            this.formTurma.patchValue(retorno);
-          }
-        });
-      }
     });
+
+    if (this.idTurma) {
+      this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
+        if (retorno) {
+          this.formTurma.disable();
+          this.formTurma.patchValue(retorno);
+        }
+      });
+    }
   }
 
   submitForm() {

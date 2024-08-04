@@ -55,7 +55,7 @@
 
   <div>
     <label for="professor">Professor</label>
-    <ng-select [(ngModel)]="listaProfessores" formControlName="professor">
+    <ng-select [(ngModel)]="professor" formControlName="professor">
       @for (professor of listaProfessores; track professor.id) {
       <ng-option [value]="professor.id">{{ professor.nomeCompleto }}</ng-option>
       }
