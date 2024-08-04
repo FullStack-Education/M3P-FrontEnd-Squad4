@@ -16,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { MateriaInterface } from '../../core/interfaces/materia.interface';
+import { MateriaService } from '../../core/services/materia.service';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -35,17 +37,13 @@ export class CadastroDocentesComponent implements OnInit {
   idDocente: string | undefined;
 
   materias!: [];
-  listaMaterias = [
-    { id: 1, nome: 'Português' },
-    { id: 2, nome: 'Matemática' },
-    { id: 3, nome: 'História' },
-    { id: 4, nome: 'Geografia' },
-  ];
+  listaMaterias: MateriaInterface[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private docenteService: DocenteService,
+    private materiaService: MateriaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog
@@ -85,6 +83,12 @@ export class CadastroDocentesComponent implements OnInit {
       bairro: new FormControl(''),
       referencia: new FormControl(''),
       materias: new FormControl('', Validators.required),
+    });
+
+    this.materiaService.getMaterias().subscribe((retorno) => {
+      retorno.forEach((materia) => {
+        this.listaMaterias.push(materia);
+      });
     });
 
     if (this.idDocente) {
