@@ -18,6 +18,12 @@ export class AlunoService {
     return this.httpClient.get<AlunoInterface>(this.url + `/${id}`);
   }
 
+  getAlunoByEmail(email: string) {
+    return this.httpClient.get<Array<AlunoInterface>>(
+      this.url + `?email=${email}`
+    );
+  }
+
   postAluno(aluno: AlunoInterface) {
     return this.httpClient.post<any>(this.url, aluno);
   }

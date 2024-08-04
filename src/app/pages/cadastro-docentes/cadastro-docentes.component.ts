@@ -15,10 +15,13 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { MateriaService } from '../../core/services/materia.service';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
+import { Genero } from '../../core/enums/genero.enum';
+import { EstadoCivil } from '../../core/enums/estado-civil.enum';
+import { NotaService } from '../../core/services/nota.service';
+import { TurmaService } from '../../core/services/turma.service';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -28,23 +31,27 @@ import { Location } from '@angular/common';
     MatButtonModule,
     MatIconModule,
     NgSelectModule,
-    FormsModule,
+    CommonModule,
   ],
   templateUrl: './cadastro-docentes.component.html',
   styleUrl: './cadastro-docentes.component.scss',
 })
 export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
-  idDocente: string | undefined;
-
-  materias!: [];
+  idDocente!: string;
   listaMaterias: MateriaInterface[] = [];
+  generos = Genero;
+  estadoCivil = EstadoCivil;
+  listaNotasProfessor: any[] = [];
+  listaTurmasProfessor: any[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private docenteService: DocenteService,
     private materiaService: MateriaService,
+    private notaService: NotaService,
+    private turmaService: TurmaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -87,13 +94,13 @@ export class CadastroDocentesComponent implements OnInit {
       materias: new FormControl('', Validators.required),
     });
 
-    this.materiaService.getMaterias().subscribe((retorno) => {
-      retorno.forEach((materia) => {
-        this.listaMaterias.push(materia);
-      });
-    });
+    this.materiaService
+      .getMaterias()
+      .subscribe((retorno) => (this.listaMaterias = retorno));
 
     if (this.idDocente) {
+      this.getNotasProfessor();
+      this.getTurmasProfessor();
       this.docenteService.getDocente(this.idDocente).subscribe((retorno) => {
         if (retorno) {
           this.formDocente.disable();
@@ -101,6 +108,18 @@ export class CadastroDocentesComponent implements OnInit {
         }
       });
     }
+  }
+
+  getNotasProfessor() {
+    this.notaService
+      .getNotasByProfessor(this.idDocente)
+      .subscribe((retorno) => (this.listaNotasProfessor = retorno));
+  }
+
+  getTurmasProfessor() {
+    this.turmaService
+      .getTurmasByProfessor(this.idDocente)
+      .subscribe((retorno) => (this.listaTurmasProfessor = retorno));
   }
 
   buscarCep() {
@@ -153,6 +172,16 @@ export class CadastroDocentesComponent implements OnInit {
   }
 
   excluirDocente(docente: DocenteInterface) {
+    if (
+      this.listaNotasProfessor.length > 0 ||
+      this.listaTurmasProfessor.length > 0
+    ) {
+      this.toastr.warning(
+        'Docente não pode ser excluído, pois possui turmas ou notas vinculadas!'
+      );
+      return;
+    }
+
     docente.id = this.idDocente!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -177,7 +206,6 @@ export class CadastroDocentesComponent implements OnInit {
   }
 
   cancelar() {
-    this.formDocente.reset();
     this.location.back();
   }
 }

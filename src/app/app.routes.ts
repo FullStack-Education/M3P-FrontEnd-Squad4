@@ -47,7 +47,7 @@ export const routes: Routes = [
     path: 'nota',
     children: [
       { path: '', component: CadastroNotasComponent },
-      { path: ':id', component: CadastroNotasComponent },
+      { path: 'aluno/:id', component: CadastroNotasComponent },
     ],
     canActivate: [usuarioLogadoGuard],
   },

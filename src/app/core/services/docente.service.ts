@@ -18,6 +18,12 @@ export class DocenteService {
     return this.httpClient.get<DocenteInterface>(this.url + `/${id}`);
   }
 
+  getDocenteByEmail(email: string) {
+    return this.httpClient.get<Array<DocenteInterface>>(
+      this.url + `?email=${email}`
+    );
+  }
+
   postDocente(docente: DocenteInterface) {
     return this.httpClient.post<any>(this.url, docente);
   }

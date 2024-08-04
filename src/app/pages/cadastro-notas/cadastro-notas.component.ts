@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -22,6 +21,8 @@ import { DocenteService } from '../../core/services/docente.service';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { MateriaService } from '../../core/services/materia.service';
 import { Location } from '@angular/common';
+import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
+import { LoginService } from '../../core/services/login.service';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -30,7 +31,6 @@ import { Location } from '@angular/common';
     ReactiveFormsModule,
     MatButtonModule,
     NgSelectModule,
-    FormsModule,
     MatIconModule,
   ],
   templateUrl: './cadastro-notas.component.html',
@@ -38,16 +38,15 @@ import { Location } from '@angular/common';
 })
 export class CadastroNotasComponent {
   formNota!: FormGroup;
-  idNota: string | undefined;
+  idAluno!: string;
   listaProfessores: DocenteInterface[] = [];
-  professor!: number;
   listaAlunos: AlunoInterface[] = [];
-  aluno!: number;
   listaMaterias: MateriaInterface[] = [];
-  materia!: number;
+  perfilAtivo!: UsuarioInterface;
 
   constructor(
     private router: Router,
+    private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private notaService: NotaService,
     private docenteService: DocenteService,
@@ -59,7 +58,8 @@ export class CadastroNotasComponent {
   ) {}
 
   ngOnInit(): void {
-    this.idNota = this.activatedRoute.snapshot.params['id'];
+    this.perfilAtivo = this.loginService.usuarioLogado;
+    this.idAluno = this.activatedRoute.snapshot.params['id'];
 
     this.formNota = new FormGroup({
       professor: new FormControl('', Validators.required),
@@ -74,48 +74,45 @@ export class CadastroNotasComponent {
     const dataFormatada = now.toISOString().split('T')[0];
     this.formNota.get('data')?.setValue(dataFormatada);
 
-    this.docenteService.getDocentes().subscribe((retorno) => {
-      retorno.forEach((docente) => {
-        this.listaProfessores.push(docente);
+    if (this.idAluno) {
+      this.alunoService.getAluno(this.idAluno).subscribe((retorno) => {
+        this.listaAlunos = [retorno];
+        this.formNota.patchValue({
+          aluno: retorno.id,
+        });
       });
-    });
-
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      retorno.forEach((aluno) => {
-        this.listaAlunos.push(aluno);
-      });
-    });
-
-    this.materiaService.getMaterias().subscribe((retorno) => {
-      retorno.forEach((materia) => {
-        this.listaMaterias.push(materia);
-      });
-    });
-
-    if (this.idNota) {
-      this.notaService.getNota(this.idNota).subscribe((retorno) => {
-        if (retorno) {
-          this.formNota.disable();
-          this.formNota.patchValue(retorno);
-        }
+    } else {
+      this.alunoService.getAlunos().subscribe((retorno) => {
+        this.listaAlunos = retorno;
       });
     }
+
+    if (this.perfilAtivo.perfil === 'docente') {
+      this.docenteService
+        .getDocenteByEmail(this.perfilAtivo.email)
+        .subscribe((retorno) => {
+          this.listaProfessores = retorno;
+          this.formNota.patchValue({
+            professor: retorno[0].id,
+          });
+        });
+    } else {
+      this.docenteService.getDocentes().subscribe((retorno) => {
+        this.listaProfessores = retorno;
+      });
+    }
+
+    this.materiaService.getMaterias().subscribe((retorno) => {
+      this.listaMaterias = retorno;
+    });
   }
 
   submitForm() {
     if (this.formNota.valid) {
-      if (this.idNota) {
-        this.editarNota(this.formNota.value);
-      } else {
-        this.cadastrarNota(this.formNota.value);
-      }
+      this.cadastrarNota(this.formNota.value);
     } else {
       this.formNota.markAllAsTouched();
     }
-  }
-
-  habilitarEdicao() {
-    this.formNota.enable();
   }
 
   cadastrarNota(nota: NotaInterface) {
@@ -125,16 +122,16 @@ export class CadastroNotasComponent {
     });
   }
 
-  editarNota(nota: NotaInterface) {
-    nota.id = this.idNota!;
-    this.notaService.putNota(nota).subscribe(() => {
-      this.toastr.success('Nota alterada com sucesso!');
-      this.router.navigate(['/home']);
-    });
-  }
+  // editarNota(nota: NotaInterface) {
+  //   nota.id = this.idAluno!;
+  //   this.notaService.putNota(nota).subscribe(() => {
+  //     this.toastr.success('Nota alterada com sucesso!');
+  //     this.router.navigate(['/home']);
+  //   });
+  // }
 
   excluirNota(nota: NotaInterface) {
-    nota.id = this.idNota!;
+    nota.id = this.idAluno!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -158,7 +155,6 @@ export class CadastroNotasComponent {
   }
 
   cancelar() {
-    this.formNota.reset();
     this.location.back();
   }
 }

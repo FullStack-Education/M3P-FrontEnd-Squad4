@@ -1,22 +1,11 @@
-<!-- ng-container admin -->
 <div class="titulo">
-  <h2>{{ !idNota ? "Cadastro" : "Edição" }} de Avaliação/Nota</h2>
+  <h2>Cadastro de Avaliação/Nota</h2>
   <div class="botoes">
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idNota"
-      (click)="habilitarEdicao()"
-    >
+    <button mat-flat-button type="button" [disabled]="true">
       <mat-icon>edit</mat-icon>
       Editar
     </button>
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idNota"
-      (click)="excluirNota(formNota.value)"
-    >
+    <button mat-flat-button type="button" [disabled]="true">
       <mat-icon>delete</mat-icon>
       Excluir
     </button>
@@ -25,28 +14,40 @@
 <form [formGroup]="formNota" (ngSubmit)="submitForm()">
   <div>
     <label for="professor">Professor</label>
-    <ng-select [(ngModel)]="professor" formControlName="professor">
-      @for (professor of listaProfessores; track professor.id) {
-      <ng-option [value]="professor.id">{{ professor.nomeCompleto }}</ng-option>
-      }
+    <ng-select
+      [items]="listaProfessores"
+      bindLabel="nomeCompleto"
+      bindValue="id"
+      labelForId="professor"
+      placeholder="Selecione..."
+      formControlName="professor"
+    >
     </ng-select>
   </div>
 
   <div>
     <label for="materia">Nome da Materia</label>
-    <ng-select [(ngModel)]="materia" formControlName="materia">
-      @for (materia of listaMaterias; track materia.id) {
-      <ng-option [value]="materia.id">{{ materia.nome }}</ng-option>
-      }
+    <ng-select
+      [items]="listaMaterias"
+      bindLabel="nome"
+      bindValue="id"
+      labelForId="materia"
+      placeholder="Selecione..."
+      formControlName="materia"
+    >
     </ng-select>
   </div>
 
   <div>
     <label for="aluno">Nome do Aluno</label>
-    <ng-select [(ngModel)]="aluno" formControlName="aluno">
-      @for (aluno of listaAlunos; track aluno.id) {
-      <ng-option [value]="aluno.id">{{ aluno.nomeCompleto }}</ng-option>
-      }
+    <ng-select
+      [items]="listaAlunos"
+      bindLabel="nomeCompleto"
+      bindValue="id"
+      labelForId="aluno"
+      placeholder="Selecione..."
+      formControlName="aluno"
+    >
     </ng-select>
   </div>
 
@@ -76,7 +77,7 @@
     </button>
     <button mat-flat-button type="submit" [disabled]="!formNota.valid">
       <mat-icon>check</mat-icon>
-      {{ !idNota ? "Salvar Nota" : "Salvar Alterações" }}
+      Salvar Nota
     </button>
   </div>
 </form>
