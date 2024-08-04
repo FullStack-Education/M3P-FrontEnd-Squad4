@@ -17,6 +17,8 @@ import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Location } from '@angular/common';
+import { TurmaInterface } from '../../core/interfaces/turma.interface';
+import { TurmaService } from '../../core/services/turma.service';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -36,17 +38,13 @@ export class CadastroAlunosComponent {
   idAluno: string | undefined;
 
   turmas!: [];
-  listaTurmas = [
-    { id: 1, nome: 'Fullstack' },
-    { id: 2, nome: 'DEVstart' },
-    { id: 3, nome: 'DEVinHouse' },
-    { id: 4, nome: 'DEVexpert' },
-  ];
+  listaTurmas: TurmaInterface[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private alunoService: AlunoService,
+    private turmaService: TurmaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -87,6 +85,12 @@ export class CadastroAlunosComponent {
       bairro: new FormControl(''),
       referencia: new FormControl(''),
       turmas: new FormControl('', Validators.required),
+    });
+
+    this.turmaService.getTurmas().subscribe((retorno) => {
+      retorno.forEach((turma) => {
+        this.listaTurmas.push(turma);
+      });
     });
 
     if (this.idAluno) {
