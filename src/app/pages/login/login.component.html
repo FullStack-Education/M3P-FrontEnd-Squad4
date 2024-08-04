@@ -11,7 +11,13 @@
   </div>
   <div>
     <label for="senha">Senha:</label>
-    <input type="password" id="senha" name="senha" formControlName="senha" />
+    <input
+      type="password"
+      id="senha"
+      name="senha"
+      autocomplete="current-password"
+      formControlName="senha"
+    />
     <span
       *ngIf="(formLogin.controls['senha'].touched || formLogin.controls['senha'].dirty) && formLogin.controls['senha'].errors?.['required']"
       >Senha obrigatória</span
