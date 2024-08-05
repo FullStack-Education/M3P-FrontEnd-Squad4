@@ -30,7 +30,7 @@
       [(ngModel)]="textoPesquisa"
     />
     <button mat-flat-button type="button" (click)="pesquisar()">
-      <i class="pi pi-search"></i>
+      <mat-icon>search</mat-icon>
       Pesquisar
     </button>
   </div>
@@ -48,6 +48,7 @@
         (click)="verDetalhes(aluno.id)"
         *ngIf="perfilAtivo === 'admin'"
       >
+        <mat-icon>edit</mat-icon>
         Ver detalhes
       </button>
       <button
@@ -56,6 +57,7 @@
         (click)="lancarNota(aluno.id)"
         *ngIf="perfilAtivo === 'docente'"
       >
+        <mat-icon>edit</mat-icon>
         Lançar nota
       </button>
     </li>

@@ -17,11 +17,18 @@ import { AlunoService } from '../../core/services/aluno.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatButtonModule, MatChipsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatIconModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

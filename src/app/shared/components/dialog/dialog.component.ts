@@ -14,6 +14,7 @@ import {
   MatDialogTitle,
   MatDialogActions,
 } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog',
@@ -23,6 +24,7 @@ import {
     MatDialogContent,
     MatDialogActions,
     MatButtonModule,
+    MatIconModule,
     CommonModule,
   ],
   templateUrl: './dialog.component.html',
