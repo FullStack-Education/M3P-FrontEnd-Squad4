@@ -1,0 +1,11 @@
+.alunos {
+  display: flex;
+  gap: 48px;
+  li {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 4px;
+  }
+}

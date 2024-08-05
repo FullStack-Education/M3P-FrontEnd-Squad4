@@ -37,10 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'turma',
-    children: [
-      { path: '', component: CadastroTurmasComponent },
-      { path: ':id', component: CadastroTurmasComponent },
-    ],
+    component: CadastroTurmasComponent,
     canActivate: [usuarioLogadoGuard],
   },
   {

@@ -33,12 +33,4 @@ export class NotaService {
   postNota(nota: NotaInterface) {
     return this.httpClient.post<any>(this.url, nota);
   }
-
-  putNota(nota: NotaInterface) {
-    return this.httpClient.put<any>(this.url + `/${nota.id}`, nota);
-  }
-
-  deleteNota(nota: NotaInterface) {
-    return this.httpClient.delete<any>(this.url + `/${nota.id}`);
-  }
 }

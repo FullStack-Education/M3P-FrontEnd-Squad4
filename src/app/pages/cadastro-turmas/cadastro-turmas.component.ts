@@ -1,24 +1,26 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocenteInterface } from '../../core/interfaces/docente.interface';
-import { DocenteService } from '../../core/services/docente.service';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material/dialog';
-import { TurmaService } from '../../core/services/turma.service';
-import { TurmaInterface } from '../../core/interfaces/turma.interface';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Location } from '@angular/common';
-import { LoginService } from '../../core/services/login.service';
+
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
+import { DocenteInterface } from '../../core/interfaces/docente.interface';
+import { TurmaInterface } from '../../core/interfaces/turma.interface';
+
+import { LoginService } from '../../core/services/login.service';
+import { DocenteService } from '../../core/services/docente.service';
+import { TurmaService } from '../../core/services/turma.service';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -45,7 +47,6 @@ export class CadastroTurmasComponent {
     private turmaService: TurmaService,
     private docenteService: DocenteService,
     private toastr: ToastrService,
-    private dialog: MatDialog,
     private location: Location
   ) {}
 
@@ -99,18 +100,10 @@ export class CadastroTurmasComponent {
 
   submitForm() {
     if (this.formTurma.valid) {
-      if (this.idTurma) {
-        this.editarTurma(this.formTurma.value);
-      } else {
-        this.cadastrarTurma(this.formTurma.value);
-      }
+      this.cadastrarTurma(this.formTurma.value);
     } else {
       this.formTurma.markAllAsTouched();
     }
-  }
-
-  habilitarEdicao() {
-    this.formTurma.enable();
   }
 
   cadastrarTurma(turma: TurmaInterface) {
@@ -120,40 +113,7 @@ export class CadastroTurmasComponent {
     });
   }
 
-  editarTurma(turma: TurmaInterface) {
-    turma.id = this.idTurma!;
-    this.turmaService.putTurma(turma).subscribe(() => {
-      this.toastr.success('Turma alterada com sucesso!');
-      this.router.navigate(['/home']);
-    });
-  }
-
-  excluirTurma(turma: TurmaInterface) {
-    turma.id = this.idTurma!;
-
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        titulo: 'Excluir Turma',
-        mensagem: 'Você tem certeza que deseja prosseguir com a exclusão?',
-        btConfirmar: 'Confirmar',
-        btCancelar: 'Cancelar',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.turmaService.deleteTurma(turma).subscribe(() => {
-          this.toastr.success('Turma excluído com sucesso!');
-          this.router.navigate(['/home']);
-        });
-      } else {
-        return;
-      }
-    });
-  }
-
   cancelar() {
-    this.formTurma.reset();
     this.location.back();
   }
 }

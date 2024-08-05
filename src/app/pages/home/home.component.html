@@ -2,15 +2,15 @@
   <h2>Estatísticas Gerais</h2>
   <ul>
     <li>
-      <strong>15</strong>
+      <strong>{{ totalAlunos }}</strong>
       <span>alunos</span>
     </li>
     <li>
-      <strong>02</strong>
+      <strong>{{ totalTurmas }}</strong>
       <span>turmas</span>
     </li>
     <li>
-      <strong>05</strong>
+      <strong>{{ totalDocentes }}</strong>
       <span>docentes</span>
     </li>
   </ul>
@@ -27,6 +27,7 @@
       id="pesquisar"
       name="pesquisar"
       placeholder="Buscar por nome, telefone ou e-mail"
+      [(ngModel)]="textoPesquisa"
     />
     <button mat-flat-button type="button" (click)="pesquisar()">
       <i class="pi pi-search"></i>
@@ -34,61 +35,26 @@
     </button>
   </div>
 
-  <ul>
-    <li>
+  <ul class="alunos">
+    <li *ngFor="let aluno of listaAlunos">
       <i class="pi pi-user"></i>
-      <strong>Nome do aluno</strong>
+      <strong>{{ aluno.nomeCompleto }}</strong>
       <span>idade</span>
-      <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
-        Ver detalhes
-      </button>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
-        Lançar nota
-      </button>
-    </li>
-    <li>
-      <i class="pi pi-user"></i>
-      <strong>Nome do aluno</strong>
-      <span>idade</span>
-      <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
-        Ver detalhes
-      </button>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
-        Lançar nota
-      </button>
-    </li>
-    <li>
-      <i class="pi pi-user"></i>
-      <strong>Nome do aluno</strong>
-      <span>idade</span>
-      <a href="#">(00) 00000-0000</a>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'admin'">
-        Ver detalhes
-      </button>
-      <button mat-flat-button type="button" *ngIf="perfilAtivo === 'docente'">
-        Lançar nota
-      </button>
-    </li>
-    <li>
-      <i class="pi pi-user"></i>
-      <strong>Nome do aluno</strong>
-      <span>idade</span>
-      <a href="#">(00) 00000-0000</a>
+      <a href="#">{{ aluno.telefone }}</a>
+      <a href="#">{{ aluno.email }}</a>
       <button
         mat-flat-button
         type="button"
+        (click)="verDetalhes(aluno.id)"
         *ngIf="perfilAtivo === 'admin'"
-        click="verDetalhes()"
       >
         Ver detalhes
       </button>
       <button
         mat-flat-button
         type="button"
+        (click)="lancarNota(aluno.id)"
         *ngIf="perfilAtivo === 'docente'"
-        click="lançarNota()"
       >
         Lançar nota
       </button>
@@ -113,7 +79,7 @@
         <tr>
           <td>{{ nota.avaliacao }}</td>
           <td>{{ getNomeMaterias(nota.materia) }}</td>
-          <td>{{ nota.data }}</td>
+          <td>{{ nota.data | date : "dd/MM/yyyy" }}</td>
           <td>{{ nota.nota | number : "1.2-2" }}</td>
         </tr>
         }
@@ -123,11 +89,11 @@
 
   <section class="minhas-materias">
     <h2>Minhas Matérias</h2>
-    <ul>
+    <mat-chip-set>
       @for (materia of listaMaterias; track materia.id) {
-      <li>{{ materia.nome }}</li>
+      <mat-chip>{{ materia.nome }}</mat-chip>
       }
-    </ul>
+    </mat-chip-set>
   </section>
 
   <section class="cursos-extras">

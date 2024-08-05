@@ -1,22 +1,11 @@
-<!-- ng-container admin -->
 <div class="titulo">
-  <h2>{{ !idTurma ? "Cadastro" : "Edição" }} de Turma</h2>
+  <h2>Cadastro de Turma</h2>
   <div class="botoes">
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idTurma"
-      (click)="habilitarEdicao()"
-    >
+    <button mat-flat-button type="button" [disabled]="true">
       <mat-icon>edit</mat-icon>
       Editar
     </button>
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idTurma"
-      (click)="excluirTurma(formTurma.value)"
-    >
+    <button mat-flat-button type="button" [disabled]="true">
       <mat-icon>delete</mat-icon>
       Excluir
     </button>
@@ -72,7 +61,6 @@
     </button>
     <button mat-flat-button type="submit" [disabled]="!formTurma.valid">
       <mat-icon>check</mat-icon>
-      {{ !idTurma ? "Salvar Turma" : "Salvar Alterações" }}
     </button>
   </div>
 </form>

@@ -1,28 +1,31 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router } from '@angular/router';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-import { NotaService } from '../../core/services/nota.service';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
-import { NotaInterface } from '../../core/interfaces/nota.interface';
-import { AlunoInterface } from '../../core/interfaces/aluno.interface';
-import { DocenteInterface } from '../../core/interfaces/docente.interface';
-import { AlunoService } from '../../core/services/aluno.service';
-import { DocenteService } from '../../core/services/docente.service';
-import { MateriaInterface } from '../../core/interfaces/materia.interface';
-import { MateriaService } from '../../core/services/materia.service';
-import { Location } from '@angular/common';
+
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
+import { DocenteInterface } from '../../core/interfaces/docente.interface';
+import { AlunoInterface } from '../../core/interfaces/aluno.interface';
+import { MateriaInterface } from '../../core/interfaces/materia.interface';
+import { NotaInterface } from '../../core/interfaces/nota.interface';
+
 import { LoginService } from '../../core/services/login.service';
+import { DocenteService } from '../../core/services/docente.service';
+import { AlunoService } from '../../core/services/aluno.service';
+import { MateriaService } from '../../core/services/materia.service';
+import { NotaService } from '../../core/services/nota.service';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -53,7 +56,6 @@ export class CadastroNotasComponent {
     private alunoService: AlunoService,
     private materiaService: MateriaService,
     private toastr: ToastrService,
-    private dialog: MatDialog,
     private location: Location
   ) {}
 
@@ -119,38 +121,6 @@ export class CadastroNotasComponent {
     this.notaService.postNota(nota).subscribe(() => {
       this.toastr.success('Nota cadastrada com sucesso!');
       this.router.navigate(['/home']);
-    });
-  }
-
-  // editarNota(nota: NotaInterface) {
-  //   nota.id = this.idAluno!;
-  //   this.notaService.putNota(nota).subscribe(() => {
-  //     this.toastr.success('Nota alterada com sucesso!');
-  //     this.router.navigate(['/home']);
-  //   });
-  // }
-
-  excluirNota(nota: NotaInterface) {
-    nota.id = this.idAluno!;
-
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        titulo: 'Excluir Nota',
-        mensagem: 'Você tem certeza que deseja prosseguir com a exclusão?',
-        btConfirmar: 'Confirmar',
-        btCancelar: 'Cancelar',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.notaService.deleteNota(nota).subscribe(() => {
-          this.toastr.success('Nota excluído com sucesso!');
-          this.router.navigate(['/home']);
-        });
-      } else {
-        return;
-      }
     });
   }
 

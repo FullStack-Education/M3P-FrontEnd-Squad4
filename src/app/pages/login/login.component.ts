@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -7,11 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { LoginService } from '../../core/services/login.service';
+
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+
 import { ToastrService } from 'ngx-toastr';
+
+import { LoginService } from '../../core/services/login.service';
+
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -25,9 +29,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
