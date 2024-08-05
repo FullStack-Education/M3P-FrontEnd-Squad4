@@ -31,12 +31,14 @@
   </div>
   <div class="botoes">
     <button mat-flat-button type="button" (click)="criarConta()">
+      <mat-icon>add</mat-icon>
       Criar conta
     </button>
     <button mat-flat-button type="button" (click)="recuperarSenha()">
       Esqueci a senha
     </button>
     <button mat-flat-button type="submit" [disabled]="!formLogin.valid">
+      <mat-icon>login</mat-icon>
       Entrar
     </button>
   </div>
