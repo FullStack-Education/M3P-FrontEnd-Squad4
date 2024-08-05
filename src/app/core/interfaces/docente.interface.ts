@@ -6,7 +6,7 @@ export interface DocenteInterface {
   cpf: string;
   rg: string;
   estadoCivil: string;
-  telefone: number;
+  telefone: string;
   email: string;
   senha: string;
   naturalidade: string;

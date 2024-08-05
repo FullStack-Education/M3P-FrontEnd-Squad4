@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../../core/services/login.service';
 import { Router } from '@angular/router';
+
+import { MatDialog } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { SidenavService } from '../../../core/services/sidenav.service';
 import { MatButtonModule } from '@angular/material/button';
+
+import { LoginService } from '../../../core/services/login.service';
+import { SidenavService } from '../../../core/services/sidenav.service';
+
 import { DialogComponent } from '../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-toolbar',
@@ -23,9 +26,9 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
     private sidenavService: SidenavService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

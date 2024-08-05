@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../../core/services/login.service';
-import { Router, RouterModule } from '@angular/router';
-import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+
 import {
   MatListItem,
   MatListItemIcon,
@@ -12,6 +11,11 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+
+import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface';
+
+import { LoginService } from '../../../core/services/login.service';
+
 import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
@@ -81,8 +85,8 @@ export class MenuLateralComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

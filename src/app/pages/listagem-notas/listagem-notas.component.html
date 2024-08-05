@@ -12,7 +12,7 @@
       </li>
       <li>
         <span>Data de Nascimento:</span>
-        <strong>{{ alunoAtivo.nascimento }}</strong>
+        <strong>{{ alunoAtivo.nascimento | date : "dd/MM/yyyy" }}</strong>
       </li>
       <li>
         <span>Email:</span>
@@ -39,7 +39,10 @@
       </li>
       <li>
         <span>Período:</span>
-        <strong>{{ turma.dataInicio }} a {{ turma.dataTermino }}</strong>
+        <strong
+          >{{ turma.dataInicio | date : "dd/MM/yyyy" }} a
+          {{ turma.dataTermino | date : "dd/MM/yyyy" }}</strong
+        >
       </li>
       <li>
         <span>Horário:</span>
@@ -66,8 +69,8 @@
         <tr>
           <td>{{ nota.id }}</td>
           <td>{{ nota.avaliacao }}</td>
-          <td>{{ nota.data }}</td>
-          <td>{{ nota.materia }}</td>
+          <td>{{ nota.data | date : "dd/MM/yyyy" }}</td>
+          <td>{{ getNomeMaterias(nota.materia) }}</td>
           <td>{{ nota.nota | number : "1.2-2" }}</td>
         </tr>
         }

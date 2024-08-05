@@ -27,12 +27,4 @@ export class TurmaService {
   postTurma(turma: TurmaInterface) {
     return this.httpClient.post<any>(this.url, turma);
   }
-
-  putTurma(turma: TurmaInterface) {
-    return this.httpClient.put<any>(this.url + `/${turma.id}`, turma);
-  }
-
-  deleteTurma(turma: TurmaInterface) {
-    return this.httpClient.delete<any>(this.url + `/${turma.id}`);
-  }
 }

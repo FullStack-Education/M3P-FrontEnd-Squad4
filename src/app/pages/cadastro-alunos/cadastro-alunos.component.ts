@@ -1,25 +1,30 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CepService } from '../../core/services/cep.service';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { AlunoService } from '../../core/services/aluno.service';
-import { ToastrService } from 'ngx-toastr';
-import { MatDialog } from '@angular/material/dialog';
-import { AlunoInterface } from '../../core/interfaces/aluno.interface';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CommonModule, Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+
+import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
+
+import { AlunoService } from '../../core/services/aluno.service';
 import { TurmaService } from '../../core/services/turma.service';
+import { CepService } from '../../core/services/cep.service';
+
 import { Genero } from '../../core/enums/genero.enum';
-import { EstadoCivil } from '../../core/enums/estado-civil.enum';
+
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -39,7 +44,6 @@ export class CadastroAlunosComponent {
   idAluno: string | undefined;
   listaTurmas: TurmaInterface[] = [];
   generos = Genero;
-  estadoCivil = EstadoCivil;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -70,7 +74,6 @@ export class CadastroAlunosComponent {
       genero: new FormControl('', Validators.required),
       cpf: new FormControl('', Validators.required),
       rg: new FormControl('', Validators.required),
-      estadoCivil: new FormControl('', Validators.required),
       telefone: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', [
@@ -93,11 +96,18 @@ export class CadastroAlunosComponent {
       .subscribe((retorno) => (this.listaTurmas = retorno));
 
     if (this.idAluno) {
-      this.alunoService.getAluno(this.idAluno).subscribe((retorno) => {
-        if (retorno) {
+      this.alunoService.getAluno(this.idAluno).subscribe({
+        next: (retorno) => {
           this.formAluno.disable();
           this.formAluno.patchValue(retorno);
-        }
+        },
+        error: (erro) => {
+          this.toastr.error('Aluno não encontrado!');
+          console.log(erro);
+          setTimeout(() => {
+            this.cancelar();
+          }, 2000);
+        },
       });
     }
   }
@@ -112,9 +122,9 @@ export class CadastroAlunosComponent {
             this.formAluno.patchValue(retorno);
           }
         },
-        error: (err) => {
+        error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(err);
+          console.log(erro);
         },
       });
     }
@@ -176,7 +186,6 @@ export class CadastroAlunosComponent {
   }
 
   cancelar() {
-    this.formAluno.reset();
     this.location.back();
   }
 }

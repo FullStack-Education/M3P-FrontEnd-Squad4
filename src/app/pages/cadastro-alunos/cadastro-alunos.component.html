@@ -67,18 +67,6 @@
   </div>
 
   <div>
-    <label for="estado">Estado Civil</label>
-    <select name="estado" id="estado" formControlName="estadoCivil">
-      <option
-        *ngFor="let estado of estadoCivil | keyvalue"
-        [value]="estado.value"
-      >
-        {{ estado.value }}
-      </option>
-    </select>
-  </div>
-
-  <div>
     <label for="telefone">Telefone</label>
     <input
       type="tel"

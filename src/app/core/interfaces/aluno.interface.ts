@@ -5,8 +5,7 @@ export interface AlunoInterface {
   nascimento: Date;
   cpf: string;
   rg: string;
-  estadoCivil: string;
-  telefone: number;
+  telefone: string;
   email: string;
   senha: string;
   naturalidade: string;

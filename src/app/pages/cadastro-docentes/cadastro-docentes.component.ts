@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -6,22 +7,27 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CepService } from '../../core/services/cep.service';
-import { MatButtonModule } from '@angular/material/button';
-import { DocenteService } from '../../core/services/docente.service';
-import { DocenteInterface } from '../../core/interfaces/docente.interface';
+
+import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { NgSelectModule } from '@ng-select/ng-select';
+
+import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
+
+import { DocenteService } from '../../core/services/docente.service';
+import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
-import { CommonModule, Location } from '@angular/common';
+import { NotaService } from '../../core/services/nota.service';
+import { CepService } from '../../core/services/cep.service';
+
 import { Genero } from '../../core/enums/genero.enum';
 import { EstadoCivil } from '../../core/enums/estado-civil.enum';
-import { NotaService } from '../../core/services/nota.service';
-import { TurmaService } from '../../core/services/turma.service';
+
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -39,11 +45,11 @@ import { TurmaService } from '../../core/services/turma.service';
 export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
   idDocente!: string;
-  listaMaterias: MateriaInterface[] = [];
+  listaMaterias!: MateriaInterface[];
   generos = Genero;
   estadoCivil = EstadoCivil;
-  listaNotasProfessor: any[] = [];
-  listaTurmasProfessor: any[] = [];
+  listaNotasProfessor!: any[];
+  listaTurmasProfessor!: any[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -101,11 +107,18 @@ export class CadastroDocentesComponent implements OnInit {
     if (this.idDocente) {
       this.getNotasProfessor();
       this.getTurmasProfessor();
-      this.docenteService.getDocente(this.idDocente).subscribe((retorno) => {
-        if (retorno) {
+      this.docenteService.getDocente(this.idDocente).subscribe({
+        next: (retorno) => {
           this.formDocente.disable();
           this.formDocente.patchValue(retorno);
-        }
+        },
+        error: (erro) => {
+          this.toastr.error('Docente não encontrado!');
+          console.log(erro);
+          setTimeout(() => {
+            this.cancelar();
+          }, 2000);
+        },
       });
     }
   }
@@ -132,9 +145,9 @@ export class CadastroDocentesComponent implements OnInit {
             this.formDocente.patchValue(retorno);
           }
         },
-        error: (err) => {
+        error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(err);
+          console.log(erro);
         },
       });
     }
