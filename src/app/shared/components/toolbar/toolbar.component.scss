@@ -1,28 +1,63 @@
+@import "../../../../styles.scss";
+
 .toolbar {
-  background-color: #dce3e9;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  padding: 10px 20px;
+  background-color: $blue-100;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  h1 {
-    font-weight: bold;
-  }
-  .spacer {
-    flex: 1;
+  padding: 4rem 3.2rem;
+  .logo {
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
   }
   .avatar {
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     gap: 8px;
     img {
-      width: 48px;
-      height: 48px;
+      width: 4rem;
+      height: 4rem;
       border-radius: 100%;
     }
     span {
       font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 1rem;
+    .logo {
+      padding: 0.4rem 1rem;
+    }
+    .avatar {
+      padding: 0.4rem 1rem;
+      border-radius: 1rem;
+      gap: 8px;
+      img {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 100%;
+      }
+      span {
+        display: none;
+      }
     }
   }
 }

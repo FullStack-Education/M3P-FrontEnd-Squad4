@@ -7,27 +7,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
-
 import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
 import { CepService } from '../../core/services/cep.service';
-
 import { Genero } from '../../core/enums/genero.enum';
 import { EstadoCivil } from '../../core/enums/estado-civil.enum';
-
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -38,6 +33,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
     MatIconModule,
     NgSelectModule,
     CommonModule,
+    ErroFormComponent,
   ],
   templateUrl: './cadastro-docentes.component.html',
   styleUrl: './cadastro-docentes.component.scss',
@@ -46,10 +42,16 @@ export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
   idDocente!: string;
   listaMaterias!: MateriaInterface[];
-  generos = Genero;
-  estadoCivil = EstadoCivil;
   listaNotasProfessor!: any[];
   listaTurmasProfessor!: any[];
+  generos = Object.keys(Genero).map((key) => ({
+    id: Genero[key as keyof typeof Genero],
+    nome: Genero[key as keyof typeof Genero],
+  }));
+  estadoCivil = Object.keys(EstadoCivil).map((key) => ({
+    id: EstadoCivil[key as keyof typeof EstadoCivil],
+    nome: EstadoCivil[key as keyof typeof EstadoCivil],
+  }));
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -79,17 +81,17 @@ export class CadastroDocentesComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      genero: new FormControl('', Validators.required),
+      genero: new FormControl(null, Validators.required),
       cpf: new FormControl('', Validators.required),
-      rg: new FormControl('', Validators.required),
-      estadoCivil: new FormControl('', Validators.required),
+      rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+      estadoCivil: new FormControl(null, Validators.required),
       telefone: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
-      cep: new FormControl('', Validators.required),
+      cep: new FormControl(''),
       localidade: new FormControl(''),
       uf: new FormControl(''),
       logradouro: new FormControl(''),

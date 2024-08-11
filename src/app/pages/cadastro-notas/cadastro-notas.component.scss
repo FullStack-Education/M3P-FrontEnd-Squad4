@@ -1,0 +1,77 @@
+@import "../../../styles.scss";
+
+.notas {
+  background-color: $blue-100;
+  padding: 3.2rem;
+  min-height: calc(100vh - 80px);
+  h2 {
+    font-size: 3.6rem;
+    margin-top: 0;
+    margin-bottom: 4rem;
+  }
+  h3 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    border-bottom: 2px dashed $blue-200;
+    padding-bottom: 1rem;
+    flex-grow: 1;
+  }
+  .titulo {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    .botoes {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+  }
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.6rem;
+    }
+    input {
+      border: 1px solid $blue-200;
+      border-radius: 4px;
+      padding: 1rem 1.6rem;
+      font-size: 1.6rem;
+    }
+
+    .botoes {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .notas {
+    min-height: calc(100vh - 64px);
+    padding: 2rem;
+    h2 {
+      font-size: 2.6rem;
+      margin-bottom: 3rem;
+    }
+    h3 {
+      font-size: 1.8rem;
+    }
+    .titulo {
+      flex-direction: column-reverse;
+    }
+  }
+}
+@media (max-width: 599px) {
+  .notas {
+    min-height: calc(100vh - 56px);
+  }
+}

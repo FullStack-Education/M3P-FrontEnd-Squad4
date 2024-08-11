@@ -1,6 +1,7 @@
 <div class="logo">
-  <img src="../../../../assets/labpcp.jpg" alt="LabPCP" />
+  <img src="../../../../assets/labpcp.svg" alt="LabPCP" />
   <h2>LabPCP</h2>
+  <p>Sistema de Gestão Educacional</p>
 </div>
 
 <mat-nav-list class="menu">
@@ -8,6 +9,7 @@
     mat-list-item
     [routerLink]="[item.rota]"
     *ngFor="let item of itensMenuFiltrado"
+    (click)="closeSidenav()"
   >
     <mat-icon matListItemIcon>{{ item.icone }}</mat-icon>
     <span matListItemTitle>{{ item.rotulo }}</span>

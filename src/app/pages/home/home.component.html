@@ -1,109 +1,122 @@
-<section class="estatisticas" *ngIf="perfilAtivo === 'admin'">
-  <h2>Estatísticas Gerais</h2>
-  <ul>
-    <li>
-      <strong>{{ totalAlunos }}</strong>
-      <span>alunos</span>
-    </li>
-    <li>
-      <strong>{{ totalTurmas }}</strong>
-      <span>turmas</span>
-    </li>
-    <li>
-      <strong>{{ totalDocentes }}</strong>
-      <span>docentes</span>
-    </li>
-  </ul>
-</section>
-
-<section
-  class="busca-alunos"
-  *ngIf="perfilAtivo === 'admin' || perfilAtivo === 'docente'"
->
-  <div class="pesquisar">
-    <label for="pesquisar">Pesquisar aluno:</label>
-    <input
-      type="text"
-      id="pesquisar"
-      name="pesquisar"
-      placeholder="Buscar por nome, telefone ou e-mail"
-      [(ngModel)]="textoPesquisa"
-    />
-    <button mat-flat-button type="button" (click)="pesquisar()">
-      <mat-icon>search</mat-icon>
-      Pesquisar
-    </button>
-  </div>
-
-  <ul class="alunos">
-    <li *ngFor="let aluno of listaAlunos">
-      <i class="pi pi-user"></i>
-      <strong>{{ aluno.nomeCompleto }}</strong>
-      <span>idade</span>
-      <a href="#">{{ aluno.telefone }}</a>
-      <a href="#">{{ aluno.email }}</a>
-      <button
-        mat-flat-button
-        type="button"
-        (click)="verDetalhes(aluno.id)"
-        *ngIf="perfilAtivo === 'admin'"
-      >
-        <mat-icon>edit</mat-icon>
-        Ver detalhes
-      </button>
-      <button
-        mat-flat-button
-        type="button"
-        (click)="lancarNota(aluno.id)"
-        *ngIf="perfilAtivo === 'docente'"
-      >
-        <mat-icon>edit</mat-icon>
-        Lançar nota
-      </button>
-    </li>
-  </ul>
-</section>
-
-<ng-container *ngIf="perfilAtivo === 'aluno'">
-  <section class="minhas-avaliacoes">
-    <h2>Minhas Avaliações</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nome Avaliação</th>
-          <th>Matéria</th>
-          <th>Data</th>
-          <th>Nota</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (nota of listaNotas; track nota.id) {
-        <tr>
-          <td>{{ nota.avaliacao }}</td>
-          <td>{{ getNomeMaterias(nota.materia) }}</td>
-          <td>{{ nota.data | date : "dd/MM/yyyy" }}</td>
-          <td>{{ nota.nota | number : "1.2-2" }}</td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </section>
-
-  <section class="minhas-materias">
-    <h2>Minhas Matérias</h2>
-    <mat-chip-set>
-      @for (materia of listaMaterias; track materia.id) {
-      <mat-chip>{{ materia.nome }}</mat-chip>
-      }
-    </mat-chip-set>
-  </section>
-
-  <section class="cursos-extras">
-    <h2>Cursos Extras</h2>
-    <ul>
-      <li>Nome do curso extra</li>
-      <li>Nome do curso extra</li>
-      <li>Nome do curso extra</li>
+<div class="home">
+  <h2>Dashboard</h2>
+  <section class="estatisticas" *ngIf="perfilAtivo === 'admin'">
+    <h3>Estatísticas Gerais</h3>
+    <ul class="numeros">
+      <li>
+        <strong>{{ totalAlunos }}</strong>
+        <span>alunos</span>
+      </li>
+      <li>
+        <strong>{{ totalTurmas }}</strong>
+        <span>turmas</span>
+      </li>
+      <li>
+        <strong>{{ totalDocentes }}</strong>
+        <span *ngIf="totalDocentes === 1">docente</span>
+        <span *ngIf="totalDocentes !== 1">docentes</span>
+      </li>
     </ul>
   </section>
-</ng-container>
+
+  <section
+    class="busca-alunos"
+    *ngIf="perfilAtivo === 'admin' || perfilAtivo === 'docente'"
+  >
+    <h3>Listagem de Alunos</h3>
+    <div class="pesquisar">
+      <label for="pesquisar">Pesquisar aluno:</label>
+      <input
+        type="text"
+        id="pesquisar"
+        name="pesquisar"
+        placeholder="Buscar por nome, telefone ou e-mail"
+        [(ngModel)]="textoPesquisa"
+      />
+      <button mat-flat-button type="button" (click)="pesquisar()">
+        <mat-icon>search</mat-icon>
+        Pesquisar
+      </button>
+    </div>
+
+    <p>{{ listaAlunos.length }} registro(s) encontrado(s)</p>
+    <ul class="alunos">
+      <li *ngFor="let aluno of listaAlunos">
+        <img src="../../../assets/profile.png" [alt]="aluno.nomeCompleto" />
+        <div>
+          <strong>{{ aluno.nomeCompleto }}</strong>
+          <span>idade</span>
+          <a href="#">{{ aluno.telefone }}</a>
+          <a href="#">{{ aluno.email }}</a>
+          <button
+            mat-flat-button
+            type="button"
+            (click)="verDetalhes(aluno.id)"
+            *ngIf="perfilAtivo === 'admin'"
+          >
+            <mat-icon>more_vert</mat-icon>
+            Ver detalhes
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            (click)="lancarNota(aluno.id)"
+            *ngIf="perfilAtivo === 'docente'"
+          >
+            <mat-icon>edit</mat-icon>
+            Lançar nota
+          </button>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <ng-container *ngIf="perfilAtivo === 'aluno'">
+    <section class="minhas-avaliacoes">
+      <h3>Minhas Avaliações</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome Avaliação</th>
+            <th>Matéria</th>
+            <th>Data</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let nota of listaNotas" [routerLink]="'/notas'">
+            <td>{{ nota.avaliacao }}</td>
+            <td>{{ getNomeMaterias(nota.materia) }}</td>
+            <td>{{ nota.data | date : "dd/MM/yyyy" }}</td>
+            <td>{{ nota.nota | number : "1.2-2" }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ul *ngFor="let nota of listaNotas" [routerLink]="'/notas'">
+        <li><span>Avaliação: </span>{{ nota.avaliacao }}</li>
+        <li><span>Matéria: </span>{{ getNomeMaterias(nota.materia) }}</li>
+        <li><span>Data: </span>{{ nota.data | date : "dd/MM/yyyy" }}</li>
+        <li><span>Nota: </span>{{ nota.nota | number : "1.2-2" }}</li>
+      </ul>
+    </section>
+
+    <section class="minhas-materias">
+      <h3>Minhas Matérias</h3>
+      <mat-chip-set>
+        @for (materia of listaMaterias; track materia.id) {
+        <mat-chip>{{ materia.nome }}</mat-chip>
+        }
+      </mat-chip-set>
+    </section>
+
+    <section class="cursos-extras">
+      <h3>Cursos Extras</h3>
+      <ul>
+        <li>Nome do curso extra</li>
+        <li>Nome do curso extra</li>
+        <li>Nome do curso extra</li>
+      </ul>
+    </section>
+  </ng-container>
+</div>

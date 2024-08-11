@@ -7,16 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
 import { ToastrService } from 'ngx-toastr';
-
 import { LoginService } from '../../core/services/login.service';
-
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +24,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
+    ErroFormComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -43,7 +41,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.formLogin = new FormGroup({
-      email: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', Validators.required),
     });
   }
@@ -56,7 +54,7 @@ export class LoginComponent implements OnInit {
         this.toastr.success('Login efetuado com sucesso!');
       } else {
         this.formLogin.reset();
-        this.toastr.error('Usuário ou senha incorretos!');
+        this.toastr.error('Usuário e/ou senha incorretos!');
       }
     } else {
       this.toastr.warning('Por favor, preencha todos os campos!');
@@ -77,8 +75,7 @@ export class LoginComponent implements OnInit {
     this.dialog.open(DialogComponent, {
       data: {
         titulo: 'Recuperar Senha',
-        mensagem:
-          'Processo de recuperação de senha enviado para o e-mail cadastrado!',
+        mensagem: 'Funcionalidade em desenvolvimento!',
         btCancelar: 'Fechar',
       },
     });

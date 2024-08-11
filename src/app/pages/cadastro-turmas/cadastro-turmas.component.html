@@ -1,67 +1,117 @@
-<div class="titulo">
-  <h2>Cadastro de Turma</h2>
-  <div class="botoes">
-    <button mat-flat-button type="button" [disabled]="true">
-      <mat-icon>edit</mat-icon>
-      Editar
-    </button>
-    <button mat-flat-button type="button" [disabled]="true">
-      <mat-icon>delete</mat-icon>
-      Excluir
-    </button>
+<div class="turmas">
+  <h2>Gerenciamento de Turma</h2>
+  <div class="titulo">
+    <h3>Cadastro</h3>
+    <div class="botoes">
+      <button mat-flat-button type="button" [disabled]="true" class="bt-editar">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="true"
+        class="bt-excluir"
+      >
+        <mat-icon>delete</mat-icon>
+        Excluir
+      </button>
+    </div>
   </div>
+  <form [formGroup]="formTurma" (ngSubmit)="submitForm()">
+    <div class="col-33">
+      <label for="nome">Nome da Turma</label>
+      <input type="text" name="nome" id="nome" formControlName="nomeTurma" />
+      <app-erro-form
+        [control]="formTurma.controls['nomeTurma']"
+        [customMessages]="{
+          required: 'Nome da turma é obrigatório',
+          minlength: 'O nome da turma precisa ter no mínimo 8 caracteres',
+          maxlength: 'O nome da turma pode ter no máximo 64 caracteres'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-66">
+      <label for="professor">Professor</label>
+      <ng-select
+        [items]="listaProfessores"
+        bindLabel="nomeCompleto"
+        bindValue="id"
+        labelForId="professor"
+        placeholder="Selecione..."
+        formControlName="professor"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formTurma.controls['professor']"
+        [customMessages]="{
+            required: 'Professor é obrigatório',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="dataInicio">Data de Início</label>
+      <input
+        type="date"
+        name="dataInicio"
+        id="dataInicio"
+        formControlName="dataInicio"
+      />
+      <app-erro-form
+        [control]="formTurma.controls['dataInicio']"
+        [customMessages]="{
+            required: 'Data de início é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="dataTermino">Data de Término</label>
+      <input
+        type="date"
+        name="dataTermino"
+        id="dataTermino"
+        formControlName="dataTermino"
+      />
+      <app-erro-form
+        [control]="formTurma.controls['dataTermino']"
+        [customMessages]="{
+            required: 'Data de término é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="horario">Horário</label>
+      <input
+        type="time"
+        name="horario"
+        id="horario"
+        formControlName="horario"
+      />
+      <app-erro-form
+        [control]="formTurma.controls['horario']"
+        [customMessages]="{
+            required: 'Horário é obrigatório',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="botoes">
+      <button
+        mat-flat-button
+        type="button"
+        (click)="cancelar()"
+        class="bt-cancelar"
+      >
+        <mat-icon>close</mat-icon>Cancelar
+      </button>
+      <button mat-flat-button type="submit">
+        <mat-icon>check</mat-icon>
+        Salvar Turma
+      </button>
+    </div>
+  </form>
 </div>
-<form [formGroup]="formTurma" (ngSubmit)="submitForm()">
-  <div>
-    <label for="nome">Nome da Turma</label>
-    <input type="text" name="nome" id="nome" formControlName="nomeTurma" />
-  </div>
-
-  <div>
-    <label for="dataInicio">Data de Início</label>
-    <input
-      type="date"
-      name="dataInicio"
-      id="dataInicio"
-      formControlName="dataInicio"
-    />
-  </div>
-
-  <div>
-    <label for="dataTermino">Data de Término</label>
-    <input
-      type="date"
-      name="dataTermino"
-      id="dataTermino"
-      formControlName="dataTermino"
-    />
-  </div>
-
-  <div>
-    <label for="horario">Horário</label>
-    <input type="time" name="horario" id="horario" formControlName="horario" />
-  </div>
-
-  <div>
-    <label for="professor">Professor</label>
-    <ng-select
-      [items]="listaProfessores"
-      bindLabel="nomeCompleto"
-      bindValue="id"
-      labelForId="professor"
-      placeholder="Selecione..."
-      formControlName="professor"
-    >
-    </ng-select>
-  </div>
-
-  <div class="botoes">
-    <button mat-flat-button type="button" (click)="cancelar()">
-      <mat-icon>close</mat-icon>Cancelar
-    </button>
-    <button mat-flat-button type="submit" [disabled]="!formTurma.valid">
-      <mat-icon>check</mat-icon>
-      Salvar Turma
-    </button>
-  </div>
-</form>

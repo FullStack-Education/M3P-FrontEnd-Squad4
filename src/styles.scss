@@ -1,31 +1,57 @@
-// @import "@ng-select/ng-select/themes/material.theme.css";
 @import "@ng-select/ng-select/themes/default.theme.css";
 
+$blue-100: #e2eeff;
+$blue-200: #b2d1ff;
+$blue-500: #3f8cfe;
+$alerta: #f75262;
+$sucesso: #15b95a;
+$hover: #fff5d9;
+$borda: #eaeaea;
+$cancelar: #5a5a5a;
+
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-  font-family: "Noto Sans", "Helvetica Neue", sans-serif;
-}
-ul {
-  list-style: none;
-}
-a,
-button {
-  cursor: pointer;
 }
 
 html,
 body {
   height: 100%;
+  font-size: 62.5%;
+  font-family: "Roboto", sans-serif;
 }
+
 body {
   margin: 0;
+  font-size: 1.6rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+a,
+button {
+  cursor: pointer;
+  font-size: 1.6rem !important;
+  font-weight: 500 !important;
+}
+
+app-dialog {
+  * {
+    font-size: 1.6rem;
+    line-height: 150%;
+  }
+  h2 {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    margin-bottom: 1.6rem !important;
+  }
 }
 
 .toast-top-right {
-  top: 84px !important;
-  right: 20 !important;
+  top: 8.4rem !important;
+  right: 2rem !important;
 }
 
 .mat-mdc-unelevated-button,
@@ -37,4 +63,68 @@ body {
 .mdc-dialog--open .mat-mdc-dialog-surface,
 .mdc-dialog--closing .mat-mdc-dialog-surface {
   border-radius: 12px !important;
+}
+
+.mat-mdc-button > .mat-icon,
+.mat-mdc-unelevated-button > .mat-icon,
+.mat-mdc-raised-button > .mat-icon,
+.mat-mdc-outlined-button > .mat-icon {
+  font-size: 2rem !important;
+  height: 2rem !important;
+  width: 2rem !important;
+}
+
+.mat-mdc-unelevated-button:not(:disabled) {
+  background-color: $blue-500 !important;
+}
+
+mat-flat-button {
+  font-weight: 600 !important;
+}
+
+.mdc-evolution-chip__text-label.mat-mdc-chip-action-label {
+  font-size: 1.6rem !important;
+}
+
+.col-25 {
+  width: 23%;
+}
+.col-50 {
+  width: 50%;
+}
+.col-75 {
+  width: 75%;
+}
+.col-33 {
+  width: 32%;
+}
+.col-66 {
+  width: 66%;
+}
+
+.ng-select .ng-select-container {
+  border-color: $blue-200;
+}
+.ng-select.ng-select-disabled > .ng-select-container {
+  background-color: rgba(239, 239, 239, 0.3);
+}
+
+.bt-cancelar.mat-mdc-unelevated-button:not(:disabled) {
+  background-color: $cancelar !important;
+}
+.bt-editar.mat-mdc-unelevated-button:not(:disabled) {
+  background-color: $sucesso !important;
+}
+.bt-excluir.mat-mdc-unelevated-button:not(:disabled) {
+  background-color: $alerta !important;
+}
+
+@media (max-width: 768px) {
+  .col-25,
+  .col-50,
+  .col-75,
+  .col-33,
+  .col-66 {
+    width: 100%;
+  }
 }
