@@ -1,59 +1,65 @@
-<div class="notas-aluno">
-  <section>
-    <h2>Informações do Aluno</h2>
-    <ul>
-      <li>
-        <span>Nome:</span>
-        <strong>{{ alunoAtivo.nomeCompleto }}</strong>
-      </li>
-      <li>
-        <span>CPF:</span>
-        <strong>{{ alunoAtivo.cpf }}</strong>
-      </li>
-      <li>
-        <span>Data de Nascimento:</span>
-        <strong>{{ alunoAtivo.nascimento | date : "dd/MM/yyyy" }}</strong>
-      </li>
-      <li>
-        <span>Email:</span>
-        <strong>{{ alunoAtivo.email }}</strong>
-      </li>
-      <li>
-        <span>Telefone:</span>
-        <strong>{{ alunoAtivo.telefone }}</strong>
-      </li>
-    </ul>
+<div class="lista-notas">
+  <h2>Listagem de Notas</h2>
+  <section class="aluno">
+    <h3>Informações do Aluno</h3>
+    <div>
+      <img src="../../../assets/profile.png" [alt]="alunoAtivo.nomeCompleto" />
+      <ul>
+        <li>
+          <span>Nome:</span>
+          <strong>{{ alunoAtivo.nomeCompleto }}</strong>
+        </li>
+        <li>
+          <span>CPF:</span>
+          <strong>{{ alunoAtivo.cpf }}</strong>
+        </li>
+        <li>
+          <span>Nascimento:</span>
+          <strong>{{ alunoAtivo.nascimento | date : "dd/MM/yyyy" }}</strong>
+        </li>
+        <li>
+          <span>Email:</span>
+          <strong>{{ alunoAtivo.email }}</strong>
+        </li>
+        <li>
+          <span>Telefone:</span>
+          <strong>{{ alunoAtivo.telefone }}</strong>
+        </li>
+      </ul>
+    </div>
   </section>
 
-  <section>
-    <h2>Informações da Turma</h2>
-    @for (turma of listaTurmas; track turma.id) {
-    <ul>
-      <li>
-        <span>Nome da Turma:</span>
-        <strong>{{ turma.nomeTurma }}</strong>
-      </li>
-      <li>
-        <span>Professor:</span>
-        <strong>{{ getNomeProfessorTurma(turma.professor) }}</strong>
-      </li>
-      <li>
-        <span>Período:</span>
-        <strong
-          >{{ turma.dataInicio | date : "dd/MM/yyyy" }} a
-          {{ turma.dataTermino | date : "dd/MM/yyyy" }}</strong
-        >
-      </li>
-      <li>
-        <span>Horário:</span>
-        <strong>{{ turma.horario }}h</strong>
-      </li>
-    </ul>
-    }
+  <section class="turma">
+    <h3>Informações da Turma</h3>
+    <div class="cards">
+      @for (turma of listaTurmas; track turma.id) {
+      <ul>
+        <li>
+          <span>Turma:</span>
+          <strong>{{ turma.nomeTurma }}</strong>
+        </li>
+        <li>
+          <span>Professor:</span>
+          <strong>{{ getNomeProfessorTurma(turma.professor) }}</strong>
+        </li>
+        <li>
+          <span>Período:</span>
+          <strong
+            >{{ turma.dataInicio | date : "dd/MM/yyyy" }} a
+            {{ turma.dataTermino | date : "dd/MM/yyyy" }}</strong
+          >
+        </li>
+        <li>
+          <span>Horário:</span>
+          <strong>{{ turma.horario }}h</strong>
+        </li>
+      </ul>
+      }
+    </div>
   </section>
 
-  <section>
-    <h2>Histórico de Notas</h2>
+  <section class="notas">
+    <h3>Histórico de Notas</h3>
     <table>
       <thead>
         <tr>
@@ -76,5 +82,13 @@
         }
       </tbody>
     </table>
+    @for (nota of listaNotas; track nota.id) {
+    <ul>
+      <li><span>Avaliação: </span>{{ nota.avaliacao }}</li>
+      <li><span>Matéria: </span>{{ getNomeMaterias(nota.materia) }}</li>
+      <li><span>Data: </span>{{ nota.data | date : "dd/MM/yyyy" }}</li>
+      <li><span>Nota: </span>{{ nota.nota | number : "1.2-2" }}</li>
+    </ul>
+    }
   </section>
 </div>

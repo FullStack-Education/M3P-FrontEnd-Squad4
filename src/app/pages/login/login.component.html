@@ -1,45 +1,69 @@
-<h1>Login</h1>
+<div class="login">
+  <div class="ilustra">
+    <img src="../../../assets/ilustra.svg" alt="LabPCP" />
+    <div>
+      <h1>LabPCP</h1>
+      <p>Sistema de Gestão Educacional</p>
+    </div>
+  </div>
+  <div class="formulario">
+    <h2>Login</h2>
+    <p>Se você já possui uma conta, informe seu email e senha para acessar.</p>
 
-<form [formGroup]="formLogin" (ngSubmit)="entrar()">
-  <div>
-    <label for="email">Email:</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      autocomplete="username"
-      formControlName="email"
-    />
-    <span
-      *ngIf="(formLogin.controls['email'].touched || formLogin.controls['email'].dirty) && formLogin.controls['email'].errors?.['required']"
-      >Email obrigatório</span
-    >
+    <form [formGroup]="formLogin" (ngSubmit)="entrar()">
+      <div>
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="username"
+          formControlName="email"
+          placeholder="email@dominio.com"
+        />
+        <app-erro-form
+          [control]="formLogin.controls['email']"
+          [customMessages]="{
+            required: 'Email é obrigatório',
+            email: 'Por favor, insira um email válido'
+          }"
+        ></app-erro-form>
+      </div>
+      <div>
+        <label for="senha">Senha:</label>
+        <input
+          type="password"
+          id="senha"
+          name="senha"
+          autocomplete="current-password"
+          formControlName="senha"
+        />
+        <app-erro-form
+          [control]="formLogin.controls['senha']"
+          [customMessages]="{
+            required: 'Senha é obrigatória'
+          }"
+        ></app-erro-form>
+      </div>
+      <div class="botoes">
+        <button mat-flat-button type="submit">
+          <mat-icon>login</mat-icon>
+          Entrar
+        </button>
+        <span (click)="recuperarSenha()"> Esqueci a senha </span>
+      </div>
+      <div class="nova">
+        <p>Não possui cadastro?</p>
+        <button
+          mat-flat-button
+          type="button"
+          (click)="criarConta()"
+          class="bt-editar"
+        >
+          <mat-icon>add</mat-icon>
+          Criar conta
+        </button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label for="senha">Senha:</label>
-    <input
-      type="password"
-      id="senha"
-      name="senha"
-      autocomplete="current-password"
-      formControlName="senha"
-    />
-    <span
-      *ngIf="(formLogin.controls['senha'].touched || formLogin.controls['senha'].dirty) && formLogin.controls['senha'].errors?.['required']"
-      >Senha obrigatória</span
-    >
-  </div>
-  <div class="botoes">
-    <button mat-flat-button type="button" (click)="criarConta()">
-      <mat-icon>add</mat-icon>
-      Criar conta
-    </button>
-    <button mat-flat-button type="button" (click)="recuperarSenha()">
-      Esqueci a senha
-    </button>
-    <button mat-flat-button type="submit" [disabled]="!formLogin.valid">
-      <mat-icon>login</mat-icon>
-      Entrar
-    </button>
-  </div>
-</form>
+</div>

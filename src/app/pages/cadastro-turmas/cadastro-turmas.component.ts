@@ -7,20 +7,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
-
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
+import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -30,6 +27,7 @@ import { TurmaService } from '../../core/services/turma.service';
     MatButtonModule,
     NgSelectModule,
     MatIconModule,
+    ErroFormComponent,
   ],
   templateUrl: './cadastro-turmas.component.html',
   styleUrl: './cadastro-turmas.component.scss',

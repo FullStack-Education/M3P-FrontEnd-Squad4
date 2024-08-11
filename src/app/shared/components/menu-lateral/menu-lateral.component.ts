@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-
 import {
   MatListItem,
   MatListItemIcon,
@@ -11,12 +10,10 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-
 import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface';
-
 import { LoginService } from '../../../core/services/login.service';
-
 import { DialogComponent } from '../dialog/dialog.component';
+import { SidenavService } from '../../../core/services/sidenav.service';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -86,7 +83,8 @@ export class MenuLateralComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private sidenavService: SidenavService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +97,15 @@ export class MenuLateralComponent implements OnInit {
 
   validarPermissao(item: ItemMenuInterface): boolean {
     return item.perfis.includes(this.perfilAtivo);
+  }
+
+  closeSidenav() {
+    if (
+      this.sidenavService.sidenavMode === 'over' ||
+      this.sidenavService.sidenavMode === 'push'
+    ) {
+      this.sidenavService.close();
+    }
   }
 
   sair() {

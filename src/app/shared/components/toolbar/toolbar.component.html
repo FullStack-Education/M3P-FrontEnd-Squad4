@@ -1,18 +1,19 @@
 <mat-toolbar class="toolbar">
-  <button
-    mat-icon-button
-    (click)="toggleSidenav()"
-    aria-label="Exibir/ocultar menu"
-  >
-    <mat-icon>menu</mat-icon>
-  </button>
-  <h1>LabPCP</h1>
-  <span class="spacer"></span>
+  <div class="logo">
+    <button
+      mat-icon-button
+      (click)="toggleSidenav()"
+      aria-label="Exibir/ocultar menu"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1>LabPCP</h1>
+  </div>
   <div class="avatar">
     <img [src]="usuarioAtivo.avatar" [alt]="usuarioAtivo.nome" />
     <span>{{ usuarioAtivo.nome }}</span>
+    <button mat-icon-button (click)="sair()" aria-label="Sair do Sistema">
+      <mat-icon>logout</mat-icon>
+    </button>
   </div>
-  <button mat-icon-button (click)="sair()" aria-label="Sair do Sistema">
-    <mat-icon>logout</mat-icon>
-  </button>
 </mat-toolbar>

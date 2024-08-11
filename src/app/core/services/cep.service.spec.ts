@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CepService } from './cep.service';
 
 describe('CepService', () => {

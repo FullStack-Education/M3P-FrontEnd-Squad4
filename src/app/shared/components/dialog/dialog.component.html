@@ -3,7 +3,12 @@
   <p>{{ data.mensagem }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button *ngIf="data.btCancelar" (click)="cancelarAcao()">
+  <button
+    mat-flat-button
+    *ngIf="data.btCancelar"
+    (click)="cancelarAcao()"
+    class="bt-cancelar"
+  >
     <mat-icon>close</mat-icon>
     {{ data.btCancelar }}
   </button>

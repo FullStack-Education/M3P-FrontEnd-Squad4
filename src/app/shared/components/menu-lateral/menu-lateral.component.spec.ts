@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MenuLateralComponent } from './menu-lateral.component';
 
 describe('MenuLateralComponent', () => {
@@ -8,9 +7,8 @@ describe('MenuLateralComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuLateralComponent]
-    })
-    .compileComponents();
+      imports: [MenuLateralComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MenuLateralComponent);
     component = fixture.componentInstance;

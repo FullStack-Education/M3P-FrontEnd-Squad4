@@ -1,5 +1,5 @@
 <mat-sidenav-container class="container">
-  <mat-sidenav mode="side" [(opened)]="opened" *ngIf="showMenuLateral">
+  <mat-sidenav [mode]="sidenavMode" [(opened)]="opened" *ngIf="showMenuLateral">
     <app-menu-lateral></app-menu-lateral>
   </mat-sidenav>
 

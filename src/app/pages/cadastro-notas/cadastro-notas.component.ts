@@ -7,25 +7,23 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { NotaInterface } from '../../core/interfaces/nota.interface';
-
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { AlunoService } from '../../core/services/aluno.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
+import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { TurmaInterface } from '../../core/interfaces/turma.interface';
+import { TurmaService } from '../../core/services/turma.service';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -35,6 +33,7 @@ import { NotaService } from '../../core/services/nota.service';
     MatButtonModule,
     NgSelectModule,
     MatIconModule,
+    ErroFormComponent,
   ],
   templateUrl: './cadastro-notas.component.html',
   styleUrl: './cadastro-notas.component.scss',
@@ -42,6 +41,7 @@ import { NotaService } from '../../core/services/nota.service';
 export class CadastroNotasComponent {
   formNota!: FormGroup;
   idAluno!: string;
+  listaTurmas: TurmaInterface[] = [];
   listaProfessores: DocenteInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
@@ -52,6 +52,7 @@ export class CadastroNotasComponent {
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private notaService: NotaService,
+    private turmaService: TurmaService,
     private docenteService: DocenteService,
     private alunoService: AlunoService,
     private materiaService: MateriaService,
@@ -64,12 +65,17 @@ export class CadastroNotasComponent {
     this.idAluno = this.activatedRoute.snapshot.params['id'];
 
     this.formNota = new FormGroup({
+      turma: new FormControl('', Validators.required),
       professor: new FormControl('', Validators.required),
       materia: new FormControl('', Validators.required),
       avaliacao: new FormControl('', Validators.required),
       data: new FormControl('', Validators.required),
       aluno: new FormControl('', Validators.required),
-      nota: new FormControl('', Validators.required),
+      nota: new FormControl('', [
+        Validators.required,
+        Validators.min(0),
+        Validators.max(10),
+      ]),
     });
 
     const now = new Date();
@@ -103,6 +109,10 @@ export class CadastroNotasComponent {
         this.listaProfessores = retorno;
       });
     }
+
+    this.turmaService.getTurmas().subscribe((retorno) => {
+      this.listaTurmas = retorno;
+    });
 
     this.materiaService.getMaterias().subscribe((retorno) => {
       this.listaMaterias = retorno;

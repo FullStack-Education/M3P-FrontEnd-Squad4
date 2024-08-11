@@ -1,183 +1,283 @@
-<div class="titulo">
-  <h2>{{ !idAluno ? "Cadastro" : "Edição" }} de Aluno</h2>
-  <div class="botoes">
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idAluno"
-      (click)="habilitarEdicao()"
-    >
-      <mat-icon>edit</mat-icon>
-      Editar
-    </button>
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="!idAluno"
-      (click)="excluirAluno(formAluno.value)"
-    >
-      <mat-icon>delete</mat-icon>
-      Excluir
-    </button>
+<div class="alunos">
+  <h2>Gerenciamento de Aluno</h2>
+  <div class="titulo">
+    <h3>{{ !idAluno ? "Cadastro" : "Edição" }}</h3>
+    <div class="botoes">
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="!idAluno"
+        (click)="habilitarEdicao()"
+        class="bt-editar"
+      >
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="!idAluno"
+        (click)="excluirAluno(formAluno.value)"
+        class="bt-excluir"
+      >
+        <mat-icon>delete</mat-icon>
+        Excluir
+      </button>
+    </div>
   </div>
+  <form [formGroup]="formAluno" (ngSubmit)="submitForm()">
+    <div class="col-66">
+      <label for="nome">Nome Completo</label>
+      <input type="text" name="nome" id="nome" formControlName="nomeCompleto" />
+      <app-erro-form
+        [control]="formAluno.controls['nomeCompleto']"
+        [customMessages]="{
+          required: 'Nome completo é obrigatório',
+          minlength: 'O nome precisa ter no mínimo 8 caracteres',
+          maxlength: 'O nome pode ter no máximo 64 caracteres'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="genero">Gênero</label>
+      <ng-select
+        [items]="generos"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="genero"
+        placeholder="Selecione..."
+        formControlName="genero"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formAluno.controls['genero']"
+        [customMessages]="{
+          required: 'Gênero é obrigatório',
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="nascimento">Data de Nascimento</label>
+      <input
+        type="date"
+        name="nascimento"
+        id="nascimento"
+        formControlName="nascimento"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['nascimento']"
+        [customMessages]="{
+          required: 'Data de nascimento é obrigatória',
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-66">
+      <label for="naturalidade">Naturalidade</label>
+      <input
+        type="text"
+        name="naturalidade"
+        id="naturalidade"
+        formControlName="naturalidade"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['naturalidade']"
+        [customMessages]="{
+          required: 'Naturalidade é obrigatória',
+          minlength: 'Naturalidade precisa ter no mínimo 8 caracteres',
+          maxlength: 'Naturalidade pode ter no máximo 64 caracteres'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="cpf">CPF</label>
+      <input
+        type="text"
+        name="cpf"
+        id="cpf"
+        formControlName="cpf"
+        placeholder="000.000.000-00"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['cpf']"
+        [customMessages]="{
+          required: 'CPF é obrigatório',
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="rg">RG com Órgão Expeditor</label>
+      <input type="text" name="rg" id="rg" formControlName="rg" />
+      <app-erro-form
+        [control]="formAluno.controls['rg']"
+        [customMessages]="{
+          required: 'RG é obrigatório',
+          maxlength: 'RG pode ter no máximo 20 caracteres'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="telefone">Telefone</label>
+      <input
+        type="tel"
+        name="telefone"
+        id="telefone"
+        formControlName="telefone"
+        placeholder="(00) 00000-0000"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['telefone']"
+        [customMessages]="{
+          required: 'Telefone é obrigatório'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-66">
+      <label for="email">E-mail</label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        autocomplete="username"
+        formControlName="email"
+        placeholder="email@dominio.com"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['email']"
+        [customMessages]="{
+          email: 'Por favor, insira um email válido'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="senha">Senha</label>
+      <input
+        type="password"
+        name="senha"
+        id="senha"
+        autocomplete="current-password"
+        formControlName="senha"
+      />
+      <app-erro-form
+        [control]="formAluno.controls['senha']"
+        [customMessages]="{
+            required: 'Senha é obrigatória',
+            minlength: 'A senha precisa ter no mínimo 8 caracteres',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-66">
+      <label for="turmas">Turmas</label>
+      <ng-select
+        [items]="listaTurmas"
+        bindLabel="nomeTurma"
+        bindValue="id"
+        labelForId="turmas"
+        [multiple]="true"
+        placeholder="Selecione..."
+        formControlName="turmas"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formAluno.controls['turmas']"
+        [customMessages]="{
+          required: 'Campo obrigatório, selecione uma ou mais turmas.'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <fieldset>
+      <legend>Endereço</legend>
+
+      <div class="col-25">
+        <label for="cep">CEP</label>
+        <input
+          type="text"
+          name="cep"
+          id="cep"
+          formControlName="cep"
+          (blur)="buscarCep()"
+          placeholder="00000-000"
+        />
+      </div>
+
+      <div class="col-50">
+        <label for="localidade">Cidade</label>
+        <input
+          type="text"
+          name="localidade"
+          id="localidade"
+          formControlName="localidade"
+        />
+      </div>
+
+      <div class="col-25">
+        <label for="uf">Estado</label>
+        <input type="text" name="uf" id="uf" formControlName="uf" />
+      </div>
+
+      <div class="col-66">
+        <label for="logradouro">Logradouro</label>
+        <input
+          type="text"
+          name="logradouro"
+          id="logradouro"
+          formControlName="logradouro"
+        />
+      </div>
+
+      <div class="col-33">
+        <label for="numero">Número</label>
+        <input type="text" name="numero" id="numero" formControlName="numero" />
+      </div>
+
+      <div class="col-66">
+        <label for="complemento">Complemento</label>
+        <input
+          type="text"
+          name="complemento"
+          id="complemento"
+          formControlName="complemento"
+        />
+      </div>
+
+      <div class="col-33">
+        <label for="bairro">Bairro</label>
+        <input type="text" name="bairro" id="bairro" formControlName="bairro" />
+      </div>
+
+      <div class="col-66">
+        <label for="referencia">Ponto de Referência</label>
+        <input
+          type="text"
+          name="referencia"
+          id="referencia"
+          formControlName="referencia"
+        />
+      </div>
+    </fieldset>
+
+    <div class="botoes">
+      <button
+        mat-flat-button
+        type="button"
+        (click)="cancelar()"
+        class="bt-cancelar"
+      >
+        <mat-icon>close</mat-icon>Cancelar
+      </button>
+      <button mat-flat-button type="submit">
+        <mat-icon>check</mat-icon>
+        {{ !idAluno ? "Salvar Aluno" : "Salvar Alterações" }}
+      </button>
+    </div>
+  </form>
 </div>
-<form [formGroup]="formAluno" (ngSubmit)="submitForm()">
-  <div>
-    <label for="nome">Nome Completo</label>
-    <input type="text" name="nome" id="nome" formControlName="nomeCompleto" />
-  </div>
-
-  <div>
-    <label for="nascimento">Data de Nascimento</label>
-    <input
-      type="date"
-      name="nascimento"
-      id="nascimento"
-      formControlName="nascimento"
-    />
-  </div>
-
-  <div>
-    <label for="naturalidade">Naturalidade</label>
-    <input
-      type="text"
-      name="naturalidade"
-      id="naturalidade"
-      formControlName="naturalidade"
-    />
-  </div>
-
-  <div>
-    <label for="genero">Gênero</label>
-    <select name="genero" id="genero" formControlName="genero">
-      <option *ngFor="let genero of generos | keyvalue" [value]="genero.value">
-        {{ genero.value }}
-      </option>
-    </select>
-  </div>
-
-  <div>
-    <label for="cpf">CPF</label>
-    <input type="text" name="cpf" id="cpf" formControlName="cpf" />
-  </div>
-
-  <div>
-    <label for="rg">RG com Órgão Expeditor</label>
-    <input type="text" name="rg" id="rg" formControlName="rg" />
-  </div>
-
-  <div>
-    <label for="telefone">Telefone</label>
-    <input
-      type="tel"
-      name="telefone"
-      id="telefone"
-      formControlName="telefone"
-    />
-  </div>
-
-  <div>
-    <label for="email">E-mail</label>
-    <input
-      type="email"
-      name="email"
-      id="email"
-      autocomplete="username"
-      formControlName="email"
-    />
-  </div>
-
-  <div>
-    <label for="senha">Senha</label>
-    <input
-      type="password"
-      name="senha"
-      id="senha"
-      autocomplete="current-password"
-      formControlName="senha"
-    />
-  </div>
-
-  <div>
-    <label for="cep">CEP</label>
-    <input
-      type="text"
-      name="cep"
-      id="cep"
-      formControlName="cep"
-      (blur)="buscarCep()"
-    />
-  </div>
-  <div>
-    <label for="localidade">Cidade</label>
-    <input
-      type="text"
-      name="localidade"
-      id="localidade"
-      formControlName="localidade"
-    />
-  </div>
-  <div>
-    <label for="uf">Estado</label>
-    <input type="text" name="uf" id="uf" formControlName="uf" />
-  </div>
-  <div>
-    <label for="logradouro">Logradouro</label>
-    <input
-      type="text"
-      name="logradouro"
-      id="logradouro"
-      formControlName="logradouro"
-    />
-  </div>
-  <div>
-    <label for="numero">Número</label>
-    <input type="text" name="numero" id="numero" formControlName="numero" />
-  </div>
-  <div>
-    <label for="complemento">Complemento</label>
-    <input
-      type="text"
-      name="complemento"
-      id="complemento"
-      formControlName="complemento"
-    />
-  </div>
-  <div>
-    <label for="bairro">Bairro</label>
-    <input type="text" name="bairro" id="bairro" formControlName="bairro" />
-  </div>
-  <div>
-    <label for="referencia">Ponto de Referência</label>
-    <input
-      type="text"
-      name="referencia"
-      id="referencia"
-      formControlName="referencia"
-    />
-  </div>
-
-  <div>
-    <label for="turmas">Turmas</label>
-    <ng-select
-      [items]="listaTurmas"
-      bindLabel="nomeTurma"
-      bindValue="id"
-      labelForId="turmas"
-      [multiple]="true"
-      placeholder="Selecione..."
-      formControlName="turmas"
-    >
-    </ng-select>
-  </div>
-
-  <div class="botoes">
-    <button mat-flat-button type="button" (click)="cancelar()">
-      <mat-icon>close</mat-icon>Cancelar
-    </button>
-    <button mat-flat-button type="submit" [disabled]="!formAluno.valid">
-      <mat-icon>check</mat-icon>
-      {{ !idAluno ? "Salvar Aluno" : "Salvar Alterações" }}
-    </button>
-  </div>
-</form>

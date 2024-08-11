@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MatButtonModule } from '@angular/material/button';
-
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { NotaInterface } from '../../core/interfaces/nota.interface';
-
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { AlunoService } from '../../core/services/aluno.service';
@@ -26,11 +23,31 @@ import { NotaService } from '../../core/services/nota.service';
 })
 export class ListagemNotasComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
-  alunoAtivo!: AlunoInterface;
+  alunoAtivo: AlunoInterface = {
+    id: '',
+    nomeCompleto: '',
+    genero: '',
+    nascimento: new Date(),
+    cpf: '',
+    rg: '',
+    telefone: '',
+    email: '',
+    senha: '',
+    naturalidade: '',
+    cep: 0,
+    localidade: '',
+    uf: '',
+    logradouro: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    referencia: '',
+    turmas: [],
+  };
   listaAlunos!: AlunoInterface[];
-  listaDocentes!: DocenteInterface[];
+  listaDocentes: DocenteInterface[] = [];
   listaTurmas!: TurmaInterface[];
-  listaMaterias!: MateriaInterface[];
+  listaMaterias: MateriaInterface[] = [];
   listaNotas!: NotaInterface[];
 
   constructor(
@@ -90,11 +107,18 @@ export class ListagemNotasComponent implements OnInit {
       .getNotasByAluno(this.alunoAtivo.id)
       .subscribe((retorno) => {
         this.listaNotas = retorno;
+        this.ordenarNotasPorDataAsc();
         let idMaterias = retorno.map((item) => {
           return item.materia;
         });
         this.getMateriasAluno(idMaterias);
       });
+  }
+
+  ordenarNotasPorDataAsc() {
+    this.listaNotas.sort((a, b) => {
+      return new Date(a.data).getTime() - new Date(b.data).getTime();
+    });
   }
 
   getMateriasAluno(ids: Array<string>) {

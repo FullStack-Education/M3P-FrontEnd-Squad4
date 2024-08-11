@@ -7,24 +7,19 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
-
 import { AlunoService } from '../../core/services/aluno.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { CepService } from '../../core/services/cep.service';
-
 import { Genero } from '../../core/enums/genero.enum';
-
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -35,6 +30,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
     MatIconModule,
     NgSelectModule,
     CommonModule,
+    ErroFormComponent,
   ],
   templateUrl: './cadastro-alunos.component.html',
   styleUrl: './cadastro-alunos.component.scss',
@@ -43,7 +39,10 @@ export class CadastroAlunosComponent {
   formAluno!: FormGroup;
   idAluno: string | undefined;
   listaTurmas: TurmaInterface[] = [];
-  generos = Genero;
+  generos = Object.keys(Genero).map((key) => ({
+    id: Genero[key as keyof typeof Genero],
+    nome: Genero[key as keyof typeof Genero],
+  }));
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,16 +70,16 @@ export class CadastroAlunosComponent {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      genero: new FormControl('', Validators.required),
+      genero: new FormControl(null, Validators.required),
       cpf: new FormControl('', Validators.required),
-      rg: new FormControl('', Validators.required),
+      rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       telefone: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', Validators.email),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
-      cep: new FormControl('', Validators.required),
+      cep: new FormControl(''),
       localidade: new FormControl(''),
       uf: new FormControl(''),
       logradouro: new FormControl(''),
@@ -88,7 +87,7 @@ export class CadastroAlunosComponent {
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       referencia: new FormControl(''),
-      turmas: new FormControl('', Validators.required),
+      turmas: new FormControl(null, Validators.required),
     });
 
     this.turmaService

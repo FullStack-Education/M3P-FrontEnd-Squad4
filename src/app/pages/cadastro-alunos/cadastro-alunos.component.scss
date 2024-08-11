@@ -1,0 +1,101 @@
+@import "../../../styles.scss";
+
+.alunos {
+  background-color: $blue-100;
+  padding: 3.2rem;
+  min-height: calc(100vh - 80px);
+  h2 {
+    font-size: 3.6rem;
+    margin-top: 0;
+    margin-bottom: 4rem;
+  }
+  h3 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    border-bottom: 2px dashed $blue-200;
+    padding-bottom: 1rem;
+    flex-grow: 1;
+  }
+  .titulo {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    .botoes {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+  }
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.6rem;
+    }
+    input,
+    select {
+      border: 1px solid $blue-200;
+      border-radius: 4px;
+      padding: 1rem 1.6rem;
+      font-size: 1.6rem;
+    }
+    fieldset {
+      border: 1px solid $blue-200;
+      padding: 2.4rem;
+      border-radius: 1rem;
+      width: 100%;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      legend {
+        background-color: $blue-200;
+        padding: 1rem 1.6rem;
+        border-radius: 4px;
+      }
+    }
+    .botoes {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .alunos {
+    min-height: calc(100vh - 64px);
+    padding: 2rem;
+    h2 {
+      font-size: 2.6rem;
+      margin-bottom: 3rem;
+    }
+    h3 {
+      font-size: 1.8rem;
+    }
+    .titulo {
+      flex-direction: column-reverse;
+    }
+    form {
+      fieldset {
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 0;
+        border-top: 1px solid $blue-200;
+      }
+    }
+  }
+}
+@media (max-width: 599px) {
+  .alunos {
+    min-height: calc(100vh - 56px);
+  }
+}

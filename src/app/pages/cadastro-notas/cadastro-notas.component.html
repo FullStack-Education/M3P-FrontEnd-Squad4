@@ -1,83 +1,158 @@
-<div class="titulo">
-  <h2>Cadastro de Avaliação/Nota</h2>
-  <div class="botoes">
-    <button mat-flat-button type="button" [disabled]="true">
-      <mat-icon>edit</mat-icon>
-      Editar
-    </button>
-    <button mat-flat-button type="button" [disabled]="true">
-      <mat-icon>delete</mat-icon>
-      Excluir
-    </button>
+<div class="notas">
+  <h2>Gerenciamento de Avaliação</h2>
+  <div class="titulo">
+    <h3>Cadastro</h3>
+    <div class="botoes">
+      <button mat-flat-button type="button" [disabled]="true" class="bt-editar">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="true"
+        class="bt-excluir"
+      >
+        <mat-icon>delete</mat-icon>
+        Excluir
+      </button>
+    </div>
   </div>
+  <form [formGroup]="formNota" (ngSubmit)="submitForm()">
+    <div class="col-33">
+      <label for="turma">Turma</label>
+      <ng-select
+        [items]="listaTurmas"
+        bindLabel="turmas"
+        bindValue="id"
+        labelForId="turma"
+        placeholder="Selecione..."
+        formControlName="turma"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formNota.controls['turma']"
+        [customMessages]="{
+            required: 'Turma é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+    <div class="col-66">
+      <label for="professor">Professor</label>
+      <ng-select
+        [items]="listaProfessores"
+        bindLabel="nomeCompleto"
+        bindValue="id"
+        labelForId="professor"
+        placeholder="Selecione..."
+        formControlName="professor"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formNota.controls['professor']"
+        [customMessages]="{
+            required: 'Professor é obrigatório',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="materia">Nome da Materia</label>
+      <ng-select
+        [items]="listaMaterias"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="materia"
+        placeholder="Selecione..."
+        formControlName="materia"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formNota.controls['materia']"
+        [customMessages]="{
+            required: 'Matéria é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-66">
+      <label for="aluno">Nome do Aluno</label>
+      <ng-select
+        [items]="listaAlunos"
+        bindLabel="nomeCompleto"
+        bindValue="id"
+        labelForId="aluno"
+        placeholder="Selecione..."
+        formControlName="aluno"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formNota.controls['aluno']"
+        [customMessages]="{
+            required: 'Nome do aluno é obrigatório',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-50">
+      <label for="avaliacao">Nome da Avaliação</label>
+      <input
+        type="text"
+        name="avaliacao"
+        id="avaliacao"
+        formControlName="avaliacao"
+      />
+      <app-erro-form
+        [control]="formNota.controls['avaliacao']"
+        [customMessages]="{
+            required: 'Nome da avaliação é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-25">
+      <label for="data">Data da Avaliação</label>
+      <input type="date" name="data" id="data" formControlName="data" />
+      <app-erro-form
+        [control]="formNota.controls['data']"
+        [customMessages]="{
+            required: 'Data é obrigatória',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-25">
+      <label for="nota">Nota</label>
+      <input
+        type="number"
+        name="nota"
+        id="nota"
+        formControlName="nota"
+        placeholder="0.0"
+      />
+      <app-erro-form
+        [control]="formNota.controls['nota']"
+        [customMessages]="{
+          required: 'Nota é obrigatória',
+          min: 'Nota mínima é 0 (zero)',
+          max: 'Nota máxima é 10 (dez)'
+        }"
+      ></app-erro-form>
+    </div>
+
+    <div class="botoes">
+      <button
+        mat-flat-button
+        type="button"
+        class="bt-cancelar"
+        (click)="cancelar()"
+      >
+        <mat-icon>close</mat-icon>Cancelar
+      </button>
+      <button mat-flat-button type="submit">
+        <mat-icon>check</mat-icon>
+        Salvar Nota
+      </button>
+    </div>
+  </form>
 </div>
-<form [formGroup]="formNota" (ngSubmit)="submitForm()">
-  <div>
-    <label for="professor">Professor</label>
-    <ng-select
-      [items]="listaProfessores"
-      bindLabel="nomeCompleto"
-      bindValue="id"
-      labelForId="professor"
-      placeholder="Selecione..."
-      formControlName="professor"
-    >
-    </ng-select>
-  </div>
-
-  <div>
-    <label for="materia">Nome da Materia</label>
-    <ng-select
-      [items]="listaMaterias"
-      bindLabel="nome"
-      bindValue="id"
-      labelForId="materia"
-      placeholder="Selecione..."
-      formControlName="materia"
-    >
-    </ng-select>
-  </div>
-
-  <div>
-    <label for="aluno">Nome do Aluno</label>
-    <ng-select
-      [items]="listaAlunos"
-      bindLabel="nomeCompleto"
-      bindValue="id"
-      labelForId="aluno"
-      placeholder="Selecione..."
-      formControlName="aluno"
-    >
-    </ng-select>
-  </div>
-
-  <div>
-    <label for="avaliacao">Nome da Avaliação</label>
-    <input
-      type="text"
-      name="avaliacao"
-      id="avaliacao"
-      formControlName="avaliacao"
-    />
-  </div>
-
-  <div>
-    <label for="data">Data da Avaliação</label>
-    <input type="date" name="data" id="data" formControlName="data" />
-  </div>
-
-  <div>
-    <label for="nota">Nota</label>
-    <input type="number" name="nota" id="nota" formControlName="nota" />
-  </div>
-
-  <div class="botoes">
-    <button mat-flat-button type="button" (click)="cancelar()">
-      <mat-icon>close</mat-icon>Cancelar
-    </button>
-    <button mat-flat-button type="submit" [disabled]="!formNota.valid">
-      <mat-icon>check</mat-icon>
-      Salvar Nota
-    </button>
-  </div>
-</form>
