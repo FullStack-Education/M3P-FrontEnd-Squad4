@@ -24,6 +24,12 @@ export class TurmaService {
     );
   }
 
+  getTurmasByAluno(idAluno: string) {
+    return this.httpClient.get<Array<TurmaInterface>>(
+      this.url + `?aluno=${idAluno}`
+    );
+  }
+
   postTurma(turma: TurmaInterface) {
     return this.httpClient.post<any>(this.url, turma);
   }

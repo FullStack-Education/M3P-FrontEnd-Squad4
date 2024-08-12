@@ -2,42 +2,26 @@
   "usuarios": [
     {
       "id": "1",
-      "email": "scheila@email.com",
-      "senha": "abc123",
-      "nome": "Scheila Stihler",
+      "email": "admin@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Admin",
       "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
       "perfil": "admin"
     },
     {
       "id": "2",
-      "email": "eduardo@email.com",
-      "senha": "abc123",
-      "nome": "Eduardo Silva",
+      "email": "docente@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Docente",
       "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
       "perfil": "docente"
     },
     {
       "id": "3",
-      "email": "rayane@email.com",
-      "senha": "abc123",
-      "nome": "Rayane Cristina",
-      "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
-      "perfil": "docente"
-    },
-    {
-      "id": "4",
-      "email": "suene@email.com",
-      "senha": "abc123",
-      "nome": "Suene Souza",
+      "email": "aluno@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Aluno",
       "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
-      "perfil": "aluno"
-    },
-    {
-      "id": "5",
-      "email": "leandro@email.com",
-      "senha": "abc123",
-      "nome": "Leandro Dias",
-      "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
       "perfil": "aluno"
     }
   ],
@@ -52,7 +36,7 @@
       "estadoCivil": "Casado",
       "telefone": "(31) 1234-5678",
       "email": "eduardo@email.com",
-      "senha": "abc123",
+      "senha": "abc12345",
       "naturalidade": "Belo Horizonte",
       "cep": 30130100,
       "localidade": "Belo Horizonte",
@@ -62,22 +46,19 @@
       "complemento": "Apto 101",
       "bairro": "Centro",
       "referencia": "Próximo ao Parque Municipal",
-      "materias": [
-        "1",
-        "2"
-      ]
+      "materias": ["1", "2"]
     },
     {
       "id": "2",
       "nomeCompleto": "Rayane Cristina",
       "genero": "Feminino",
-      "nascimento": "1975-10-22",
+      "nascimento": "2000-10-22",
       "cpf": "23456789011",
       "rg": "SP-23.456.789",
       "estadoCivil": "Solteiro",
       "telefone": "(11) 2345-6789",
       "email": "rayane@email.com",
-      "senha": "abc123",
+      "senha": "abc12345",
       "naturalidade": "São Paulo",
       "cep": 88001000,
       "localidade": "São Paulo",
@@ -87,82 +68,39 @@
       "complemento": "Bloco B",
       "bairro": "Centro",
       "referencia": "Próximo ao MASP",
-      "materias": [
-        "1",
-        "2",
-        "3"
-      ]
-    },
-    {
-      "id": "4ecc",
-      "nomeCompleto": "sca lakjsdf lkasj dflkjas dflk dj",
-      "nascimento": "2024-08-01",
-      "naturalidade": "asdfasdfasdfasdf",
-      "genero": "Masculino",
-      "cpf": "1234567898",
-      "rg": "asdfasdf",
-      "estadoCivil": "Solteiro",
-      "telefone": "554654564654",
-      "email": "asfasdf@asdfasdf",
-      "senha": "56465482",
-      "cep": "88036-260",
-      "localidade": "Florianópolis",
-      "uf": "SC",
-      "logradouro": "Rua Presidente Gama Rosa",
-      "numero": "",
-      "complemento": "",
-      "bairro": "Trindade",
-      "referencia": "",
-      "materias": [
-        "3"
-      ]
+      "materias": ["3"]
     }
   ],
   "turmas": [
     {
       "id": "1",
       "nomeTurma": "FullStack",
-      "dataInicio": "2024-08-15",
+      "dataInicio": "2023-12-01",
       "dataTermino": "2024-12-15",
-      "horario": "10:00",
+      "horario": "20:00",
       "professor": "1"
     },
     {
       "id": "2",
       "nomeTurma": "DEVstart",
-      "dataInicio": "2024-08-15",
-      "dataTermino": "2024-12-15",
+      "dataInicio": "2024-01-15",
+      "dataTermino": "2024-10-31",
       "horario": "18:00",
       "professor": "2"
-    },
-    {
-      "id": "6904",
-      "nomeTurma": "Análise de dados",
-      "dataInicio": "2024-08-11",
-      "dataTermino": "2024-08-11",
-      "horario": "16:01",
-      "professor": "4ecc"
-    },
-    {
-      "id": "5416",
-      "nomeTurma": "Biologia",
-      "dataInicio": "2024-04-08",
-      "dataTermino": "2024-09-07",
-      "horario": "19:00",
-      "professor": "1"
     }
   ],
   "alunos": [
     {
-      "nomeCompleto": "Suene Souza Silva Costa de Oliveira",
-      "nascimento": "2000-01-15",
-      "naturalidade": "Belo Horizonte",
+      "id": "1",
+      "nomeCompleto": "Scheila Stihler",
+      "nascimento": "1978-07-18",
+      "naturalidade": "Rio do Sul",
       "genero": "Feminino",
       "cpf": "12345678900",
       "rg": "MG-12.345.678",
       "telefone": "(31) 1234-5678",
-      "email": "suene@email.com",
-      "senha": "abc12355",
+      "email": "scheila@email.com",
+      "senha": "abc12378",
       "cep": 88036260,
       "localidade": "Florianópolis",
       "uf": "SC",
@@ -171,23 +109,19 @@
       "complemento": "",
       "bairro": "Trindade",
       "referencia": "Próximo ao Shopping Villa Romana",
-      "turmas": [
-        "1",
-        "2"
-      ],
-      "id": "1"
+      "turmas": ["1", "2"]
     },
     {
       "id": "2",
-      "nomeCompleto": "Leandro Dias",
+      "nomeCompleto": "Rodrigo Noronha",
       "genero": "Masculino",
-      "nascimento": "2000-01-15",
+      "nascimento": "1981-10-26",
       "cpf": "12345678900",
       "rg": "MG-12.345.678",
       "telefone": "(11) 99555-9911",
-      "email": "leandro@email.com",
-      "senha": "abc123",
-      "naturalidade": "Belo Horizonte",
+      "email": "rodrigo@email.com",
+      "senha": "abc12345",
+      "naturalidade": "Florianópolis",
       "cep": 88036260,
       "localidade": "Florianópolis",
       "uf": "SC",
@@ -196,176 +130,14 @@
       "complemento": "",
       "bairro": "Trindade",
       "referencia": "Próximo ao Shopping Villa Romana",
-      "turmas": [
-        "1"
-      ]
-    },
-    {
-      "id": "3",
-      "nomeCompleto": "Cheryl Henckels",
-      "genero": "Feminino",
-      "nascimento": "2002-08-02",
-      "cpf": "12345678900",
-      "rg": "MG-12.345.678",
-      "telefone": "(47) 98345-9118",
-      "email": "cheryl@email.com",
-      "senha": "abc123",
-      "naturalidade": "Belo Horizonte",
-      "cep": 88036260,
-      "localidade": "Florianópolis",
-      "uf": "SC",
-      "logradouro": "Rua Presidente Gama Rosa",
-      "numero": "195",
-      "complemento": "",
-      "bairro": "Trindade",
-      "referencia": "Próximo ao Shopping Villa Romana",
-      "turmas": [
-        "1"
-      ]
-    },
-    {
-      "id": "5",
-      "nomeCompleto": "Cheryl Henckels",
-      "genero": "Feminino",
-      "nascimento": "2002-08-02",
-      "cpf": "12345678900",
-      "rg": "MG-12.345.678",
-      "telefone": "(47) 98345-9118",
-      "email": "cheryl@email.com",
-      "senha": "abc123",
-      "naturalidade": "Belo Horizonte",
-      "cep": 88036260,
-      "localidade": "Florianópolis",
-      "uf": "SC",
-      "logradouro": "Rua Presidente Gama Rosa",
-      "numero": "195",
-      "complemento": "",
-      "bairro": "Trindade",
-      "referencia": "Próximo ao Shopping Villa Romana",
-      "turmas": [
-        "1"
-      ]
-    },
-    {
-      "id": "baea",
-      "nomeCompleto": "dlk çlks dçflka sdçfl kadsçfk",
-      "nascimento": "2024-08-11",
-      "naturalidade": "asdfasdfasdf",
-      "genero": "Feminino",
-      "cpf": "112345678982",
-      "rg": "asdfasdfasdf",
-      "telefone": "44564564654654",
-      "email": "asdfasdf@asdfasdfsdf",
-      "senha": "12345678",
-      "cep": "88036-260",
-      "localidade": "Florianópolis",
-      "uf": "SC",
-      "logradouro": "Rua Presidente Gama Rosa",
-      "numero": "",
-      "complemento": "",
-      "bairro": "Trindade",
-      "referencia": "",
-      "turmas": [
-        "2"
-      ]
+      "turmas": ["2"]
     }
   ],
-  "notas": [
-    {
-      "id": "1",
-      "professor": "1",
-      "materia": "1",
-      "avaliacao": "Prova escrita",
-      "data": "2024-08-04",
-      "aluno": "1",
-      "nota": 10
-    },
-    {
-      "id": "2",
-      "professor": "2",
-      "materia": "2",
-      "avaliacao": "Prova escrita",
-      "data": "2024-08-04",
-      "aluno": "1",
-      "nota": 8
-    },
-    {
-      "id": "092d",
-      "professor": "1",
-      "materia": "1",
-      "avaliacao": "Trabalho final",
-      "data": "2024-08-04",
-      "aluno": "1",
-      "nota": 9.35
-    },
-    {
-      "id": "d4bf",
-      "professor": "1",
-      "materia": "1",
-      "avaliacao": "asdfasdf",
-      "data": "2024-08-05",
-      "aluno": "1",
-      "nota": 5
-    },
-    {
-      "id": "c94f",
-      "professor": "1",
-      "materia": "2",
-      "avaliacao": "Trabalho final",
-      "data": "2024-08-05",
-      "aluno": "3",
-      "nota": 10
-    },
-    {
-      "id": "3d3b",
-      "professor": "1",
-      "materia": "2",
-      "avaliacao": "Teste Responsividade",
-      "data": "2024-08-07",
-      "aluno": "3",
-      "nota": 10
-    },
-    {
-      "id": "74e2",
-      "professor": "1",
-      "materia": "3",
-      "avaliacao": "ABC",
-      "data": "2024-06-11",
-      "aluno": "1",
-      "nota": 5
-    },
-    {
-      "id": "74e4",
-      "professor": "1",
-      "materia": "3",
-      "avaliacao": "ABC",
-      "data": "2024-08-03",
-      "aluno": "1",
-      "nota": 5
-    },
-    {
-      "id": "92e4",
-      "professor": "1",
-      "materia": "3",
-      "avaliacao": "ABC",
-      "data": "2024-08-03",
-      "aluno": "1",
-      "nota": 4
-    },
-    {
-      "id": "13e4",
-      "professor": "1",
-      "materia": "4",
-      "avaliacao": "ABC",
-      "data": "2024-08-03",
-      "aluno": "1",
-      "nota": 4
-    }
-  ],
+  "notas": [],
   "materias": [
     {
       "id": "1",
-      "nome": "Análise e desenvolvimento de sistemas III"
+      "nome": "HTML"
     },
     {
       "id": "2",

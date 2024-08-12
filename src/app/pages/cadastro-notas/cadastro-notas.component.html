@@ -19,24 +19,6 @@
     </div>
   </div>
   <form [formGroup]="formNota" (ngSubmit)="submitForm()">
-    <div class="col-33">
-      <label for="turma">Turma</label>
-      <ng-select
-        [items]="listaTurmas"
-        bindLabel="turmas"
-        bindValue="id"
-        labelForId="turma"
-        placeholder="Selecione..."
-        formControlName="turma"
-      >
-      </ng-select>
-      <app-erro-form
-        [control]="formNota.controls['turma']"
-        [customMessages]="{
-            required: 'Turma é obrigatória',
-          }"
-      ></app-erro-form>
-    </div>
     <div class="col-66">
       <label for="professor">Professor</label>
       <ng-select
@@ -44,6 +26,7 @@
         bindLabel="nomeCompleto"
         bindValue="id"
         labelForId="professor"
+        (change)="getTurmasProfessor($event)"
         placeholder="Selecione..."
         formControlName="professor"
       >
@@ -52,6 +35,26 @@
         [control]="formNota.controls['professor']"
         [customMessages]="{
             required: 'Professor é obrigatório',
+          }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="turma">Turma</label>
+      <ng-select
+        [items]="listaTurmasProfessor"
+        bindLabel="nomeTurma"
+        bindValue="id"
+        labelForId="turma"
+        (change)="getTurmaAlunos($event)"
+        placeholder="Selecione..."
+        formControlName="turma"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formNota.controls['turma']"
+        [customMessages]="{
+            required: 'Turma é obrigatória',
           }"
       ></app-erro-form>
     </div>
@@ -116,8 +119,9 @@
       <app-erro-form
         [control]="formNota.controls['data']"
         [customMessages]="{
-            required: 'Data é obrigatória',
-          }"
+          required: 'Data é obrigatória',
+          pattern: 'Formato deve ser 12/12/1234'
+        }"
       ></app-erro-form>
     </div>
 

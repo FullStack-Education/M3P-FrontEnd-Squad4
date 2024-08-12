@@ -41,11 +41,13 @@ import { TurmaService } from '../../core/services/turma.service';
 export class CadastroNotasComponent {
   formNota!: FormGroup;
   idAluno!: string;
-  listaTurmas: TurmaInterface[] = [];
+  listaTurmasProfessor: TurmaInterface[] = [];
   listaProfessores: DocenteInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
+
+  dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
   constructor(
     private router: Router,
@@ -69,7 +71,10 @@ export class CadastroNotasComponent {
       professor: new FormControl('', Validators.required),
       materia: new FormControl('', Validators.required),
       avaliacao: new FormControl('', Validators.required),
-      data: new FormControl('', Validators.required),
+      data: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.dataRegex),
+      ]),
       aluno: new FormControl('', Validators.required),
       nota: new FormControl('', [
         Validators.required,
@@ -103,19 +108,45 @@ export class CadastroNotasComponent {
           this.formNota.patchValue({
             professor: retorno[0].id,
           });
+          this.getTurmasProfessor(retorno[0]);
+          // this.getTurmaAlunos()
         });
     } else {
       this.docenteService.getDocentes().subscribe((retorno) => {
         this.listaProfessores = retorno;
       });
     }
+  }
 
-    this.turmaService.getTurmas().subscribe((retorno) => {
-      this.listaTurmas = retorno;
+  getTurmasProfessor(idProfessor: DocenteInterface) {
+    this.formNota.patchValue({
+      turma: '',
+      materia: '',
+      aluno: '',
     });
+    this.turmaService
+      .getTurmasByProfessor(idProfessor.id)
+      .subscribe((retorno) => {
+        this.listaTurmasProfessor = retorno;
+        console.log(retorno);
+      });
 
     this.materiaService.getMaterias().subscribe((retorno) => {
-      this.listaMaterias = retorno;
+      this.listaMaterias = retorno.filter((item) => {
+        return idProfessor.materias.includes(item.id);
+      });
+    });
+  }
+
+  getTurmaAlunos(turma: TurmaInterface) {
+    this.formNota.patchValue({
+      aluno: '',
+    });
+
+    this.alunoService.getAlunos().subscribe((retorno) => {
+      this.listaAlunos = retorno.filter((item) => {
+        return item.turmas.includes(turma.id);
+      });
     });
   }
 

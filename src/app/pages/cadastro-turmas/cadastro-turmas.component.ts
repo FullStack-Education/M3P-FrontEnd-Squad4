@@ -38,6 +38,8 @@ export class CadastroTurmasComponent {
   listaProfessores: DocenteInterface[] = [];
   perfilAtivo!: UsuarioInterface;
 
+  dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
+
   constructor(
     private router: Router,
     private loginService: LoginService,
@@ -58,8 +60,14 @@ export class CadastroTurmasComponent {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      dataInicio: new FormControl('', Validators.required),
-      dataTermino: new FormControl('', Validators.required),
+      dataInicio: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.dataRegex),
+      ]),
+      dataTermino: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.dataRegex),
+      ]),
       horario: new FormControl('', Validators.required),
       professor: new FormControl('', Validators.required),
     });

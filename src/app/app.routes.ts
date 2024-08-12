@@ -1,61 +1,100 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { HomeComponent } from './pages/home/home.component';
-import { ListagemDocentesComponent } from './pages/listagem-docentes/listagem-docentes.component';
-import { CadastroDocentesComponent } from './pages/cadastro-docentes/cadastro-docentes.component';
-import { CadastroAlunosComponent } from './pages/cadastro-alunos/cadastro-alunos.component';
-import { CadastroTurmasComponent } from './pages/cadastro-turmas/cadastro-turmas.component';
-import { CadastroNotasComponent } from './pages/cadastro-notas/cadastro-notas.component';
-import { ListagemNotasComponent } from './pages/listagem-notas/listagem-notas.component';
 import { usuarioLogadoGuard } from './core/guards/usuario-logado.guard';
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./pages/login/login.component').then((c) => c.LoginComponent),
   },
   {
     path: 'home',
-    component: HomeComponent,
+    loadComponent: () =>
+      import('./pages/home/home.component').then((c) => c.HomeComponent),
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'docente',
     children: [
-      { path: '', component: CadastroDocentesComponent },
-      { path: ':id', component: CadastroDocentesComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/cadastro-docentes/cadastro-docentes.component').then(
+            (c) => c.CadastroDocentesComponent
+          ),
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./pages/cadastro-docentes/cadastro-docentes.component').then(
+            (c) => c.CadastroDocentesComponent
+          ),
+      },
     ],
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'aluno',
     children: [
-      { path: '', component: CadastroAlunosComponent },
-      { path: ':id', component: CadastroAlunosComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/cadastro-alunos/cadastro-alunos.component').then(
+            (c) => c.CadastroAlunosComponent
+          ),
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./pages/cadastro-alunos/cadastro-alunos.component').then(
+            (c) => c.CadastroAlunosComponent
+          ),
+      },
     ],
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'turma',
-    component: CadastroTurmasComponent,
+    loadComponent: () =>
+      import('./pages/cadastro-turmas/cadastro-turmas.component').then(
+        (c) => c.CadastroTurmasComponent
+      ),
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'nota',
     children: [
-      { path: '', component: CadastroNotasComponent },
-      { path: 'aluno/:id', component: CadastroNotasComponent },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/cadastro-notas/cadastro-notas.component').then(
+            (c) => c.CadastroNotasComponent
+          ),
+      },
+      {
+        path: 'aluno/:id',
+        loadComponent: () =>
+          import('./pages/cadastro-notas/cadastro-notas.component').then(
+            (c) => c.CadastroNotasComponent
+          ),
+      },
     ],
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'docentes',
-    component: ListagemDocentesComponent,
+    loadComponent: () =>
+      import('./pages/listagem-docentes/listagem-docentes.component').then(
+        (c) => c.ListagemDocentesComponent
+      ),
     canActivate: [usuarioLogadoGuard],
   },
   {
     path: 'notas',
-    component: ListagemNotasComponent,
+    loadComponent: () =>
+      import('./pages/listagem-notas/listagem-notas.component').then(
+        (c) => c.ListagemNotasComponent
+      ),
     canActivate: [usuarioLogadoGuard],
   },
   {
