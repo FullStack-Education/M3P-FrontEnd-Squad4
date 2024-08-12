@@ -150,6 +150,14 @@
       "dataTermino": "2024-09-07",
       "horario": "19:00",
       "professor": "1"
+    },
+    {
+      "id": "25c9",
+      "nomeTurma": "12345678",
+      "dataInicio": "2024-08-12",
+      "dataTermino": "2024-08-12",
+      "horario": "21:23",
+      "professor": "1"
     }
   ],
   "alunos": [
@@ -360,6 +368,16 @@
       "data": "2024-08-03",
       "aluno": "1",
       "nota": 4
+    },
+    {
+      "id": "a84e",
+      "turma": "1",
+      "professor": "1",
+      "materia": "2",
+      "avaliacao": "teste de avaliaçãpo",
+      "data": "2024-08-12",
+      "aluno": "1",
+      "nota": 8
     }
   ],
   "materias": [

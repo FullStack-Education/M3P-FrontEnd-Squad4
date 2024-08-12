@@ -45,7 +45,7 @@
         <img src="../../../assets/profile.png" [alt]="aluno.nomeCompleto" />
         <div>
           <strong>{{ aluno.nomeCompleto }}</strong>
-          <span>idade</span>
+          <span>{{ aluno.nascimento | idadePipe }} anos</span>
           <a href="#">{{ aluno.telefone }}</a>
           <a href="#">{{ aluno.email }}</a>
           <button

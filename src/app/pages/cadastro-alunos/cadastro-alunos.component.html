@@ -70,6 +70,7 @@
         [control]="formAluno.controls['nascimento']"
         [customMessages]="{
           required: 'Data de nascimento é obrigatória',
+          pattern: 'Formato deve ser 12/12/1234'
         }"
       ></app-erro-form>
     </div>
@@ -105,6 +106,7 @@
         [control]="formAluno.controls['cpf']"
         [customMessages]="{
           required: 'CPF é obrigatório',
+          pattern: 'Formato deve ser 123.123.123-12'
         }"
       ></app-erro-form>
     </div>
@@ -128,12 +130,13 @@
         name="telefone"
         id="telefone"
         formControlName="telefone"
-        placeholder="(00) 00000-0000"
+        placeholder="(00) 9 0000-0000"
       />
       <app-erro-form
         [control]="formAluno.controls['telefone']"
         [customMessages]="{
-          required: 'Telefone é obrigatório'
+          required: 'Telefone é obrigatório',
+          pattern: 'Formato deve ser (12) 9 1234-1234'
         }"
       ></app-erro-form>
     </div>
@@ -207,6 +210,12 @@
           (blur)="buscarCep()"
           placeholder="00000-000"
         />
+        <app-erro-form
+          [control]="formAluno.controls['cep']"
+          [customMessages]="{
+            pattern: 'Formato deve ser 12345-123'
+          }"
+        ></app-erro-form>
       </div>
 
       <div class="col-50">

@@ -20,6 +20,7 @@ import { CepService } from '../../core/services/cep.service';
 import { Genero } from '../../core/enums/genero.enum';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { NotaService } from '../../core/services/nota.service';
 
 @Component({
   selector: 'app-cadastro-alunos',
@@ -37,18 +38,25 @@ import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.c
 })
 export class CadastroAlunosComponent {
   formAluno!: FormGroup;
-  idAluno: string | undefined;
+  idAluno!: string;
   listaTurmas: TurmaInterface[] = [];
+  listaNotas!: any[];
   generos = Object.keys(Genero).map((key) => ({
     id: Genero[key as keyof typeof Genero],
     nome: Genero[key as keyof typeof Genero],
   }));
+
+  dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
+  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
+  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cepRegex = /^\d{5}-\d{3}$/;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private alunoService: AlunoService,
     private turmaService: TurmaService,
+    private notaService: NotaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -64,22 +72,31 @@ export class CadastroAlunosComponent {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      nascimento: new FormControl('', Validators.required),
+      nascimento: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.dataRegex),
+      ]),
       naturalidade: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
       genero: new FormControl(null, Validators.required),
-      cpf: new FormControl('', Validators.required),
+      cpf: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.cpfRegex),
+      ]),
       rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
-      telefone: new FormControl('', Validators.required),
+      telefone: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.telefoneRegex),
+      ]),
       email: new FormControl('', Validators.email),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
-      cep: new FormControl(''),
+      cep: new FormControl('', Validators.pattern(this.cepRegex)),
       localidade: new FormControl(''),
       uf: new FormControl(''),
       logradouro: new FormControl(''),
@@ -95,6 +112,8 @@ export class CadastroAlunosComponent {
       .subscribe((retorno) => (this.listaTurmas = retorno));
 
     if (this.idAluno) {
+      this.getNotasAluno();
+      this.getTurmasAluno();
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
           this.formAluno.disable();
@@ -109,6 +128,18 @@ export class CadastroAlunosComponent {
         },
       });
     }
+  }
+
+  getNotasAluno() {
+    this.notaService
+      .getNotasByAluno(this.idAluno)
+      .subscribe((retorno) => (this.listaNotas = retorno));
+  }
+
+  getTurmasAluno() {
+    this.turmaService
+      .getTurmasByAluno(this.idAluno)
+      .subscribe((retorno) => (this.listaTurmas = retorno));
   }
 
   buscarCep() {
@@ -161,6 +192,13 @@ export class CadastroAlunosComponent {
   }
 
   excluirAluno(aluno: AlunoInterface) {
+    if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
+      this.toastr.warning(
+        'Aluno não pode ser excluído, pois possui turmas ou notas vinculadas!'
+      );
+      return;
+    }
+
     aluno.id = this.idAluno!;
 
     const dialogRef = this.dialog.open(DialogComponent, {

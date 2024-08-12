@@ -53,6 +53,11 @@ export class CadastroDocentesComponent implements OnInit {
     nome: EstadoCivil[key as keyof typeof EstadoCivil],
   }));
 
+  dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
+  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
+  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cepRegex = /^\d{5}-\d{3}$/;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -75,23 +80,32 @@ export class CadastroDocentesComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
-      nascimento: new FormControl('', Validators.required),
+      nascimento: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.dataRegex),
+      ]),
       naturalidade: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(64),
       ]),
       genero: new FormControl(null, Validators.required),
-      cpf: new FormControl('', Validators.required),
+      cpf: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.cpfRegex),
+      ]),
       rg: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       estadoCivil: new FormControl(null, Validators.required),
-      telefone: new FormControl('', Validators.required),
+      telefone: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.telefoneRegex),
+      ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
-      cep: new FormControl(''),
+      cep: new FormControl('', Validators.pattern(this.cepRegex)),
       localidade: new FormControl(''),
       uf: new FormControl(''),
       logradouro: new FormControl(''),

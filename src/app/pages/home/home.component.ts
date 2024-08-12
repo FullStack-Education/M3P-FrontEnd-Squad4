@@ -15,6 +15,7 @@ import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
 import { MatIconModule } from '@angular/material/icon';
+import { IdadePipe } from '../../core/pipes/idade.pipe';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatChipsModule,
     MatIconModule,
     RouterModule,
+    IdadePipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

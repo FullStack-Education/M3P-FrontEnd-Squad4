@@ -62,8 +62,9 @@
       <app-erro-form
         [control]="formTurma.controls['dataInicio']"
         [customMessages]="{
-            required: 'Data de início é obrigatória',
-          }"
+          required: 'Data de início é obrigatória',
+          pattern: 'Formato deve ser 12/12/1234'
+        }"
       ></app-erro-form>
     </div>
 
@@ -78,8 +79,9 @@
       <app-erro-form
         [control]="formTurma.controls['dataTermino']"
         [customMessages]="{
-            required: 'Data de término é obrigatória',
-          }"
+          required: 'Data de término é obrigatória',
+          pattern: 'Formato deve ser 12/12/1234'
+        }"
       ></app-erro-form>
     </div>
 
