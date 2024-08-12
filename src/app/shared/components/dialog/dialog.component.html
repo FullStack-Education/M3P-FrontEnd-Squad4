@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ data.titulo }}</h2>
+<mat-dialog-content>
+  <p>{{ data.mensagem }}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    *ngIf="data.btCancelar"
+    (click)="cancelarAcao()"
+    class="bt-cancelar"
+  >
+    <mat-icon>close</mat-icon>
+    {{ data.btCancelar }}
+  </button>
+  <button mat-flat-button *ngIf="data.btConfirmar" (click)="confirmarAcao()">
+    <mat-icon>check</mat-icon>
+    {{ data.btConfirmar }}
+  </button>
+</mat-dialog-actions>

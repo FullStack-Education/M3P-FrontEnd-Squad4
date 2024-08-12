@@ -1,0 +1,15 @@
+@import "../styles.scss";
+
+.container {
+  min-width: 375px;
+  height: 100vh;
+  .content {
+    position: relative;
+  }
+}
+
+mat-sidenav {
+  width: 280px;
+  background: white;
+  border-radius: 0;
+}

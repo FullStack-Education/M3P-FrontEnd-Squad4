@@ -1,0 +1,22 @@
+<div class="logo">
+  <img src="../../../../assets/labpcp.svg" alt="LabPCP" />
+  <h2>LabPCP</h2>
+  <p>Sistema de Gestão Educacional</p>
+</div>
+
+<mat-nav-list class="menu">
+  <a
+    mat-list-item
+    [routerLink]="[item.rota]"
+    *ngFor="let item of itensMenuFiltrado"
+    (click)="closeSidenav()"
+  >
+    <mat-icon matListItemIcon>{{ item.icone }}</mat-icon>
+    <span matListItemTitle>{{ item.rotulo }}</span>
+  </a>
+
+  <a mat-list-item (click)="sair()">
+    <mat-icon matListItemIcon>logout</mat-icon>
+    <span matListItemTitle>Sair do Sistema</span>
+  </a>
+</mat-nav-list>

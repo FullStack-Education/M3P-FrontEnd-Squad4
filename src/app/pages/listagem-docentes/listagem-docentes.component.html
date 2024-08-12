@@ -1,0 +1,61 @@
+<div class="lista-docentes">
+  <h2>Listagem de Docentes</h2>
+  <section class="busca-docentes">
+    <div class="pesquisar">
+      <label for="pesquisar">Pesquisar docente:</label>
+      <input
+        type="text"
+        id="pesquisar"
+        name="pesquisar"
+        placeholder="Buscar por nome ou código"
+        [(ngModel)]="textoPesquisa"
+      />
+      <button mat-flat-button type="button" (click)="pesquisar()">
+        <mat-icon>search</mat-icon>
+        Pesquisar
+      </button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome Completo</th>
+          <th>Contatos</th>
+          <th>Detalhes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let docente of listaDocentes">
+          <td>{{ docente.id }}</td>
+          <td>{{ docente.nomeCompleto }}</td>
+          <td>{{ docente.email }}<br />{{ docente.telefone }}</td>
+          <td>
+            <button
+              mat-flat-button
+              type="button"
+              (click)="verDetalhes(docente.id)"
+            >
+              <mat-icon>more_vert</mat-icon>Ver mais
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    @for (docente of listaDocentes; track docente.id) {
+    <ul>
+      <li><span>Código: </span>{{ docente.id }}</li>
+      <li><span>Nome: </span>{{ docente.nomeCompleto }}</li>
+      <li>
+        <span>Contatos: </span>{{ docente.email }}<br />{{ docente.telefone }}
+      </li>
+      <li>
+        <span></span>
+        <button mat-flat-button type="button" (click)="verDetalhes(docente.id)">
+          <mat-icon>more_vert</mat-icon>Ver mais
+        </button>
+      </li>
+    </ul>
+    }
+  </section>
+</div>

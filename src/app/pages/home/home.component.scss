@@ -1,0 +1,246 @@
+@import "../../../styles.scss";
+
+.home {
+  background-color: $blue-100;
+  padding: 3.2rem;
+  min-height: calc(100vh - 80px);
+  h2 {
+    font-size: 3.6rem;
+    margin-top: 0;
+    margin-bottom: 4rem;
+  }
+  h3 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px dashed $blue-200;
+    padding-bottom: 1rem;
+  }
+  .estatisticas {
+    margin-bottom: 6rem;
+    .numeros {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4.8rem;
+      li {
+        background: white;
+        padding: 2.4rem 2.4rem 0.4rem 1.2rem;
+        border-radius: 1rem;
+        border-left: 6px solid $blue-500;
+        strong {
+          font-size: 5rem;
+          color: $blue-500;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+  .busca-alunos {
+    .pesquisar {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+      margin-bottom: 2.4rem;
+      input {
+        border: 1px solid $blue-200;
+        border-radius: 4px;
+        padding: 1rem 1.6rem;
+        font-size: 1.6rem;
+        min-width: 35rem;
+      }
+    }
+    .alunos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4.8rem;
+      li {
+        border-radius: 2rem;
+        background-color: white;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        img {
+          max-width: 120px;
+          margin-bottom: 1rem;
+        }
+        div {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          span {
+            font-size: 1.4rem;
+            display: block;
+            margin: 0.4rem 0 1rem;
+          }
+          a {
+            color: black;
+            font-size: 1.4rem;
+            text-decoration: none;
+            line-height: 140%;
+          }
+          button {
+            margin-top: 2rem;
+          }
+        }
+      }
+    }
+  }
+  .minhas-avaliacoes {
+    ul {
+      display: none;
+    }
+    table {
+      width: 100%;
+      thead {
+        background-color: $blue-200;
+        tr {
+          th {
+            padding: 0.6rem;
+            border-radius: 4px;
+          }
+        }
+      }
+      tr {
+        &:hover {
+          td {
+            background: $hover;
+            cursor: pointer;
+          }
+        }
+        td {
+          padding: 0.6rem;
+          background: white;
+          border-radius: 4px;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .minhas-materias {
+    margin: 4rem 0;
+  }
+  .cursos-extras {
+    ul {
+      list-style: disc;
+      padding-left: 1.6rem;
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .home {
+    .busca-alunos {
+      .alunos {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+}
+@media (max-width: 600px) {
+  .home {
+    min-height: calc(100vh - 64px);
+  }
+}
+@media (max-width: 940px) {
+  .home {
+    .estatisticas {
+      .numeros {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .busca-alunos {
+      .alunos {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+@media (max-width: 560px) {
+  .home {
+    .busca-alunos {
+      .alunos {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    min-height: calc(100vh - 64px);
+    padding: 2rem;
+    h2 {
+      font-size: 2.6rem;
+      margin-bottom: 3rem;
+    }
+    h3 {
+      font-size: 1.8rem;
+    }
+    .estatisticas {
+      margin-bottom: 4rem;
+      .numeros {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        li {
+          width: 100%;
+          max-width: 37.5rem;
+        }
+      }
+    }
+    .busca-alunos {
+      .pesquisar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        input {
+          width: 100%;
+          min-width: unset;
+        }
+        button {
+          width: 100%;
+        }
+      }
+      .alunos {
+        gap: 2rem;
+      }
+    }
+    .minhas-avaliacoes {
+      table {
+        display: none;
+      }
+      ul {
+        display: block;
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        border-left: 6px solid $blue-500;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        cursor: pointer;
+        &:hover {
+          background-color: $hover;
+        }
+        li {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 1rem;
+          span {
+            font-weight: normal;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 599px) {
+  .home {
+    min-height: calc(100vh - 56px);
+  }
+}

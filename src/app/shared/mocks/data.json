@@ -1,0 +1,155 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "email": "admin@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Admin",
+      "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+      "perfil": "admin"
+    },
+    {
+      "id": "2",
+      "email": "docente@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Docente",
+      "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
+      "perfil": "docente"
+    },
+    {
+      "id": "3",
+      "email": "aluno@email.com",
+      "senha": "abc12345",
+      "nome": "Usuário Aluno",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+      "perfil": "aluno"
+    }
+  ],
+  "docentes": [
+    {
+      "id": "1",
+      "nomeCompleto": "Eduardo Silva",
+      "genero": "Masculino",
+      "nascimento": "1980-05-12",
+      "cpf": "12345678900",
+      "rg": "MG-12.345.678",
+      "estadoCivil": "Casado",
+      "telefone": "(31) 1234-5678",
+      "email": "eduardo@email.com",
+      "senha": "abc12345",
+      "naturalidade": "Belo Horizonte",
+      "cep": 30130100,
+      "localidade": "Belo Horizonte",
+      "uf": "MG",
+      "logradouro": "Rua A",
+      "numero": "100",
+      "complemento": "Apto 101",
+      "bairro": "Centro",
+      "referencia": "Próximo ao Parque Municipal",
+      "materias": ["1", "2"]
+    },
+    {
+      "id": "2",
+      "nomeCompleto": "Rayane Cristina",
+      "genero": "Feminino",
+      "nascimento": "2000-10-22",
+      "cpf": "23456789011",
+      "rg": "SP-23.456.789",
+      "estadoCivil": "Solteiro",
+      "telefone": "(11) 2345-6789",
+      "email": "rayane@email.com",
+      "senha": "abc12345",
+      "naturalidade": "São Paulo",
+      "cep": 88001000,
+      "localidade": "São Paulo",
+      "uf": "SP",
+      "logradouro": "Avenida B",
+      "numero": "200",
+      "complemento": "Bloco B",
+      "bairro": "Centro",
+      "referencia": "Próximo ao MASP",
+      "materias": ["3"]
+    }
+  ],
+  "turmas": [
+    {
+      "id": "1",
+      "nomeTurma": "FullStack",
+      "dataInicio": "2023-12-01",
+      "dataTermino": "2024-12-15",
+      "horario": "20:00",
+      "professor": "1"
+    },
+    {
+      "id": "2",
+      "nomeTurma": "DEVstart",
+      "dataInicio": "2024-01-15",
+      "dataTermino": "2024-10-31",
+      "horario": "18:00",
+      "professor": "2"
+    }
+  ],
+  "alunos": [
+    {
+      "id": "1",
+      "nomeCompleto": "Scheila Stihler",
+      "nascimento": "1978-07-18",
+      "naturalidade": "Rio do Sul",
+      "genero": "Feminino",
+      "cpf": "12345678900",
+      "rg": "MG-12.345.678",
+      "telefone": "(31) 1234-5678",
+      "email": "scheila@email.com",
+      "senha": "abc12378",
+      "cep": 88036260,
+      "localidade": "Florianópolis",
+      "uf": "SC",
+      "logradouro": "Rua Presidente Gama Rosa",
+      "numero": "195",
+      "complemento": "",
+      "bairro": "Trindade",
+      "referencia": "Próximo ao Shopping Villa Romana",
+      "turmas": ["1", "2"]
+    },
+    {
+      "id": "2",
+      "nomeCompleto": "Rodrigo Noronha",
+      "genero": "Masculino",
+      "nascimento": "1981-10-26",
+      "cpf": "12345678900",
+      "rg": "MG-12.345.678",
+      "telefone": "(11) 99555-9911",
+      "email": "rodrigo@email.com",
+      "senha": "abc12345",
+      "naturalidade": "Florianópolis",
+      "cep": 88036260,
+      "localidade": "Florianópolis",
+      "uf": "SC",
+      "logradouro": "Rua Presidente Gama Rosa",
+      "numero": "195",
+      "complemento": "",
+      "bairro": "Trindade",
+      "referencia": "Próximo ao Shopping Villa Romana",
+      "turmas": ["2"]
+    }
+  ],
+  "notas": [],
+  "materias": [
+    {
+      "id": "1",
+      "nome": "HTML"
+    },
+    {
+      "id": "2",
+      "nome": "CSS"
+    },
+    {
+      "id": "3",
+      "nome": "JavaScript"
+    },
+    {
+      "id": "4",
+      "nome": "Angular"
+    }
+  ]
+}
