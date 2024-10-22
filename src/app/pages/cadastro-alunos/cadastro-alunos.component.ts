@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective } from 'ngx-mask';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { AlunoService } from '../../core/services/aluno.service';
@@ -32,6 +33,7 @@ import { NotaService } from '../../core/services/nota.service';
     NgSelectModule,
     CommonModule,
     ErroFormComponent,
+    NgxMaskDirective,
   ],
   templateUrl: './cadastro-alunos.component.html',
   styleUrl: './cadastro-alunos.component.scss',
@@ -47,8 +49,8 @@ export class CadastroAlunosComponent {
   }));
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
-  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+  telefoneRegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
   cepRegex = /^\d{5}-\d{3}$/;
 
   constructor(
