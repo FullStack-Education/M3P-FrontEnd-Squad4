@@ -14,10 +14,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
+import { CursoInterface } from '../../core/interfaces/curso.interface';
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { CursoService } from '../../core/services/curso.service';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -36,6 +38,7 @@ export class CadastroTurmasComponent {
   formTurma!: FormGroup;
   idTurma: string | undefined;
   listaProfessores: DocenteInterface[] = [];
+  listaCursos: CursoInterface[] = [];
   perfilAtivo!: UsuarioInterface;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
@@ -46,6 +49,7 @@ export class CadastroTurmasComponent {
     private activatedRoute: ActivatedRoute,
     private turmaService: TurmaService,
     private docenteService: DocenteService,
+    private cursoService: CursoService,
     private toastr: ToastrService,
     private location: Location
   ) {}
@@ -70,6 +74,7 @@ export class CadastroTurmasComponent {
       ]),
       horario: new FormControl('', Validators.required),
       professor: new FormControl('', Validators.required),
+      curso: new FormControl('', Validators.required),
     });
 
     const now = new Date();
@@ -93,6 +98,10 @@ export class CadastroTurmasComponent {
         this.listaProfessores = retorno;
       });
     }
+
+    this.cursoService
+      .getCursos()
+      .subscribe((retorno) => (this.listaCursos = retorno));
 
     if (this.idTurma) {
       this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
