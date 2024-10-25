@@ -32,7 +32,26 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-66">
+    <div class="col-33">
+      <label for="curso">Curso</label>
+      <ng-select
+        [items]="listaCursos"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="curso"
+        placeholder="Selecione..."
+        formControlName="curso"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formTurma.controls['curso']"
+        [customMessages]="{
+        required: 'Campo obrigatório, selecione um curso',
+      }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
       <label for="professor">Professor</label>
       <ng-select
         [items]="listaProfessores"
