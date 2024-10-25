@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective } from 'ngx-mask';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { DocenteService } from '../../core/services/docente.service';
@@ -34,6 +35,7 @@ import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.c
     NgSelectModule,
     CommonModule,
     ErroFormComponent,
+    NgxMaskDirective,
   ],
   templateUrl: './cadastro-docentes.component.html',
   styleUrl: './cadastro-docentes.component.scss',
@@ -54,8 +56,8 @@ export class CadastroDocentesComponent implements OnInit {
   }));
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
-  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+  telefoneRegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
   cepRegex = /^\d{5}-\d{3}$/;
 
   constructor(
