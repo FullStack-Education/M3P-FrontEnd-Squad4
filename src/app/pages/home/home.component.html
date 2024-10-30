@@ -1,6 +1,6 @@
 <div class="home">
   <h2>Dashboard</h2>
-  <section class="estatisticas" *ngIf="perfilAtivo === 'admin'">
+  <section class="estatisticas" *ngIf="perfilAtivo === 'ADM'">
     <h3>Estatísticas Gerais</h3>
     <ul class="numeros">
       <li>
@@ -21,7 +21,7 @@
 
   <section
     class="busca-alunos"
-    *ngIf="perfilAtivo === 'admin' || perfilAtivo === 'docente'"
+    *ngIf="perfilAtivo === 'ADM' || perfilAtivo === 'PROFESSOR'"
   >
     <h3>Listagem de Alunos</h3>
     <div class="pesquisar">
@@ -52,7 +52,7 @@
             mat-flat-button
             type="button"
             (click)="verDetalhes(aluno.id)"
-            *ngIf="perfilAtivo === 'admin'"
+            *ngIf="perfilAtivo === 'ADM'"
           >
             <mat-icon>more_vert</mat-icon>
             Ver detalhes
@@ -61,7 +61,7 @@
             mat-flat-button
             type="button"
             (click)="lancarNota(aluno.id)"
-            *ngIf="perfilAtivo === 'docente'"
+            *ngIf="perfilAtivo === 'PROFESSOR'"
           >
             <mat-icon>edit</mat-icon>
             Lançar nota
@@ -71,7 +71,7 @@
     </ul>
   </section>
 
-  <ng-container *ngIf="perfilAtivo === 'aluno'">
+  <ng-container *ngIf="perfilAtivo === 'ALUNO'">
     <section class="minhas-avaliacoes">
       <h3>Minhas Avaliações</h3>
       <table>
