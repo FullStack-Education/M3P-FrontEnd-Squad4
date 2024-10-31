@@ -32,7 +32,7 @@ export class ToolbarComponent implements OnInit {
     const usuarioLogado = this.loginService.usuarioLogado;
     if (usuarioLogado) {
       this.usuarioAtivo.nome = usuarioLogado.nome;
-      this.usuarioAtivo.avatar = usuarioLogado.avatar;
+      // this.usuarioAtivo.avatar = usuarioLogado.avatar;
     }
   }
 
