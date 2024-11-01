@@ -11,13 +11,6 @@ export class UsuariosService {
 
   constructor(private httpClient: HttpClient) {}
 
-  private getHeaders() {
-    const token = sessionStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-  }
-
   getUsuarios() {
     return this.httpClient.get<Array<UsuarioInterface>>(this.url);
   }
@@ -28,10 +21,7 @@ export class UsuariosService {
 
   getUsuarioEmail(email: string): Observable<UsuarioInterface> {
     return this.httpClient.get<UsuarioInterface>(
-      this.url + `/buscar?email=${email}`,
-      {
-        headers: this.getHeaders(),
-      }
+      this.url + `/buscar?email=${email}`
     );
   }
 }
