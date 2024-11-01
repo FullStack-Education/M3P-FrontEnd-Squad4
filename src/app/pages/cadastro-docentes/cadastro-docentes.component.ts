@@ -42,7 +42,7 @@ import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.c
 })
 export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
-  idDocente!: string;
+  idDocente!: number;
   listaMaterias!: MateriaInterface[];
   listaNotasProfessor!: any[];
   listaTurmasProfessor!: any[];

@@ -36,7 +36,7 @@ import { CursoService } from '../../core/services/curso.service';
 })
 export class CadastroTurmasComponent {
   formTurma!: FormGroup;
-  idTurma: string | undefined;
+  idTurma: number | undefined;
   listaProfessores: DocenteInterface[] = [];
   listaCursos: CursoInterface[] = [];
   perfilAtivo!: UsuarioInterface;
@@ -84,7 +84,7 @@ export class CadastroTurmasComponent {
     this.formTurma.get('dataTermino')?.setValue(dataFormatada);
     this.formTurma.get('horario')?.setValue(horaFormatada);
 
-    if (this.perfilAtivo.perfil === 'docente') {
+    if (this.perfilAtivo.papel === 'ADM') {
       this.docenteService
         .getDocenteByEmail(this.perfilAtivo.email)
         .subscribe((retorno) => {

@@ -40,7 +40,7 @@ import { TurmaService } from '../../core/services/turma.service';
 })
 export class CadastroNotasComponent {
   formNota!: FormGroup;
-  idAluno!: string;
+  idAluno!: number;
   listaTurmasProfessor: TurmaInterface[] = [];
   listaProfessores: DocenteInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
@@ -100,7 +100,7 @@ export class CadastroNotasComponent {
       });
     }
 
-    if (this.perfilAtivo.perfil === 'docente') {
+    if (this.perfilAtivo.papel === 'ADM') {
       this.docenteService
         .getDocenteByEmail(this.perfilAtivo.email)
         .subscribe((retorno) => {
@@ -109,7 +109,6 @@ export class CadastroNotasComponent {
             professor: retorno[0].id,
           });
           this.getTurmasProfessor(retorno[0]);
-          // this.getTurmaAlunos()
         });
     } else {
       this.docenteService.getDocentes().subscribe((retorno) => {
@@ -145,7 +144,7 @@ export class CadastroNotasComponent {
 
     this.alunoService.getAlunos().subscribe((retorno) => {
       this.listaAlunos = retorno.filter((item) => {
-        return item.turmas.includes(turma.id);
+        return item.turmas === turma.id;
       });
     });
   }

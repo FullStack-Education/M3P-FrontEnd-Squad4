@@ -105,11 +105,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  verDetalhes(idAluno: string) {
+  verDetalhes(idAluno: number) {
     this.router.navigate(['/aluno', idAluno]);
   }
 
-  lancarNota(idAluno: string) {
+  lancarNota(idAluno: number) {
     this.router.navigate(['/nota/aluno', idAluno]);
   }
 
@@ -137,14 +137,14 @@ export class HomeComponent implements OnInit {
     return this.listaNotas.slice(0, n);
   }
 
-  getMateriasAluno(ids: Array<string>) {
+  getMateriasAluno(ids: Array<number>) {
     this.materiaService.getMaterias().subscribe((retorno) => {
       const materiasFiltradas = retorno.filter((item) => ids.includes(item.id));
       this.listaMaterias = materiasFiltradas.slice(0, 3);
     });
   }
 
-  getNomeMaterias(idMateria: string) {
+  getNomeMaterias(idMateria: number) {
     let materia = this.listaMaterias.filter((item) => {
       return item.id == idMateria;
     });

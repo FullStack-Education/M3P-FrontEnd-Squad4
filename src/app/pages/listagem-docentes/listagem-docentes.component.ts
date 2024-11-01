@@ -26,19 +26,20 @@ export class ListagemDocentesComponent implements OnInit {
     });
   }
 
-  verDetalhes(idDocente: string) {
+  verDetalhes(idDocente: number) {
     this.router.navigate(['/docente', idDocente]);
   }
 
   pesquisar() {
     if (this.textoPesquisa) {
+      const pesquisaId = Number(this.textoPesquisa);
       this.docenteService.getDocentes().subscribe((retorno) => {
         this.listaDocentes = retorno.filter(
           (docente) =>
             docente.nomeCompleto
               .toUpperCase()
               .includes(this.textoPesquisa!.toUpperCase()) ||
-            docente.id.toUpperCase().includes(this.textoPesquisa!.toUpperCase())
+            (!isNaN(pesquisaId) && docente.id === pesquisaId)
         );
       });
     } else {
