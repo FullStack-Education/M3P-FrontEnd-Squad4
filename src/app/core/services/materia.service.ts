@@ -6,7 +6,7 @@ import { MateriaInterface } from '../interfaces/materia.interface';
   providedIn: 'root',
 })
 export class MateriaService {
-  url = 'http://localhost:3000/materias';
+  url = 'http://localhost:8080/materias';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,7 +14,7 @@ export class MateriaService {
     return this.httpClient.get<Array<MateriaInterface>>(this.url);
   }
 
-  getMateria(id: string) {
+  getMateria(id: number) {
     return this.httpClient.get<MateriaInterface>(this.url + `/${id}`);
   }
 }

@@ -6,7 +6,7 @@ import { DocenteInterface } from '../interfaces/docente.interface';
   providedIn: 'root',
 })
 export class DocenteService {
-  url = 'http://localhost:3000/docentes';
+  url = 'http://localhost:8080/docentes';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,7 +14,7 @@ export class DocenteService {
     return this.httpClient.get<Array<DocenteInterface>>(this.url);
   }
 
-  getDocente(id: string) {
+  getDocente(id: number) {
     return this.httpClient.get<DocenteInterface>(this.url + `/${id}`);
   }
 

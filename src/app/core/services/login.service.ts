@@ -63,7 +63,7 @@ export class LoginService {
     if (usuarioLogadoJson) {
       this.usuarioLogado = JSON.parse(usuarioLogadoJson);
       this.perfilUsuarioAtivo = this.usuarioLogado
-        ? this.usuarioLogado.perfil
+        ? this.usuarioLogado.papel
         : '';
     }
   }

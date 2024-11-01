@@ -6,7 +6,7 @@ import { AlunoInterface } from '../interfaces/aluno.interface';
   providedIn: 'root',
 })
 export class AlunoService {
-  url = 'http://localhost:3000/alunos';
+  url = 'http://localhost:8080/alunos';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,7 +14,7 @@ export class AlunoService {
     return this.httpClient.get<Array<AlunoInterface>>(this.url);
   }
 
-  getAluno(id: string) {
+  getAluno(id: number) {
     return this.httpClient.get<AlunoInterface>(this.url + `/${id}`);
   }
 

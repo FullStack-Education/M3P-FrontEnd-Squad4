@@ -6,7 +6,7 @@ import { NotaInterface } from '../interfaces/nota.interface';
   providedIn: 'root',
 })
 export class NotaService {
-  url = 'http://localhost:3000/notas';
+  url = 'http://localhost:8080/notas';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,17 +14,17 @@ export class NotaService {
     return this.httpClient.get<Array<NotaInterface>>(this.url);
   }
 
-  getNota(id: string) {
+  getNota(id: number) {
     return this.httpClient.get<NotaInterface>(this.url + `/${id}`);
   }
 
-  getNotasByProfessor(idProfessor: string) {
+  getNotasByProfessor(idProfessor: number) {
     return this.httpClient.get<Array<NotaInterface>>(
       this.url + `?professor=${idProfessor}`
     );
   }
 
-  getNotasByAluno(idAluno: string) {
+  getNotasByAluno(idAluno: number) {
     return this.httpClient.get<Array<NotaInterface>>(
       this.url + `?aluno=${idAluno}`
     );

@@ -15,7 +15,7 @@ export class UsuariosService {
     return this.httpClient.get<Array<UsuarioInterface>>(this.url);
   }
 
-  getUsuario(id: string) {
+  getUsuario(id: number) {
     return this.httpClient.get<UsuarioInterface>(this.url + `/${id}`);
   }
 
