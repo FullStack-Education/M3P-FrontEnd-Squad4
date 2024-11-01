@@ -1,6 +1,6 @@
 export interface UsuarioInterface {
-  id: string;
+  id: number;
   email: string;
   nome: string;
-  perfil: string;
+  papel: string;
 }

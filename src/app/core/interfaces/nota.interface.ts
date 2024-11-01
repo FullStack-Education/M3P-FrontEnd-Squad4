@@ -1,9 +1,9 @@
 export interface NotaInterface {
-  id: string;
-  professor: string;
-  materia: string;
+  id: number;
+  professor: number;
+  materia: number;
   avaliacao: string;
   data: Date;
-  aluno: string;
+  aluno: number;
   nota: number;
 }

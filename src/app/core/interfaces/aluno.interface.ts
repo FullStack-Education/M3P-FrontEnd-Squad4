@@ -1,5 +1,5 @@
 export interface AlunoInterface {
-  id: string;
+  id: number;
   nomeCompleto: string;
   genero: string;
   nascimento: Date;
@@ -17,5 +17,5 @@ export interface AlunoInterface {
   complemento: string;
   bairro: string;
   referencia: string;
-  turmas: string[];
+  turmas: number;
 }

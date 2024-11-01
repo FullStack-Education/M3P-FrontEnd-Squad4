@@ -1,5 +1,5 @@
 export interface DocenteInterface {
-  id: string;
+  id: number;
   nomeCompleto: string;
   genero: string;
   nascimento: Date;
@@ -18,5 +18,5 @@ export interface DocenteInterface {
   complemento: string;
   bairro: string;
   referencia: string;
-  materias: string[];
+  materias: number[];
 }
