@@ -44,8 +44,8 @@ export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
   idDocente!: number;
   listaMaterias!: MateriaInterface[];
-  listaNotasProfessor!: any[];
-  listaTurmasProfessor!: any[];
+  listaNotasProfessor: any[] = [];
+  listaTurmasProfessor: any[] = [];
   generos = Object.keys(Genero).map((key) => ({
     id: Genero[key as keyof typeof Genero],
     nome: Genero[key as keyof typeof Genero],
@@ -127,8 +127,11 @@ export class CadastroDocentesComponent implements OnInit {
       this.getTurmasProfessor();
       this.docenteService.getDocente(this.idDocente).subscribe({
         next: (retorno) => {
-          this.formDocente.disable();
+          retorno.cpf = this.formatarCPF(retorno.cpf);
+          retorno.telefone = this.formatarTelefone(retorno.telefone);
+          retorno.cep = this.formatarCep(retorno.cep);
           this.formDocente.patchValue(retorno);
+          this.formDocente.disable();
         },
         error: (erro) => {
           this.toastr.error('Docente não encontrado!');
@@ -171,12 +174,47 @@ export class CadastroDocentesComponent implements OnInit {
     }
   }
 
+  formatarCPF(cpf: string): string {
+    return cpf
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{2})$/, '$1-$2');
+  }
+
+  formatarTelefone(telefone: string): string {
+    return telefone
+      .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')
+      .replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+  }
+
+  formatarCep(cep: string): string {
+    return cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+  }
+
+  removerCaracteresEspeciais(valor: string): string {
+    return valor.replace(/\D/g, '');
+  }
+
   submitForm() {
     if (this.formDocente.valid) {
+      const docenteData = {
+        ...this.formDocente.value,
+        email: this.formDocente.get('email')?.value,
+        cpf: this.removerCaracteresEspeciais(
+          this.formDocente.get('cpf')?.value || ''
+        ),
+        telefone: this.removerCaracteresEspeciais(
+          this.formDocente.get('telefone')?.value || ''
+        ),
+        cep: this.removerCaracteresEspeciais(
+          this.formDocente.get('cep')?.value || ''
+        ),
+      };
+
       if (this.idDocente) {
-        this.editarDocente(this.formDocente.value);
+        this.editarDocente(docenteData);
       } else {
-        this.cadastrarDocente(this.formDocente.value);
+        this.cadastrarDocente(docenteData);
       }
     } else {
       this.formDocente.markAllAsTouched();
@@ -185,6 +223,7 @@ export class CadastroDocentesComponent implements OnInit {
 
   habilitarEdicao() {
     this.formDocente.enable();
+    this.formDocente.get('email')?.disable();
   }
 
   cadastrarDocente(docente: DocenteInterface) {

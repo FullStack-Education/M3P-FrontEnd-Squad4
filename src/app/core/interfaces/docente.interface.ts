@@ -10,7 +10,7 @@ export interface DocenteInterface {
   email: string;
   senha: string;
   naturalidade: string;
-  cep: number;
+  cep: string;
   localidade: string;
   uf: string;
   logradouro: string;
