@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import {
   FormControl,
@@ -38,7 +38,7 @@ import { TurmaService } from '../../core/services/turma.service';
   templateUrl: './cadastro-notas.component.html',
   styleUrl: './cadastro-notas.component.scss',
 })
-export class CadastroNotasComponent {
+export class CadastroNotasComponent implements OnInit {
   formNota!: FormGroup;
   idAluno!: number;
   listaTurmasProfessor: TurmaInterface[] = [];
@@ -63,9 +63,17 @@ export class CadastroNotasComponent {
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.usuarioLogado;
-    this.idAluno = this.activatedRoute.snapshot.params['id'];
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.perfilAtivo = usuarioLogado;
+        this.inicializaForm();
+      }
+    });
 
+    this.idAluno = this.activatedRoute.snapshot.params['id'];
+  }
+
+  inicializaForm() {
     this.formNota = new FormGroup({
       turma: new FormControl('', Validators.required),
       professor: new FormControl('', Validators.required),
@@ -87,6 +95,11 @@ export class CadastroNotasComponent {
     const dataFormatada = now.toISOString().split('T')[0];
     this.formNota.get('data')?.setValue(dataFormatada);
 
+    this.carregarAlunos();
+    this.carregarProfessores();
+  }
+
+  carregarAlunos() {
     if (this.idAluno) {
       this.alunoService.getAluno(this.idAluno).subscribe((retorno) => {
         this.listaAlunos = [retorno];
@@ -99,7 +112,9 @@ export class CadastroNotasComponent {
         this.listaAlunos = retorno;
       });
     }
+  }
 
+  carregarProfessores() {
     if (this.perfilAtivo.papel === 'ADM') {
       this.docenteService
         .getDocenteByEmail(this.perfilAtivo.email)
@@ -144,7 +159,7 @@ export class CadastroNotasComponent {
 
     this.alunoService.getAlunos().subscribe((retorno) => {
       this.listaAlunos = retorno.filter((item) => {
-        return item.turmas === turma.id;
+        return item.turma === turma.id;
       });
     });
   }

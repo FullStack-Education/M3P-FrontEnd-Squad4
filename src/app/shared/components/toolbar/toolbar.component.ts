@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../../core/services/login.service';
 import { SidenavService } from '../../../core/services/sidenav.service';
 import { DialogComponent } from '../dialog/dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
@@ -21,6 +22,8 @@ export class ToolbarComponent implements OnInit {
     avatar: '',
   };
 
+  private subscription: Subscription = new Subscription();
+
   constructor(
     private loginService: LoginService,
     private sidenavService: SidenavService,
@@ -29,11 +32,18 @@ export class ToolbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const usuarioLogado = this.loginService.usuarioLogado;
-    if (usuarioLogado) {
-      this.usuarioAtivo.nome = usuarioLogado.nome;
-      // this.usuarioAtivo.avatar = usuarioLogado.avatar;
-    }
+    this.subscription.add(
+      this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+        if (usuarioLogado) {
+          this.usuarioAtivo.nome = usuarioLogado.nome;
+          // this.usuarioAtivo.avatar = usuarioLogado.avatar;
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   toggleSidenav(): void {

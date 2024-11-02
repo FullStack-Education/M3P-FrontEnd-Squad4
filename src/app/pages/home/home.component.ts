@@ -33,7 +33,7 @@ import { IdadePipe } from '../../core/pipes/idade.pipe';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  usuarioLogado: UsuarioInterface | null = null;
+  usuarioLogado!: UsuarioInterface;
   perfilAtivo!: string;
   alunoAtivo!: AlunoInterface;
   listaNotas!: NotaInterface[];
@@ -55,8 +55,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.perfilUsuarioAtivo;
-    this.usuarioLogado = this.loginService.usuarioLogado;
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.perfilAtivo = usuarioLogado.papel;
+        this.usuarioLogado = usuarioLogado;
+      }
+    });
 
     this.turmaService.getTurmas().subscribe((retorno) => {
       this.totalTurmas = retorno.length;

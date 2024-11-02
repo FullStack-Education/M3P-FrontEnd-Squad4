@@ -88,7 +88,11 @@ export class MenuLateralComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.perfilUsuarioAtivo;
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.perfilAtivo = usuarioLogado.papel;
+      }
+    });
 
     this.itensMenuFiltrado = this.itensMenu.filter((item) => {
       return this.validarPermissao(item);

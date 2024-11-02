@@ -55,7 +55,11 @@ export class CadastroTurmasComponent {
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.usuarioLogado;
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.perfilAtivo = usuarioLogado;
+      }
+    });
     this.idTurma = this.activatedRoute.snapshot.params['id'];
 
     this.formTurma = new FormGroup({
