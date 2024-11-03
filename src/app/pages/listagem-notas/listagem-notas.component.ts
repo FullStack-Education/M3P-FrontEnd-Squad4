@@ -34,7 +34,7 @@ export class ListagemNotasComponent implements OnInit {
     email: '',
     senha: '',
     naturalidade: '',
-    cep: 0,
+    cep: '',
     localidade: '',
     uf: '',
     logradouro: '',
@@ -42,7 +42,7 @@ export class ListagemNotasComponent implements OnInit {
     complemento: '',
     bairro: '',
     referencia: '',
-    turmas: 0,
+    turma: 0,
   };
   listaAlunos!: AlunoInterface[];
   listaDocentes: DocenteInterface[] = [];
@@ -60,7 +60,11 @@ export class ListagemNotasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.usuarioLogado = this.loginService.usuarioLogado;
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
+      }
+    });
     this.alunoService
       .getAlunoByEmail(this.usuarioLogado.email)
       .subscribe((retorno) => {
@@ -76,7 +80,7 @@ export class ListagemNotasComponent implements OnInit {
   getTurmasAluno() {
     this.turmaService.getTurmas().subscribe((retorno) => {
       this.listaTurmas = retorno.filter((item) => {
-        return item.id === this.alunoAtivo.turmas;
+        return item.id === this.alunoAtivo.turma;
       });
       let idProfessor = this.listaTurmas.map((item) => item.id);
       this.getProfessores(idProfessor);

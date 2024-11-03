@@ -67,11 +67,6 @@ export class AppComponent implements OnInit {
     this.usuarioSubscription = this.loginService.usuarioLogado$.subscribe(
       (usuario) => {
         this.usuarioLogado = usuario;
-        if (usuario) {
-          console.log('Usuário logado:', usuario);
-        } else {
-          console.log('Nenhum usuário logado.');
-        }
       }
     );
 
