@@ -233,7 +233,6 @@ export class CadastroAlunosComponent {
   }
 
   excluirAluno(aluno: AlunoInterface) {
-    console.log('Notas ---> ' + this.listaNotas.length);
     if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
         'Aluno não pode ser excluído, pois possui turmas ou notas vinculadas!'
