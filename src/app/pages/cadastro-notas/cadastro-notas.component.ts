@@ -142,7 +142,6 @@ export class CadastroNotasComponent implements OnInit {
       .getTurmasByProfessor(idProfessor.id)
       .subscribe((retorno) => {
         this.listaTurmasProfessor = retorno;
-        console.log(retorno);
       });
 
     this.materiaService.getMaterias().subscribe((retorno) => {

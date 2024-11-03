@@ -178,21 +178,20 @@
     </div>
 
     <div class="col-66">
-      <label for="turmas">Turmas</label>
+      <label for="turmas">Turma</label>
       <ng-select
         [items]="listaTurmas"
         bindLabel="nomeTurma"
         bindValue="id"
-        labelForId="turmas"
-        [multiple]="true"
+        labelForId="turma"
         placeholder="Selecione..."
-        formControlName="turmas"
+        formControlName="turma"
       >
       </ng-select>
       <app-erro-form
-        [control]="formAluno.controls['turmas']"
+        [control]="formAluno.controls['turma']"
         [customMessages]="{
-          required: 'Campo obrigatório, selecione uma ou mais turmas.'
+          required: 'Campo obrigatório, selecione uma turma.'
         }"
       ></app-erro-form>
     </div>

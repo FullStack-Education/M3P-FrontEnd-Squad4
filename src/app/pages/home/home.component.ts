@@ -60,11 +60,13 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    this.dashboardService.getEstatisticas().subscribe((retorno) => {
-      this.totalTurmas = retorno.quantidadeDeTurmas;
-      this.totalDocentes = retorno.quantidadeDeDocentes;
-      this.totalAlunos = retorno.quantidadeDeAlunos;
-    });
+    if (this.perfilAtivo === 'ADM') {
+      this.dashboardService.getEstatisticas().subscribe((retorno) => {
+        this.totalTurmas = retorno.quantidadeDeTurmas;
+        this.totalDocentes = retorno.quantidadeDeDocentes;
+        this.totalAlunos = retorno.quantidadeDeAlunos;
+      });
+    }
 
     this.alunoService.getAlunos().subscribe((retorno) => {
       this.listaAlunos = retorno;

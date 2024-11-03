@@ -106,7 +106,7 @@ export class CadastroAlunosComponent {
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       referencia: new FormControl(''),
-      turmas: new FormControl(null, Validators.required),
+      turma: new FormControl(null, Validators.required),
     });
 
     this.turmaService
@@ -118,8 +118,11 @@ export class CadastroAlunosComponent {
       this.getTurmasAluno();
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
-          this.formAluno.disable();
+          retorno.cpf = this.formatarCPF(retorno.cpf);
+          retorno.telefone = this.formatarTelefone(retorno.telefone);
+          retorno.cep = this.formatarCep(retorno.cep);
           this.formAluno.patchValue(retorno);
+          this.formAluno.disable();
         },
         error: (erro) => {
           this.toastr.error('Aluno não encontrado!');
@@ -162,12 +165,47 @@ export class CadastroAlunosComponent {
     }
   }
 
+  formatarCPF(cpf: string): string {
+    return cpf
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{2})$/, '$1-$2');
+  }
+
+  formatarTelefone(telefone: string): string {
+    return telefone
+      .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')
+      .replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+  }
+
+  formatarCep(cep: string): string {
+    return cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+  }
+
+  removerCaracteresEspeciais(valor: string): string {
+    return valor.replace(/\D/g, '');
+  }
+
   submitForm() {
     if (this.formAluno.valid) {
+      const AlunoData = {
+        ...this.formAluno.value,
+        email: this.formAluno.get('email')?.value,
+        cpf: this.removerCaracteresEspeciais(
+          this.formAluno.get('cpf')?.value || ''
+        ),
+        telefone: this.removerCaracteresEspeciais(
+          this.formAluno.get('telefone')?.value || ''
+        ),
+        cep: this.removerCaracteresEspeciais(
+          this.formAluno.get('cep')?.value || ''
+        ),
+      };
+
       if (this.idAluno) {
-        this.editarAluno(this.formAluno.value);
+        this.editarAluno(AlunoData);
       } else {
-        this.cadastrarAluno(this.formAluno.value);
+        this.cadastrarAluno(AlunoData);
       }
     } else {
       this.formAluno.markAllAsTouched();
@@ -176,6 +214,7 @@ export class CadastroAlunosComponent {
 
   habilitarEdicao() {
     this.formAluno.enable();
+    this.formAluno.get('email')?.disable();
   }
 
   cadastrarAluno(aluno: AlunoInterface) {
@@ -194,6 +233,7 @@ export class CadastroAlunosComponent {
   }
 
   excluirAluno(aluno: AlunoInterface) {
+    console.log('Notas ---> ' + this.listaNotas.length);
     if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
         'Aluno não pode ser excluído, pois possui turmas ou notas vinculadas!'
