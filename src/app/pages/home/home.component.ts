@@ -9,13 +9,12 @@ import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { NotaInterface } from '../../core/interfaces/nota.interface';
 import { LoginService } from '../../core/services/login.service';
-import { DocenteService } from '../../core/services/docente.service';
 import { AlunoService } from '../../core/services/aluno.service';
-import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
 import { MatIconModule } from '@angular/material/icon';
 import { IdadePipe } from '../../core/pipes/idade.pipe';
+import { DashboardService } from '../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-home',
@@ -47,8 +46,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private alunoService: AlunoService,
-    private docenteService: DocenteService,
-    private turmaService: TurmaService,
+    private dashboardService: DashboardService,
     private materiaService: MateriaService,
     private notaService: NotaService,
     private router: Router
@@ -62,17 +60,14 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    this.turmaService.getTurmas().subscribe((retorno) => {
-      this.totalTurmas = retorno.length;
-    });
-
-    this.docenteService.getDocentes().subscribe((retorno) => {
-      this.totalDocentes = retorno.length;
+    this.dashboardService.getEstatisticas().subscribe((retorno) => {
+      this.totalTurmas = retorno.quantidadeDeTurmas;
+      this.totalDocentes = retorno.quantidadeDeDocentes;
+      this.totalAlunos = retorno.quantidadeDeAlunos;
     });
 
     this.alunoService.getAlunos().subscribe((retorno) => {
       this.listaAlunos = retorno;
-      this.totalAlunos = retorno.length;
     });
 
     this.alunoService
