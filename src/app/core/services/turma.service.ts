@@ -6,7 +6,7 @@ import { TurmaInterface } from '../interfaces/turma.interface';
   providedIn: 'root',
 })
 export class TurmaService {
-  url = 'http://localhost:3000/turmas';
+  url = 'http://localhost:8080/turmas';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,17 +14,17 @@ export class TurmaService {
     return this.httpClient.get<Array<TurmaInterface>>(this.url);
   }
 
-  getTurma(id: string) {
+  getTurma(id: number) {
     return this.httpClient.get<TurmaInterface>(this.url + `/${id}`);
   }
 
-  getTurmasByProfessor(idProfessor: string) {
+  getTurmasByProfessor(idProfessor: number) {
     return this.httpClient.get<Array<TurmaInterface>>(
       this.url + `?professor=${idProfessor}`
     );
   }
 
-  getTurmasByAluno(idAluno: string) {
+  getTurmasByAluno(idAluno: number) {
     return this.httpClient.get<Array<TurmaInterface>>(
       this.url + `?aluno=${idAluno}`
     );

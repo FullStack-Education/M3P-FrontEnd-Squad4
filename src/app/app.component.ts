@@ -16,6 +16,9 @@ import { SidenavService } from './core/services/sidenav.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LoadingService } from './core/services/loading.service';
 import { LoadingComponent } from './shared/components/loading/loading.component';
+import { LoginService } from './core/services/login.service';
+import { UsuarioInterface } from './core/interfaces/usuario.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -37,13 +40,16 @@ export class AppComponent implements OnInit {
   showMenuLateral = true;
   showToolbar = true;
   opened = true;
+  usuarioLogado: UsuarioInterface | null = null;
   private navigationCount = 0;
+  private usuarioSubscription!: Subscription;
 
   constructor(
     private router: Router,
     private loadingService: LoadingService,
     private sidenavService: SidenavService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private loginService: LoginService
   ) {
     this.router.events.subscribe((retorno) => {
       if (retorno instanceof NavigationEnd) {
@@ -58,6 +64,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.usuarioSubscription = this.loginService.usuarioLogado$.subscribe(
+      (usuario) => {
+        this.usuarioLogado = usuario;
+        if (usuario) {
+          console.log('Usuário logado:', usuario);
+        } else {
+          console.log('Nenhum usuário logado.');
+        }
+      }
+    );
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.navigationCount++;
@@ -87,5 +104,11 @@ export class AppComponent implements OnInit {
         }
         this.sidenavService.setSidenavMode(this.sidenavMode);
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.usuarioSubscription) {
+      this.usuarioSubscription.unsubscribe();
+    }
   }
 }

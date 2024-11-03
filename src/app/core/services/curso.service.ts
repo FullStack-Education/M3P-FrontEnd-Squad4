@@ -6,7 +6,7 @@ import { CursoInterface } from '../interfaces/curso.interface';
   providedIn: 'root',
 })
 export class CursoService {
-  url = 'http://localhost:3000/cursos';
+  url = 'http://localhost:8080/cursos';
 
   constructor(private httpClient: HttpClient) {}
 
@@ -14,7 +14,7 @@ export class CursoService {
     return this.httpClient.get<Array<CursoInterface>>(this.url);
   }
 
-  getCurso(id: string) {
+  getCurso(id: number) {
     return this.httpClient.get<CursoInterface>(this.url + `/${id}`);
   }
 }

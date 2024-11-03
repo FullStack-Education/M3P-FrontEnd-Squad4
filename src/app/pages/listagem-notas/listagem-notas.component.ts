@@ -24,7 +24,7 @@ import { NotaService } from '../../core/services/nota.service';
 export class ListagemNotasComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
   alunoAtivo: AlunoInterface = {
-    id: '',
+    id: 0,
     nomeCompleto: '',
     genero: '',
     nascimento: new Date(),
@@ -42,7 +42,7 @@ export class ListagemNotasComponent implements OnInit {
     complemento: '',
     bairro: '',
     referencia: '',
-    turmas: [],
+    turmas: 0,
   };
   listaAlunos!: AlunoInterface[];
   listaDocentes: DocenteInterface[] = [];
@@ -76,14 +76,14 @@ export class ListagemNotasComponent implements OnInit {
   getTurmasAluno() {
     this.turmaService.getTurmas().subscribe((retorno) => {
       this.listaTurmas = retorno.filter((item) => {
-        return this.alunoAtivo.turmas.includes(item.id);
+        return item.id === this.alunoAtivo.turmas;
       });
       let idProfessor = this.listaTurmas.map((item) => item.id);
       this.getProfessores(idProfessor);
     });
   }
 
-  getProfessores(idProfessores: Array<string>) {
+  getProfessores(idProfessores: Array<number>) {
     this.docenteService.getDocentes().subscribe(
       (retorno) =>
         (this.listaDocentes = retorno.filter((item) => {
@@ -92,7 +92,7 @@ export class ListagemNotasComponent implements OnInit {
     );
   }
 
-  getNomeProfessorTurma(idProfessor: string) {
+  getNomeProfessorTurma(idProfessor: number) {
     let professor = this.listaDocentes.filter((item) => {
       return item.id == idProfessor;
     });
@@ -121,7 +121,7 @@ export class ListagemNotasComponent implements OnInit {
     });
   }
 
-  getMateriasAluno(ids: Array<string>) {
+  getMateriasAluno(ids: Array<number>) {
     this.materiaService.getMaterias().subscribe((retorno) => {
       this.listaMaterias = retorno.filter((item) => {
         return ids.includes(item.id);
@@ -129,7 +129,7 @@ export class ListagemNotasComponent implements OnInit {
     });
   }
 
-  getNomeMaterias(idMateria: string) {
+  getNomeMaterias(idMateria: number) {
     let materia = this.listaMaterias.filter((item) => {
       return item.id == idMateria;
     });

@@ -40,7 +40,7 @@ import { NotaService } from '../../core/services/nota.service';
 })
 export class CadastroAlunosComponent {
   formAluno!: FormGroup;
-  idAluno!: string;
+  idAluno!: number;
   listaTurmas: TurmaInterface[] = [];
   listaNotas!: any[];
   generos = Object.keys(Genero).map((key) => ({
