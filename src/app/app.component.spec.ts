@@ -14,16 +14,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'senai-fullstack-education-projeto-final-modulo02' title`, () => {
+  it(`should have the 'Projeto LabPCP' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('senai-fullstack-education-projeto-final-modulo02');
+    expect(app.title).toEqual('Projeto LabPCP');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, senai-fullstack-education-projeto-final-modulo02');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Hello, Projeto LabPCP'
+    );
   });
 });
