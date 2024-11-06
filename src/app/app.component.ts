@@ -36,6 +36,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  title = 'Projeto LabPCP';
   sidenavMode: MatDrawerMode = 'side';
   showMenuLateral = true;
   showToolbar = true;
