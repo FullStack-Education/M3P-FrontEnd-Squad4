@@ -39,12 +39,13 @@
         bindLabel="nome"
         bindValue="id"
         labelForId="curso"
+        (change)="getDocentesByCurso($event.id)"
         placeholder="Selecione..."
-        formControlName="curso"
+        formControlName="cursoId"
       >
       </ng-select>
       <app-erro-form
-        [control]="formTurma.controls['curso']"
+        [control]="formTurma.controls['cursoId']"
         [customMessages]="{
         required: 'Campo obrigatório, selecione um curso',
       }"
@@ -59,11 +60,11 @@
         bindValue="id"
         labelForId="professor"
         placeholder="Selecione..."
-        formControlName="professor"
+        formControlName="docenteId"
       >
       </ng-select>
       <app-erro-form
-        [control]="formTurma.controls['professor']"
+        [control]="formTurma.controls['docenteId']"
         [customMessages]="{
             required: 'Professor é obrigatório',
           }"

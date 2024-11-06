@@ -4,6 +4,6 @@ export interface TurmaInterface {
   dataInicio: Date;
   dataTermino: Date;
   horario: string;
-  professor: number;
-  curso: number;
+  docenteId: number;
+  cursoId: number;
 }

@@ -20,6 +20,7 @@ import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 import { CursoService } from '../../core/services/curso.service';
+import { MateriaInterface } from '../../core/interfaces/materia.interface';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -39,6 +40,7 @@ export class CadastroTurmasComponent {
   idTurma: number | undefined;
   listaProfessores: DocenteInterface[] = [];
   listaCursos: CursoInterface[] = [];
+  listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
@@ -48,8 +50,8 @@ export class CadastroTurmasComponent {
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private turmaService: TurmaService,
-    private docenteService: DocenteService,
     private cursoService: CursoService,
+    private docenteService: DocenteService,
     private toastr: ToastrService,
     private location: Location
   ) {}
@@ -77,8 +79,8 @@ export class CadastroTurmasComponent {
         Validators.pattern(this.dataRegex),
       ]),
       horario: new FormControl('', Validators.required),
-      professor: new FormControl('', Validators.required),
-      curso: new FormControl('', Validators.required),
+      docenteId: new FormControl('', Validators.required),
+      cursoId: new FormControl('', Validators.required),
     });
 
     const now = new Date();
@@ -129,6 +131,18 @@ export class CadastroTurmasComponent {
     this.turmaService.postTurma(turma).subscribe(() => {
       this.toastr.success('Turma cadastrada com sucesso!');
       this.router.navigate(['/home']);
+    });
+  }
+
+  getDocentesByCurso(idCurso: number) {
+    this.turmaService.getDocentesByCurso(idCurso).subscribe((retorno) => {
+      this.listaProfessores = retorno;
+
+      this.listaProfessores.map((professor) => {
+        this.formTurma.patchValue({
+          professor: professor.nomeCompleto,
+        });
+      });
     });
   }
 
