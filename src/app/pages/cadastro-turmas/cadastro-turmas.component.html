@@ -32,9 +32,20 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-33">
+    <div class="col-33" >
       <label for="curso">Curso</label>
       <ng-select
+        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
+        [items]="listaCursos"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="curso"
+        placeholder="Selecione..."
+        formControlName="cursoId"
+      >
+      </ng-select>
+      <ng-select
+        *ngIf="perfilAtivo.papel === 'ADM'"
         [items]="listaCursos"
         bindLabel="nome"
         bindValue="id"
@@ -52,9 +63,11 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-33">
+    <div class="col-33" >
       <label for="professor">Professor</label>
+      <input *ngIf="perfilAtivo.papel === 'PROFESSOR'" type="text" name="professor" id="professor" formControlName="docenteId" [(ngModel)]="professorByEmail">
       <ng-select
+        *ngIf="perfilAtivo.papel === 'ADM'"
         [items]="listaProfessores"
         bindLabel="nomeCompleto"
         bindValue="id"

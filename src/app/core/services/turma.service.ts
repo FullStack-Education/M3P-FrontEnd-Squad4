@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { TurmaInterface } from '../interfaces/turma.interface';
 import { Observable } from 'rxjs';
 import { DocenteInterface } from '../interfaces/docente.interface';
+import { CursoInterface } from '../interfaces/curso.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,12 @@ export class TurmaService {
     return this.httpClient.get<Array<DocenteInterface>>(
       `${this.url}/cursos/${id}/docentes`
     );
+  }
+
+  getCursosByDocente(idDocente: number): Observable<CursoInterface[]> {
+    return this.httpClient.get<Array<CursoInterface>>(
+      `${this.url}/docentes/${idDocente}/cursos`
+    )
   }
 
   postTurma(turma: TurmaInterface) {
