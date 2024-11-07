@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -20,6 +20,7 @@ import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 import { CursoService } from '../../core/services/curso.service';
+import { MateriaInterface } from '../../core/interfaces/materia.interface';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -30,6 +31,7 @@ import { CursoService } from '../../core/services/curso.service';
     NgSelectModule,
     MatIconModule,
     ErroFormComponent,
+    CommonModule
   ],
   templateUrl: './cadastro-turmas.component.html',
   styleUrl: './cadastro-turmas.component.scss',
@@ -39,7 +41,9 @@ export class CadastroTurmasComponent {
   idTurma: number | undefined;
   listaProfessores: DocenteInterface[] = [];
   listaCursos: CursoInterface[] = [];
+  listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
+  professorByEmail : DocenteInterface | undefined;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
@@ -48,8 +52,8 @@ export class CadastroTurmasComponent {
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private turmaService: TurmaService,
-    private docenteService: DocenteService,
     private cursoService: CursoService,
+    private docenteService: DocenteService,
     private toastr: ToastrService,
     private location: Location
   ) {}
@@ -77,8 +81,8 @@ export class CadastroTurmasComponent {
         Validators.pattern(this.dataRegex),
       ]),
       horario: new FormControl('', Validators.required),
-      professor: new FormControl('', Validators.required),
-      curso: new FormControl('', Validators.required),
+      docenteId: new FormControl('', Validators.required),
+      cursoId: new FormControl('', Validators.required),
     });
 
     const now = new Date();
@@ -88,24 +92,32 @@ export class CadastroTurmasComponent {
     this.formTurma.get('dataTermino')?.setValue(dataFormatada);
     this.formTurma.get('horario')?.setValue(horaFormatada);
 
-    if (this.perfilAtivo.papel === 'ADM') {
+    if (this.perfilAtivo.papel === 'PROFESSOR') {
+      let idDocente = this.professorByEmail?.id;
       this.docenteService
         .getDocenteByEmail(this.perfilAtivo.email)
         .subscribe((retorno) => {
           this.listaProfessores = retorno;
-          this.formTurma.patchValue({
-            professor: retorno[0].id,
+          this.professorByEmail = retorno.find((item) => {
+            return item.email === this.perfilAtivo.email
           });
-        });
+          idDocente = this.professorByEmail?.id
+          if (this.professorByEmail) {
+            this.formTurma.patchValue({
+              docenteId: this.professorByEmail.nomeCompleto,
+              });
+            }
+            this.formTurma.get('docenteId')?.disable();
+            if(idDocente !== undefined) {
+              this.getCursosByDocente(idDocente)
+            }
+          }
+        );
     } else {
-      this.docenteService.getDocentes().subscribe((retorno) => {
-        this.listaProfessores = retorno;
-      });
+      this.cursoService
+        .getCursos()
+        .subscribe((retorno) => (this.listaCursos = retorno));
     }
-
-    this.cursoService
-      .getCursos()
-      .subscribe((retorno) => (this.listaCursos = retorno));
 
     if (this.idTurma) {
       this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
@@ -129,6 +141,29 @@ export class CadastroTurmasComponent {
     this.turmaService.postTurma(turma).subscribe(() => {
       this.toastr.success('Turma cadastrada com sucesso!');
       this.router.navigate(['/home']);
+    });
+  }
+
+  getDocentesByCurso(idCurso: number) {
+    this.turmaService.getDocentesByCurso(idCurso).subscribe((retorno) => {
+      this.listaProfessores = retorno;
+
+      this.listaProfessores.map((professor) => {
+        this.formTurma.patchValue({
+          professor: professor.nomeCompleto,
+        });
+      });
+    });
+  }
+
+  getCursosByDocente(idDocente: number) {
+    this.turmaService.getCursosByDocente(idDocente).subscribe((retorno) => {
+      this.listaCursos = retorno;
+      this.listaCursos.map((curso) => {
+        this.formTurma.patchValue({
+          curso: curso.nome,
+        });
+      })
     });
   }
 
