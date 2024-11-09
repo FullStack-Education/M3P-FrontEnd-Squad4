@@ -60,6 +60,10 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    this.alunoService.getAlunos().subscribe((retorno) => {
+      this.listaAlunos = retorno;
+    });
+
     if (this.perfilAtivo === 'ADM') {
       this.dashboardService.getEstatisticas().subscribe((retorno) => {
         this.totalTurmas = retorno.quantidadeDeTurmas;
@@ -68,19 +72,17 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno;
-    });
+    if (this.perfilAtivo === 'ALUNO') {
+      this.alunoService
+        .getAlunoByEmail(this.usuarioLogado.email)
+        .subscribe((retorno) => {
+          if (retorno.length > 0) this.alunoAtivo = retorno[0];
 
-    this.alunoService
-      .getAlunoByEmail(this.usuarioLogado.email)
-      .subscribe((retorno) => {
-        if (retorno.length > 0) this.alunoAtivo = retorno[0];
-
-        if (this.alunoAtivo) {
-          this.getNotasAluno();
-        }
-      });
+          if (this.alunoAtivo) {
+            this.getNotasAluno();
+          }
+        });
+    }
   }
 
   pesquisar() {

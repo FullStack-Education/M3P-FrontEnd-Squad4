@@ -32,7 +32,7 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-33" >
+    <div class="col-33">
       <label for="curso">Curso</label>
       <ng-select
         *ngIf="perfilAtivo.papel === 'PROFESSOR'"
@@ -63,15 +63,22 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-33" >
-      <label for="professor">Professor</label>
-      <input *ngIf="perfilAtivo.papel === 'PROFESSOR'" type="text" name="professor" id="professor" formControlName="docenteId" [(ngModel)]="professorByEmail">
+    <div class="col-33">
+      <label for="docente">Docente</label>
+      <input
+        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
+        type="text"
+        name="docente"
+        id="docente"
+        formControlName="docenteId"
+        [(ngModel)]="docenteByEmail"
+      />
       <ng-select
         *ngIf="perfilAtivo.papel === 'ADM'"
-        [items]="listaProfessores"
+        [items]="listaDocentes"
         bindLabel="nomeCompleto"
         bindValue="id"
-        labelForId="professor"
+        labelForId="docente"
         placeholder="Selecione..."
         formControlName="docenteId"
       >
@@ -79,7 +86,7 @@
       <app-erro-form
         [control]="formTurma.controls['docenteId']"
         [customMessages]="{
-            required: 'Professor é obrigatório',
+            required: 'Docente é obrigatório',
           }"
       ></app-erro-form>
     </div>

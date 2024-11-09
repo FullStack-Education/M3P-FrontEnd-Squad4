@@ -24,6 +24,12 @@ export class AlunoService {
     );
   }
 
+  getAlunosByTurma(idTurma: number) {
+    return this.httpClient.get<Array<AlunoInterface>>(
+      this.url + `/turmas/${idTurma}/alunos`
+    );
+  }
+
   postAluno(aluno: AlunoInterface) {
     return this.httpClient.post<any>(this.url, aluno);
   }
