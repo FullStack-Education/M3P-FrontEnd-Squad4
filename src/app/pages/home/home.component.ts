@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit {
           if (idAluno !== undefined) {
             this.getCursoByAluno(idAluno);
             this.getCursosExtras(idAluno);
+            this.getNotasAluno();
           }
         });
     }
@@ -137,19 +138,19 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/nota/aluno', idAluno]);
   }
 
-  // getNotasAluno() {
-  //   this.notaService
-  //     // .getNotasByAluno(this.alunoByEmail?.id)
-  //     .subscribe((retorno) => {
-  //       this.listaNotas = retorno;
-  //       this.notasOrdenadasPorDataDesc();
-  //       this.listaNotas = this.obterUltimasNotas(3);
-  //       let idMaterias = retorno.map((item) => {
-  //         return item.materia;
-  //       });
-  //       this.getMateriasAluno(idMaterias);
-  //     });
-  // }
+  getNotasAluno() {
+    this.notaService
+      .getNotasByAluno(this.alunoByEmail?.id)
+      .subscribe((retorno) => {
+        this.listaNotas = retorno;
+        this.notasOrdenadasPorDataDesc();
+        this.listaNotas = this.obterUltimasNotas(3);
+        let idMaterias = retorno.map((item) => {
+          return item.materia;
+        });
+        this.getMateriasAluno(idMaterias);
+      });
+  }
 
   notasOrdenadasPorDataDesc() {
     this.listaNotas.sort((a, b) => {
