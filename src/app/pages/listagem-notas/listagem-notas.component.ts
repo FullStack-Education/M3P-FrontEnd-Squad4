@@ -65,6 +65,11 @@ export class ListagemNotasComponent implements OnInit {
         this.usuarioLogado = usuarioLogado;
       }
     });
+    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
+      if (usuarioLogado) {
+        this.usuarioLogado = usuarioLogado;
+      }
+    });
     this.alunoService
       .getAlunoByEmail(this.usuarioLogado.email)
       .subscribe((retorno) => {

@@ -93,7 +93,7 @@ export class CadastroAlunosComponent {
         Validators.required,
         Validators.pattern(this.telefoneRegex),
       ]),
-      email: new FormControl('', Validators.email),
+      email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),

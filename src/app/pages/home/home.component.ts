@@ -33,8 +33,8 @@ import { DashboardService } from '../../core/services/dashboard.service';
 })
 export class HomeComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
-  perfilAtivo!: string;
-  alunoAtivo!: AlunoInterface;
+  perfilAtivo!: UsuarioInterface;
+  alunoByEmail: AlunoInterface | undefined;
   listaNotas!: NotaInterface[];
   listaMaterias: MateriaInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
@@ -55,16 +55,14 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
       if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado.papel;
-        this.usuarioLogado = usuarioLogado;
+        this.perfilAtivo = usuarioLogado;
       }
     });
 
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno;
-    });
-
-    if (this.perfilAtivo === 'ADM') {
+    if (this.perfilAtivo.papel === 'ADM') {
+      this.alunoService.getAlunos().subscribe((retorno) => {
+        this.listaAlunos = retorno;
+      });
       this.dashboardService.getEstatisticas().subscribe((retorno) => {
         this.totalTurmas = retorno.quantidadeDeTurmas;
         this.totalDocentes = retorno.quantidadeDeDocentes;
@@ -72,17 +70,43 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    if (this.perfilAtivo === 'ALUNO') {
+    if (this.perfilAtivo.papel === 'ALUNO') {
+      let idAluno = this.alunoByEmail?.id;
+      this.alunoService
+        .getAlunoByEmail(this.perfilAtivo.email)
+        .subscribe((retorno) => {
+          this.listaAlunos = retorno;
+          this.alunoByEmail = retorno.find((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+          idAluno = this.alunoByEmail?.id;
+          if (this.alunoByEmail) {
+            if (idAluno !== undefined) {
+              this.getCursosExtras(idAluno);
+            }
+          }
+          //   this.forma.patchValue({
+          //     aluno: this.alunoByEmail.nomeCompleto,
+          //   });
+          // }
+          // this.formTurma.get('docenteId')?.disable();
+          // if (idDocente !== undefined) {
+          //   this.getCursosByDocente(idDocente);
+          // }
+        });
+
       this.alunoService
         .getAlunoByEmail(this.usuarioLogado.email)
         .subscribe((retorno) => {
-          if (retorno.length > 0) this.alunoAtivo = retorno[0];
-
-          if (this.alunoAtivo) {
-            this.getNotasAluno();
-          }
+          // if (this.alunoAtivo) {
+          //   this.getNotasAluno();
+          // }
         });
     }
+  }
+
+  getCursosExtras(idAluno: number) {
+    console.log('cursos extras');
   }
 
   pesquisar() {
@@ -116,19 +140,19 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/nota/aluno', idAluno]);
   }
 
-  getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.alunoAtivo.id)
-      .subscribe((retorno) => {
-        this.listaNotas = retorno;
-        this.notasOrdenadasPorDataDesc();
-        this.listaNotas = this.obterUltimasNotas(3);
-        let idMaterias = retorno.map((item) => {
-          return item.materia;
-        });
-        this.getMateriasAluno(idMaterias);
-      });
-  }
+  // getNotasAluno() {
+  //   this.notaService
+  //     // .getNotasByAluno(this.alunoByEmail?.id)
+  //     .subscribe((retorno) => {
+  //       this.listaNotas = retorno;
+  //       this.notasOrdenadasPorDataDesc();
+  //       this.listaNotas = this.obterUltimasNotas(3);
+  //       let idMaterias = retorno.map((item) => {
+  //         return item.materia;
+  //       });
+  //       this.getMateriasAluno(idMaterias);
+  //     });
+  // }
 
   notasOrdenadasPorDataDesc() {
     this.listaNotas.sort((a, b) => {
