@@ -1,6 +1,6 @@
 export interface NotaInterface {
   id: number;
-  professor: number;
+  docente: number;
   materia: number;
   avaliacao: string;
   data: Date;

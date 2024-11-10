@@ -18,9 +18,9 @@ export class NotaService {
     return this.httpClient.get<NotaInterface>(this.url + `/${id}`);
   }
 
-  getNotasByProfessor(idProfessor: number) {
+  getNotasByDocente(idDocente: number) {
     return this.httpClient.get<Array<NotaInterface>>(
-      this.url + `?professor=${idProfessor}`
+      this.url + `?docente=${idDocente}`
     );
   }
 

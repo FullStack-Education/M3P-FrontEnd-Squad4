@@ -15,6 +15,8 @@ import { NotaService } from '../../core/services/nota.service';
 import { MatIconModule } from '@angular/material/icon';
 import { IdadePipe } from '../../core/pipes/idade.pipe';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { CursoInterface } from '../../core/interfaces/curso.interface';
+import { CursoService } from '../../core/services/curso.service';
 
 @Component({
   selector: 'app-home',
@@ -33,9 +35,11 @@ import { DashboardService } from '../../core/services/dashboard.service';
 })
 export class HomeComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
-  perfilAtivo!: string;
-  alunoAtivo!: AlunoInterface;
-  listaNotas!: NotaInterface[];
+  perfilAtivo!: UsuarioInterface;
+  alunoByEmail: AlunoInterface | undefined;
+  cursoByAluno: CursoInterface | undefined;
+  cursosExtras: any;
+  listaNotas: NotaInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   totalAlunos!: number;
@@ -48,6 +52,7 @@ export class HomeComponent implements OnInit {
     private alunoService: AlunoService,
     private dashboardService: DashboardService,
     private materiaService: MateriaService,
+    private cursoService: CursoService,
     private notaService: NotaService,
     private router: Router
   ) {}
@@ -55,12 +60,14 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
       if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado.papel;
-        this.usuarioLogado = usuarioLogado;
+        this.perfilAtivo = usuarioLogado;
       }
     });
 
-    if (this.perfilAtivo === 'ADM') {
+    if (this.perfilAtivo.papel === 'ADM') {
+      this.alunoService.getAlunos().subscribe((retorno) => {
+        this.listaAlunos = retorno;
+      });
       this.dashboardService.getEstatisticas().subscribe((retorno) => {
         this.totalTurmas = retorno.quantidadeDeTurmas;
         this.totalDocentes = retorno.quantidadeDeDocentes;
@@ -68,19 +75,35 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno;
+    if (this.perfilAtivo.papel === 'ALUNO') {
+      let idAluno = this.alunoByEmail?.id;
+      this.alunoService
+        .getAlunoByEmail(this.perfilAtivo.email)
+        .subscribe((retorno) => {
+          this.listaAlunos = retorno;
+          this.alunoByEmail = retorno.find((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+          idAluno = this.alunoByEmail?.id;
+
+          if (idAluno !== undefined) {
+            this.getCursoByAluno(idAluno);
+            this.getCursosExtras(idAluno);
+          }
+        });
+    }
+  }
+
+  getCursoByAluno(idAluno: number) {
+    this.cursoService.getCursoByAluno(idAluno).subscribe((retorno) => {
+      this.cursoByAluno = retorno;
     });
+  }
 
-    this.alunoService
-      .getAlunoByEmail(this.usuarioLogado.email)
-      .subscribe((retorno) => {
-        if (retorno.length > 0) this.alunoAtivo = retorno[0];
-
-        if (this.alunoAtivo) {
-          this.getNotasAluno();
-        }
-      });
+  getCursosExtras(idAluno: number) {
+    this.cursoService.getCursosExtras(idAluno).subscribe((retorno) => {
+      this.cursosExtras = retorno;
+    });
   }
 
   pesquisar() {
@@ -114,19 +137,19 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/nota/aluno', idAluno]);
   }
 
-  getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.alunoAtivo.id)
-      .subscribe((retorno) => {
-        this.listaNotas = retorno;
-        this.notasOrdenadasPorDataDesc();
-        this.listaNotas = this.obterUltimasNotas(3);
-        let idMaterias = retorno.map((item) => {
-          return item.materia;
-        });
-        this.getMateriasAluno(idMaterias);
-      });
-  }
+  // getNotasAluno() {
+  //   this.notaService
+  //     // .getNotasByAluno(this.alunoByEmail?.id)
+  //     .subscribe((retorno) => {
+  //       this.listaNotas = retorno;
+  //       this.notasOrdenadasPorDataDesc();
+  //       this.listaNotas = this.obterUltimasNotas(3);
+  //       let idMaterias = retorno.map((item) => {
+  //         return item.materia;
+  //       });
+  //       this.getMateriasAluno(idMaterias);
+  //     });
+  // }
 
   notasOrdenadasPorDataDesc() {
     this.listaNotas.sort((a, b) => {

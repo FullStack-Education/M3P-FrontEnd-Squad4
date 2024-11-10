@@ -82,28 +82,28 @@ export class ListagemNotasComponent implements OnInit {
       this.listaTurmas = retorno.filter((item) => {
         return item.id === this.alunoAtivo.turma;
       });
-      let idProfessor = this.listaTurmas.map((item) => item.id);
-      this.getProfessores(idProfessor);
+      let idDocente = this.listaTurmas.map((item) => item.id);
+      this.getDocentes(idDocente);
     });
   }
 
-  getProfessores(idProfessores: Array<number>) {
+  getDocentes(idDocentes: Array<number>) {
     this.docenteService.getDocentes().subscribe(
       (retorno) =>
         (this.listaDocentes = retorno.filter((item) => {
-          return idProfessores.includes(item.id);
+          return idDocentes.includes(item.id);
         }))
     );
   }
 
-  getNomeProfessorTurma(idProfessor: number) {
-    let professor = this.listaDocentes.filter((item) => {
-      return item.id == idProfessor;
+  getNomeDocenteTurma(idDocente: number) {
+    let docente = this.listaDocentes.filter((item) => {
+      return item.id == idDocente;
     });
-    if (professor.length == 0) {
-      return 'Professor não encontrado!';
+    if (docente.length == 0) {
+      return 'Docente não encontrado!';
     }
-    return professor[0].nomeCompleto;
+    return docente[0].nomeCompleto;
   }
 
   getNotasAluno() {

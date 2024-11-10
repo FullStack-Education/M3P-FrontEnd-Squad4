@@ -19,7 +19,6 @@ import { NotaInterface } from '../../core/interfaces/nota.interface';
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { AlunoService } from '../../core/services/aluno.service';
-import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
@@ -41,8 +40,8 @@ import { TurmaService } from '../../core/services/turma.service';
 export class CadastroNotasComponent implements OnInit {
   formNota!: FormGroup;
   idAluno!: number;
-  listaTurmasProfessor: TurmaInterface[] = [];
-  listaProfessores: DocenteInterface[] = [];
+  listaTurmas: TurmaInterface[] = [];
+  listaDocentes: DocenteInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
@@ -57,7 +56,6 @@ export class CadastroNotasComponent implements OnInit {
     private turmaService: TurmaService,
     private docenteService: DocenteService,
     private alunoService: AlunoService,
-    private materiaService: MateriaService,
     private toastr: ToastrService,
     private location: Location
   ) {}
@@ -76,7 +74,7 @@ export class CadastroNotasComponent implements OnInit {
   inicializaForm() {
     this.formNota = new FormGroup({
       turma: new FormControl('', Validators.required),
-      professor: new FormControl('', Validators.required),
+      docente: new FormControl('', Validators.required),
       materia: new FormControl('', Validators.required),
       avaliacao: new FormControl('', Validators.required),
       data: new FormControl('', [
@@ -95,72 +93,51 @@ export class CadastroNotasComponent implements OnInit {
     const dataFormatada = now.toISOString().split('T')[0];
     this.formNota.get('data')?.setValue(dataFormatada);
 
-    this.carregarAlunos();
-    this.carregarProfessores();
+    this.carregarDocentes();
   }
 
-  carregarAlunos() {
-    if (this.idAluno) {
-      this.alunoService.getAluno(this.idAluno).subscribe((retorno) => {
-        this.listaAlunos = [retorno];
-        this.formNota.patchValue({
-          aluno: retorno.id,
-        });
-      });
-    } else {
-      this.alunoService.getAlunos().subscribe((retorno) => {
-        this.listaAlunos = retorno;
-      });
-    }
-  }
-
-  carregarProfessores() {
-    if (this.perfilAtivo.papel === 'ADM') {
-      this.docenteService
-        .getDocenteByEmail(this.perfilAtivo.email)
-        .subscribe((retorno) => {
-          this.listaProfessores = retorno;
-          this.formNota.patchValue({
-            professor: retorno[0].id,
-          });
-          this.getTurmasProfessor(retorno[0]);
-        });
+  carregarDocentes() {
+    if (this.perfilAtivo.papel == 'PROFESSOR') {
+      console.log('Acesso perfil Professor');
+      // this.docenteService
+      //   .getDocenteByEmail(this.perfilAtivo.email)
+      //   .subscribe((retorno) => {
+      //     this.listaDocentes = retorno;
+      //     this.formNota.patchValue({
+      //       docente: retorno[0].id,
+      //     });
+      //     this.getTurmasByDocentes(retorno[0]);
+      //   });
     } else {
       this.docenteService.getDocentes().subscribe((retorno) => {
-        this.listaProfessores = retorno;
+        this.listaDocentes = retorno;
       });
     }
   }
 
-  getTurmasProfessor(idProfessor: DocenteInterface) {
+  getTurmasByDocente(idDocente: DocenteInterface) {
     this.formNota.patchValue({
       turma: '',
       materia: '',
       aluno: '',
     });
-    this.turmaService
-      .getTurmasByProfessor(idProfessor.id)
-      .subscribe((retorno) => {
-        this.listaTurmasProfessor = retorno;
-      });
-
-    this.materiaService.getMaterias().subscribe((retorno) => {
-      this.listaMaterias = retorno.filter((item) => {
-        return idProfessor.materias.includes(item.id);
-      });
+    this.turmaService.getTurmasByDocente(idDocente.id).subscribe((retorno) => {
+      this.listaTurmas = retorno;
+      console.log('Turmas: ' + retorno);
     });
   }
 
-  getTurmaAlunos(turma: TurmaInterface) {
-    this.formNota.patchValue({
-      aluno: '',
+  getAlunosAndMateriasByTurma(idTurma: TurmaInterface) {
+    this.alunoService.getAlunosByTurma(idTurma.id).subscribe((retorno) => {
+      this.listaAlunos = retorno;
+      console.log('Alunos: ' + retorno);
     });
 
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno.filter((item) => {
-        return item.turma === turma.id;
-      });
-    });
+    // Carregar materias
+    // this.materiaService.getMateriasByTurma(idTurma.id).subscribe((retorno) => {
+    //   this.listaMaterias = retorno;
+    //   console.log('Materias: ' + retorno);
+    // });
   }
 
   submitForm() {

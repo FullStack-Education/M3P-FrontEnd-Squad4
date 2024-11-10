@@ -31,7 +31,7 @@ import { MateriaInterface } from '../../core/interfaces/materia.interface';
     NgSelectModule,
     MatIconModule,
     ErroFormComponent,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './cadastro-turmas.component.html',
   styleUrl: './cadastro-turmas.component.scss',
@@ -39,11 +39,11 @@ import { MateriaInterface } from '../../core/interfaces/materia.interface';
 export class CadastroTurmasComponent {
   formTurma!: FormGroup;
   idTurma: number | undefined;
-  listaProfessores: DocenteInterface[] = [];
+  listaDocentes: DocenteInterface[] = [];
   listaCursos: CursoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
-  professorByEmail : DocenteInterface | undefined;
+  docenteByEmail: DocenteInterface | undefined;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
@@ -93,26 +93,25 @@ export class CadastroTurmasComponent {
     this.formTurma.get('horario')?.setValue(horaFormatada);
 
     if (this.perfilAtivo.papel === 'PROFESSOR') {
-      let idDocente = this.professorByEmail?.id;
+      let idDocente = this.docenteByEmail?.id;
       this.docenteService
         .getDocenteByEmail(this.perfilAtivo.email)
         .subscribe((retorno) => {
-          this.listaProfessores = retorno;
-          this.professorByEmail = retorno.find((item) => {
-            return item.email === this.perfilAtivo.email
+          this.listaDocentes = retorno;
+          this.docenteByEmail = retorno.find((item) => {
+            return item.email === this.perfilAtivo.email;
           });
-          idDocente = this.professorByEmail?.id
-          if (this.professorByEmail) {
+          idDocente = this.docenteByEmail?.id;
+          if (this.docenteByEmail) {
             this.formTurma.patchValue({
-              docenteId: this.professorByEmail.nomeCompleto,
-              });
-            }
-            this.formTurma.get('docenteId')?.disable();
-            if(idDocente !== undefined) {
-              this.getCursosByDocente(idDocente)
-            }
+              docente: this.docenteByEmail.nomeCompleto,
+            });
           }
-        );
+          this.formTurma.get('docenteId')?.disable();
+          if (idDocente !== undefined) {
+            this.getCursosByDocente(idDocente);
+          }
+        });
     } else {
       this.cursoService
         .getCursos()
@@ -146,11 +145,11 @@ export class CadastroTurmasComponent {
 
   getDocentesByCurso(idCurso: number) {
     this.turmaService.getDocentesByCurso(idCurso).subscribe((retorno) => {
-      this.listaProfessores = retorno;
+      this.listaDocentes = retorno;
 
-      this.listaProfessores.map((professor) => {
+      this.listaDocentes.map((docente) => {
         this.formTurma.patchValue({
-          professor: professor.nomeCompleto,
+          docente: docente.nomeCompleto,
         });
       });
     });
@@ -163,7 +162,7 @@ export class CadastroTurmasComponent {
         this.formTurma.patchValue({
           curso: curso.nome,
         });
-      })
+      });
     });
   }
 

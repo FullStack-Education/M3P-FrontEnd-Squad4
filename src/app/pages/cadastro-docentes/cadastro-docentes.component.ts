@@ -44,8 +44,8 @@ export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
   idDocente!: number;
   listaMaterias!: MateriaInterface[];
-  listaNotasProfessor: any[] = [];
-  listaTurmasProfessor: any[] = [];
+  listaNotas: any[] = [];
+  listaTurmas: any[] = [];
   generos = Object.keys(Genero).map((key) => ({
     id: Genero[key as keyof typeof Genero],
     nome: Genero[key as keyof typeof Genero],
@@ -123,8 +123,8 @@ export class CadastroDocentesComponent implements OnInit {
       .subscribe((retorno) => (this.listaMaterias = retorno));
 
     if (this.idDocente) {
-      this.getNotasProfessor();
-      this.getTurmasProfessor();
+      // this.getNotasDocente();
+      // this.getTurmasDocente();
       this.docenteService.getDocente(this.idDocente).subscribe({
         next: (retorno) => {
           retorno.cpf = this.formatarCPF(retorno.cpf);
@@ -144,17 +144,17 @@ export class CadastroDocentesComponent implements OnInit {
     }
   }
 
-  getNotasProfessor() {
-    this.notaService
-      .getNotasByProfessor(this.idDocente)
-      .subscribe((retorno) => (this.listaNotasProfessor = retorno));
-  }
+  // getNotasDocente() {
+  //   this.notaService
+  //     .getNotasByDocente(this.idDocente)
+  //     .subscribe((retorno) => (this.listaNotas = retorno));
+  // }
 
-  getTurmasProfessor() {
-    this.turmaService
-      .getTurmasByProfessor(this.idDocente)
-      .subscribe((retorno) => (this.listaTurmasProfessor = retorno));
-  }
+  // getTurmasDocente() {
+  //   this.turmaService
+  //     .getTurmasByDocente(this.idDocente)
+  //     .subscribe((retorno) => (this.listaTurmas = retorno));
+  // }
 
   buscarCep() {
     if (this.formDocente.value.cep) {
@@ -242,10 +242,7 @@ export class CadastroDocentesComponent implements OnInit {
   }
 
   excluirDocente(docente: DocenteInterface) {
-    if (
-      this.listaNotasProfessor.length > 0 ||
-      this.listaTurmasProfessor.length > 0
-    ) {
+    if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
         'Docente não pode ser excluído, pois possui turmas ou notas vinculadas!'
       );
