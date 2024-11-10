@@ -1,6 +1,6 @@
 <div class="home">
   <h2>Dashboard</h2>
-  <section class="estatisticas" *ngIf="perfilAtivo === 'ADM'">
+  <section class="estatisticas" *ngIf="perfilAtivo.papel === 'ADM'">
     <h3>Estatísticas Gerais</h3>
     <ul class="numeros">
       <li>
@@ -21,7 +21,7 @@
 
   <section
     class="busca-alunos"
-    *ngIf="perfilAtivo === 'ADM' || perfilAtivo === 'PROFESSOR'"
+    *ngIf="perfilAtivo.papel === 'ADM' || perfilAtivo.papel === 'PROFESSOR'"
   >
     <h3>Listagem de Alunos</h3>
     <div class="pesquisar">
@@ -52,7 +52,7 @@
             mat-flat-button
             type="button"
             (click)="verDetalhes(aluno.id)"
-            *ngIf="perfilAtivo === 'ADM'"
+            *ngIf="perfilAtivo.papel === 'ADM'"
           >
             <mat-icon>more_vert</mat-icon>
             Ver detalhes
@@ -61,7 +61,7 @@
             mat-flat-button
             type="button"
             (click)="lancarNota(aluno.id)"
-            *ngIf="perfilAtivo === 'PROFESSOR'"
+            *ngIf="perfilAtivo.papel === 'PROFESSOR'"
           >
             <mat-icon>edit</mat-icon>
             Lançar nota
@@ -71,7 +71,7 @@
     </ul>
   </section>
 
-  <ng-container *ngIf="perfilAtivo === 'ALUNO'">
+  <ng-container *ngIf="perfilAtivo.papel === 'ALUNO'">
     <section class="minhas-avaliacoes">
       <h3>Minhas Avaliações</h3>
       <table>
@@ -101,22 +101,20 @@
       </ul>
     </section>
 
-    <section class="minhas-materias">
-      <h3>Minhas Matérias</h3>
+    <section class="meu-curso">
+      <h3>Meu Curso</h3>
       <mat-chip-set>
-        @for (materia of listaMaterias; track materia.id) {
-        <mat-chip>{{ materia.nome }}</mat-chip>
-        }
+        <mat-chip>{{ cursoByAluno?.nome }}</mat-chip>
       </mat-chip-set>
     </section>
 
     <section class="cursos-extras">
       <h3>Cursos Extras</h3>
-      <ul>
-        <li>Nome do curso extra</li>
-        <li>Nome do curso extra</li>
-        <li>Nome do curso extra</li>
-      </ul>
+      <mat-chip-set>
+        @for (curso of cursosExtras; track curso.id) {
+        <mat-chip>{{ curso.nome }}</mat-chip>
+        }
+      </mat-chip-set>
     </section>
   </ng-container>
 </div>

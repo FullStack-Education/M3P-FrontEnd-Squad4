@@ -15,6 +15,8 @@ import { NotaService } from '../../core/services/nota.service';
 import { MatIconModule } from '@angular/material/icon';
 import { IdadePipe } from '../../core/pipes/idade.pipe';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { CursoInterface } from '../../core/interfaces/curso.interface';
+import { CursoService } from '../../core/services/curso.service';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +37,9 @@ export class HomeComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
   perfilAtivo!: UsuarioInterface;
   alunoByEmail: AlunoInterface | undefined;
-  listaNotas!: NotaInterface[];
+  cursoByAluno: CursoInterface | undefined;
+  cursosExtras: any;
+  listaNotas: NotaInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   totalAlunos!: number;
@@ -48,6 +52,7 @@ export class HomeComponent implements OnInit {
     private alunoService: AlunoService,
     private dashboardService: DashboardService,
     private materiaService: MateriaService,
+    private cursoService: CursoService,
     private notaService: NotaService,
     private router: Router
   ) {}
@@ -80,33 +85,25 @@ export class HomeComponent implements OnInit {
             return item.email === this.perfilAtivo.email;
           });
           idAluno = this.alunoByEmail?.id;
-          if (this.alunoByEmail) {
-            if (idAluno !== undefined) {
-              this.getCursosExtras(idAluno);
-            }
-          }
-          //   this.forma.patchValue({
-          //     aluno: this.alunoByEmail.nomeCompleto,
-          //   });
-          // }
-          // this.formTurma.get('docenteId')?.disable();
-          // if (idDocente !== undefined) {
-          //   this.getCursosByDocente(idDocente);
-          // }
-        });
 
-      this.alunoService
-        .getAlunoByEmail(this.usuarioLogado.email)
-        .subscribe((retorno) => {
-          // if (this.alunoAtivo) {
-          //   this.getNotasAluno();
-          // }
+          if (idAluno !== undefined) {
+            this.getCursoByAluno(idAluno);
+            this.getCursosExtras(idAluno);
+          }
         });
     }
   }
 
+  getCursoByAluno(idAluno: number) {
+    this.cursoService.getCursoByAluno(idAluno).subscribe((retorno) => {
+      this.cursoByAluno = retorno;
+    });
+  }
+
   getCursosExtras(idAluno: number) {
-    console.log('cursos extras');
+    this.cursoService.getCursosExtras(idAluno).subscribe((retorno) => {
+      this.cursosExtras = retorno;
+    });
   }
 
   pesquisar() {
