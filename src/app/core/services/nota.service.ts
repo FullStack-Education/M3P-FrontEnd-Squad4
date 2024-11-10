@@ -24,9 +24,9 @@ export class NotaService {
     );
   }
 
-  getNotasByAluno(idAluno: number) {
+  getNotasByAluno(idAluno: any) {
     return this.httpClient.get<Array<NotaInterface>>(
-      this.url + `?aluno=${idAluno}`
+      `http://localhost:8080/alunos/${idAluno}/notas`
     );
   }
 
