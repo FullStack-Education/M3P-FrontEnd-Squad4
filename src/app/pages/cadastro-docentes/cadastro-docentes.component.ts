@@ -16,9 +16,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { DocenteService } from '../../core/services/docente.service';
-import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
-import { NotaService } from '../../core/services/nota.service';
 import { CepService } from '../../core/services/cep.service';
 import { Genero } from '../../core/enums/genero.enum';
 import { EstadoCivil } from '../../core/enums/estado-civil.enum';
@@ -65,8 +63,6 @@ export class CadastroDocentesComponent implements OnInit {
     private router: Router,
     private docenteService: DocenteService,
     private materiaService: MateriaService,
-    private notaService: NotaService,
-    private turmaService: TurmaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -123,8 +119,6 @@ export class CadastroDocentesComponent implements OnInit {
       .subscribe((retorno) => (this.listaMaterias = retorno));
 
     if (this.idDocente) {
-      // this.getNotasDocente();
-      // this.getTurmasDocente();
       this.docenteService.getDocente(this.idDocente).subscribe({
         next: (retorno) => {
           retorno.cpf = this.formatarCPF(retorno.cpf);
@@ -143,18 +137,6 @@ export class CadastroDocentesComponent implements OnInit {
       });
     }
   }
-
-  // getNotasDocente() {
-  //   this.notaService
-  //     .getNotasByDocente(this.idDocente)
-  //     .subscribe((retorno) => (this.listaNotas = retorno));
-  // }
-
-  // getTurmasDocente() {
-  //   this.turmaService
-  //     .getTurmasByDocente(this.idDocente)
-  //     .subscribe((retorno) => (this.listaTurmas = retorno));
-  // }
 
   buscarCep() {
     if (this.formDocente.value.cep) {
