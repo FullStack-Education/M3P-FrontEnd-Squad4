@@ -65,14 +65,16 @@ export class HomeComponent implements OnInit {
     });
 
     if (this.perfilAtivo.papel === 'ADM') {
-      this.alunoService.getAlunos().subscribe((retorno) => {
-        this.listaAlunos = retorno;
-      });
+      this.carregarAlunos();
       this.dashboardService.getEstatisticas().subscribe((retorno) => {
         this.totalTurmas = retorno.quantidadeDeTurmas;
         this.totalDocentes = retorno.quantidadeDeDocentes;
         this.totalAlunos = retorno.quantidadeDeAlunos;
       });
+    }
+
+    if (this.perfilAtivo.papel === 'PROFESSOR') {
+      this.carregarAlunos();
     }
 
     if (this.perfilAtivo.papel === 'ALUNO') {
@@ -93,6 +95,12 @@ export class HomeComponent implements OnInit {
           }
         });
     }
+  }
+
+  carregarAlunos() {
+    this.alunoService.getAlunos().subscribe((retorno) => {
+      this.listaAlunos = retorno;
+    });
   }
 
   getCursoByAluno(idAluno: number) {
