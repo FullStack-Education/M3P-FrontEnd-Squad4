@@ -17,4 +17,10 @@ export class MateriaService {
   getMateria(id: number) {
     return this.httpClient.get<MateriaInterface>(this.url + `/${id}`);
   }
+
+  getMateriasByDocente(idDocente: number) {
+    return this.httpClient.get<Array<MateriaInterface>>(
+      `http://localhost:8080/docentes/${idDocente}/materias`
+    );
+  }
 }

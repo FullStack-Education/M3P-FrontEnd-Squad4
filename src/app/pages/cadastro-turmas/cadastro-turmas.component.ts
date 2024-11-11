@@ -104,7 +104,7 @@ export class CadastroTurmasComponent {
           idDocente = this.docenteByEmail?.id;
           if (this.docenteByEmail) {
             this.formTurma.patchValue({
-              docente: this.docenteByEmail.nomeCompleto,
+              docenteId: this.docenteByEmail.nomeCompleto,
             });
           }
           this.formTurma.get('docenteId')?.disable();

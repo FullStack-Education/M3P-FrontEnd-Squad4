@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -23,6 +23,7 @@ import { NotaService } from '../../core/services/nota.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { TurmaService } from '../../core/services/turma.service';
+import { MateriaService } from '../../core/services/materia.service';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -33,6 +34,7 @@ import { TurmaService } from '../../core/services/turma.service';
     NgSelectModule,
     MatIconModule,
     ErroFormComponent,
+    CommonModule,
   ],
   templateUrl: './cadastro-notas.component.html',
   styleUrl: './cadastro-notas.component.scss',
@@ -45,6 +47,7 @@ export class CadastroNotasComponent implements OnInit {
   listaAlunos: AlunoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
   perfilAtivo!: UsuarioInterface;
+  docenteByEmail: DocenteInterface | undefined;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
@@ -55,6 +58,7 @@ export class CadastroNotasComponent implements OnInit {
     private notaService: NotaService,
     private turmaService: TurmaService,
     private docenteService: DocenteService,
+    private materiaService: MateriaService,
     private alunoService: AlunoService,
     private toastr: ToastrService,
     private location: Location
@@ -98,16 +102,23 @@ export class CadastroNotasComponent implements OnInit {
 
   carregarDocentes() {
     if (this.perfilAtivo.papel == 'PROFESSOR') {
-      console.log('Acesso perfil Professor');
-      // this.docenteService
-      //   .getDocenteByEmail(this.perfilAtivo.email)
-      //   .subscribe((retorno) => {
-      //     this.listaDocentes = retorno;
-      //     this.formNota.patchValue({
-      //       docente: retorno[0].id,
-      //     });
-      //     this.getTurmasByDocentes(retorno[0]);
-      //   });
+      let idDocente = this.docenteByEmail?.id;
+      this.docenteService
+        .getDocenteByEmail(this.perfilAtivo.email)
+        .subscribe((retorno) => {
+          this.listaDocentes = retorno;
+          this.docenteByEmail = retorno.find((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+          idDocente = this.docenteByEmail?.id;
+          if (this.docenteByEmail) {
+            this.getTurmasAndMateriasByDocente(this.docenteByEmail);
+            this.formNota.patchValue({
+              docente: [this.docenteByEmail.nomeCompleto],
+            });
+          }
+          this.formNota.get('docente')?.disable();
+        });
     } else {
       this.docenteService.getDocentes().subscribe((retorno) => {
         this.listaDocentes = retorno;
@@ -115,7 +126,7 @@ export class CadastroNotasComponent implements OnInit {
     }
   }
 
-  getTurmasByDocente(idDocente: DocenteInterface) {
+  getTurmasAndMateriasByDocente(idDocente: DocenteInterface) {
     this.formNota.patchValue({
       turma: '',
       materia: '',
@@ -123,26 +134,32 @@ export class CadastroNotasComponent implements OnInit {
     });
     this.turmaService.getTurmasByDocente(idDocente.id).subscribe((retorno) => {
       this.listaTurmas = retorno;
-      console.log('Turmas: ' + retorno);
     });
+    this.materiaService
+      .getMateriasByDocente(idDocente.id)
+      .subscribe((retorno) => {
+        this.listaMaterias = retorno;
+      });
   }
 
-  getAlunosAndMateriasByTurma(idTurma: TurmaInterface) {
+  getAlunosByTurma(idTurma: TurmaInterface) {
     this.alunoService.getAlunosByTurma(idTurma.id).subscribe((retorno) => {
       this.listaAlunos = retorno;
-      console.log('Alunos: ' + retorno);
     });
-
-    // Carregar materias
-    // this.materiaService.getMateriasByTurma(idTurma.id).subscribe((retorno) => {
-    //   this.listaMaterias = retorno;
-    //   console.log('Materias: ' + retorno);
-    // });
   }
 
   submitForm() {
+    let dadosNota;
     if (this.formNota.valid) {
-      this.cadastrarNota(this.formNota.value);
+      if (this.docenteByEmail !== undefined) {
+        this.formNota.removeControl('turma');
+        dadosNota = {
+          ...this.formNota.value,
+          docente: this.docenteByEmail?.id,
+        };
+        console.log(dadosNota);
+      }
+      this.cadastrarNota(dadosNota);
     } else {
       this.formNota.markAllAsTouched();
     }
