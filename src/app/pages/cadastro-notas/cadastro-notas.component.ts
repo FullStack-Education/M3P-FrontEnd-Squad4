@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -23,6 +23,7 @@ import { NotaService } from '../../core/services/nota.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { TurmaService } from '../../core/services/turma.service';
+import { MateriaService } from '../../core/services/materia.service';
 
 @Component({
   selector: 'app-cadastro-notas',
@@ -33,18 +34,19 @@ import { TurmaService } from '../../core/services/turma.service';
     NgSelectModule,
     MatIconModule,
     ErroFormComponent,
+    CommonModule,
   ],
   templateUrl: './cadastro-notas.component.html',
   styleUrl: './cadastro-notas.component.scss',
 })
 export class CadastroNotasComponent implements OnInit {
+  perfilAtivo!: UsuarioInterface;
   formNota!: FormGroup;
   idAluno!: number;
   listaTurmas: TurmaInterface[] = [];
   listaDocentes: DocenteInterface[] = [];
   listaAlunos: AlunoInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
-  perfilAtivo!: UsuarioInterface;
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
@@ -55,6 +57,7 @@ export class CadastroNotasComponent implements OnInit {
     private notaService: NotaService,
     private turmaService: TurmaService,
     private docenteService: DocenteService,
+    private materiaService: MateriaService,
     private alunoService: AlunoService,
     private toastr: ToastrService,
     private location: Location
@@ -98,50 +101,81 @@ export class CadastroNotasComponent implements OnInit {
 
   carregarDocentes() {
     if (this.perfilAtivo.papel == 'PROFESSOR') {
-      console.log('Acesso perfil Professor');
-      // this.docenteService
-      //   .getDocenteByEmail(this.perfilAtivo.email)
-      //   .subscribe((retorno) => {
-      //     this.listaDocentes = retorno;
-      //     this.formNota.patchValue({
-      //       docente: retorno[0].id,
-      //     });
-      //     this.getTurmasByDocentes(retorno[0]);
-      //   });
+      this.docenteService.getDocentes().subscribe({
+        next: (retorno) => {
+          this.listaDocentes = retorno.filter((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
+          console.log(erro);
+        },
+      });
     } else {
-      this.docenteService.getDocentes().subscribe((retorno) => {
-        this.listaDocentes = retorno;
+      this.docenteService.getDocentes().subscribe({
+        next: (retorno) => {
+          this.listaDocentes = retorno;
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
+          console.log(erro);
+        },
       });
     }
   }
 
-  getTurmasByDocente(idDocente: DocenteInterface) {
+  getTurmasAndMateriasByDocente(idDocente: DocenteInterface) {
     this.formNota.patchValue({
       turma: '',
       materia: '',
-      aluno: '',
     });
-    this.turmaService.getTurmasByDocente(idDocente.id).subscribe((retorno) => {
-      this.listaTurmas = retorno;
-      console.log('Turmas: ' + retorno);
+
+    this.listaTurmas = [];
+    this.listaMaterias = [];
+
+    this.turmaService.getTurmasByDocente(idDocente.id).subscribe({
+      next: (retorno) => {
+        this.listaTurmas = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Não há turmas cadastradas!');
+        console.log(erro);
+      },
+    });
+
+    this.materiaService.getMateriasByDocente(idDocente.id).subscribe({
+      next: (retorno) => {
+        this.listaMaterias = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Não há matérias cadastradas!');
+        console.log(erro);
+      },
     });
   }
 
-  getAlunosAndMateriasByTurma(idTurma: TurmaInterface) {
-    this.alunoService.getAlunosByTurma(idTurma.id).subscribe((retorno) => {
-      this.listaAlunos = retorno;
-      console.log('Alunos: ' + retorno);
+  getAlunosByTurma(idTurma: TurmaInterface) {
+    this.formNota.patchValue({
+      aluno: '',
     });
 
-    // Carregar materias
-    // this.materiaService.getMateriasByTurma(idTurma.id).subscribe((retorno) => {
-    //   this.listaMaterias = retorno;
-    //   console.log('Materias: ' + retorno);
-    // });
+    this.listaAlunos = [];
+
+    this.alunoService.getAlunosByTurma(idTurma.id).subscribe({
+      next: (retorno) => {
+        this.listaAlunos = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Não há alunos cadastrados nesta turma!');
+        console.log(erro);
+      },
+    });
   }
 
   submitForm() {
     if (this.formNota.valid) {
+      this.formNota.removeControl('turma');
       this.cadastrarNota(this.formNota.value);
     } else {
       this.formNota.markAllAsTouched();
@@ -149,9 +183,18 @@ export class CadastroNotasComponent implements OnInit {
   }
 
   cadastrarNota(nota: NotaInterface) {
-    this.notaService.postNota(nota).subscribe(() => {
-      this.toastr.success('Nota cadastrada com sucesso!');
-      this.router.navigate(['/home']);
+    this.notaService.postNota(nota).subscribe({
+      next: () => {
+        this.toastr.success('Avaliação cadastrada com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao cadastrar a avaliação!');
+        console.log(erro);
+        setTimeout(() => {
+          this.cancelar();
+        }, 2000);
+      },
     });
   }
 
