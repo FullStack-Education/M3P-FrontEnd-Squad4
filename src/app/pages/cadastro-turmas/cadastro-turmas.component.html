@@ -35,22 +35,22 @@
     <div class="col-33">
       <label for="curso">Curso</label>
       <ng-select
-        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
-        [items]="listaCursos"
-        bindLabel="nome"
-        bindValue="id"
-        labelForId="curso"
-        placeholder="Selecione..."
-        formControlName="cursoId"
-      >
-      </ng-select>
-      <ng-select
         *ngIf="perfilAtivo.papel === 'ADM'"
         [items]="listaCursos"
         bindLabel="nome"
         bindValue="id"
         labelForId="curso"
         (change)="getDocentesByCurso($event.id)"
+        placeholder="Selecione..."
+        formControlName="cursoId"
+      >
+      </ng-select>
+      <ng-select
+        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
+        [items]="listaCursos"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="curso"
         placeholder="Selecione..."
         formControlName="cursoId"
       >
@@ -65,16 +65,7 @@
 
     <div class="col-33">
       <label for="docente">Docente</label>
-      <input
-        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
-        type="text"
-        name="docente"
-        id="docente"
-        formControlName="docenteId"
-        [(ngModel)]="docenteByEmail"
-      />
       <ng-select
-        *ngIf="perfilAtivo.papel === 'ADM'"
         [items]="listaDocentes"
         bindLabel="nomeCompleto"
         bindValue="id"
