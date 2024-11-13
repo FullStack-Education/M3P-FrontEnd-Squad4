@@ -6,12 +6,14 @@ import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
+import { ToastrService } from 'ngx-toastr';
 
 fdescribe('ListagemDocentesComponent', () => {
   let component: ListagemDocentesComponent;
   let fixture: ComponentFixture<ListagemDocentesComponent>;
   let docenteServiceMock: any;
   let routerMock: any;
+  let toastrMock: any;
 
   const mockDocentes: DocenteInterface[] = [
     { id: 1, nomeCompleto: 'João Silva',
@@ -57,12 +59,18 @@ fdescribe('ListagemDocentesComponent', () => {
   beforeEach(async () => {
     docenteServiceMock = jasmine.createSpyObj('DocenteService', ['getDocentes']);
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
+    toastrMock = jasmine.createSpyObj('ToastrService', [
+      'success',
+      'error',
+      'warning',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [ListagemDocentesComponent, FormsModule],
       providers: [
         { provide: DocenteService, useValue: docenteServiceMock },
         { provide: Router, useValue: routerMock },
+        { provide: ToastrService, useValue: toastrMock },
       ],
     }).compileComponents();
 
@@ -136,16 +144,17 @@ fdescribe('ListagemDocentesComponent', () => {
     expect(component.listaDocentes[0].id).toBe(1);
   });
 
-  // it('deve lidar com erro no serviço de docentes corretamente', fakeAsync(() => {
-  //   docenteServiceMock.getDocentes.and.returnValue(throwError('Erro ao buscar docentes'));
-  //   component.ngOnInit();
-  //   tick();
-  //   fixture.detectChanges();
+  it('deve lidar com erro no serviço de docentes corretamente', fakeAsync(() => {
+    docenteServiceMock.getDocentes.and.returnValue(throwError('Erro ao buscar docentes'));
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
 
-  //   expect(component.listaDocentes.length).toBe(0);
-  //   const errorMessage = fixture.debugElement.query(By.css('.error-message'));
-  //   expect(errorMessage).toBeTruthy();
-  // }));
+    expect(component.listaDocentes.length).toBe(0);
+    expect(toastrMock.error).toHaveBeenCalledWith(
+      'Ocorreu um erro ao carregar a lista de docentes!'
+    );
+  }));
 
   it('deve restaurar lista ao limpar campo de busca', () => {
     docenteServiceMock.getDocentes.and.returnValue(of(mockDocentes));
