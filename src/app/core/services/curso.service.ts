@@ -20,13 +20,13 @@ export class CursoService {
 
   getCursoByAluno(idAluno: number) {
     return this.httpClient.get<CursoInterface>(
-      this.url + `/aluno/${idAluno}/curso`
+      this.url + `?idAluno=${idAluno}`
     );
   }
 
   getCursosExtras(idAluno: number) {
     return this.httpClient.get<CursoInterface>(
-      this.url + `/alunos/${idAluno}/cursos`
+      `http://localhost:8080/alunos/${idAluno}/cursos`
     );
   }
 }

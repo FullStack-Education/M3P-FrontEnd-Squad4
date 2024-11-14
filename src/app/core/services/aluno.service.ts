@@ -26,7 +26,7 @@ export class AlunoService {
 
   getAlunosByTurma(idTurma: number) {
     return this.httpClient.get<Array<AlunoInterface>>(
-      this.url + `/turmas/${idTurma}/alunos`
+      `http://localhost:8080/turmas/${idTurma}/alunos`
     );
   }
 
