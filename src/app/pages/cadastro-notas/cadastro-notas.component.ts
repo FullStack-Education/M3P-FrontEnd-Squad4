@@ -109,7 +109,7 @@ export class CadastroNotasComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     } else {
@@ -119,7 +119,7 @@ export class CadastroNotasComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
@@ -140,7 +140,7 @@ export class CadastroNotasComponent implements OnInit {
       },
       error: (erro) => {
         this.toastr.error('Não há turmas cadastradas!');
-        console.log(erro);
+        console.error(erro);
       },
     });
 
@@ -150,7 +150,7 @@ export class CadastroNotasComponent implements OnInit {
       },
       error: (erro) => {
         this.toastr.error('Não há matérias cadastradas!');
-        console.log(erro);
+        console.error(erro);
       },
     });
   }
@@ -168,7 +168,7 @@ export class CadastroNotasComponent implements OnInit {
       },
       error: (erro) => {
         this.toastr.error('Não há alunos cadastrados nesta turma!');
-        console.log(erro);
+        console.error(erro);
       },
     });
   }
@@ -190,7 +190,7 @@ export class CadastroNotasComponent implements OnInit {
       },
       error: (erro) => {
         this.toastr.error('Ocorreu um erro ao cadastrar a avaliação!');
-        console.log(erro);
+        console.error(erro);
         setTimeout(() => {
           this.cancelar();
         }, 2000);

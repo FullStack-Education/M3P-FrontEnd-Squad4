@@ -129,7 +129,7 @@ export class CadastroDocentesComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Docente não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -150,7 +150,7 @@ export class CadastroDocentesComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }

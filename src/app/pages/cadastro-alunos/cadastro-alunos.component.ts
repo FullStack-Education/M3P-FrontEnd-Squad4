@@ -114,8 +114,6 @@ export class CadastroAlunosComponent {
       .subscribe((retorno) => (this.listaTurmas = retorno));
 
     if (this.idAluno) {
-      this.getNotasAluno();
-      this.getTurmasAluno();
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
           retorno.cpf = this.formatarCPF(retorno.cpf);
@@ -126,7 +124,7 @@ export class CadastroAlunosComponent {
         },
         error: (erro) => {
           this.toastr.error('Aluno não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -159,7 +157,7 @@ export class CadastroAlunosComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
