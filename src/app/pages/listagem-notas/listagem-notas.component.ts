@@ -13,6 +13,7 @@ import { AlunoService } from '../../core/services/aluno.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-listagem-notas',
@@ -24,12 +25,12 @@ import { NotaService } from '../../core/services/nota.service';
 export class ListagemNotasComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
   perfilAtivo!: UsuarioInterface;
-  alunoByEmail: AlunoInterface | undefined;
-  listaAlunos!: AlunoInterface[];
-  listaDocentes: DocenteInterface[] = [];
+  alunoAtivo: AlunoInterface | undefined;
   turmaByAluno: TurmaInterface | undefined;
+  listaAlunos: AlunoInterface[] = [];
+  listaDocentes: DocenteInterface[] = [];
   listaMaterias: MateriaInterface[] = [];
-  listaNotas!: NotaInterface[];
+  listaNotas: NotaInterface[] = [];
 
   constructor(
     private loginService: LoginService,
@@ -37,7 +38,8 @@ export class ListagemNotasComponent implements OnInit {
     private alunoService: AlunoService,
     private turmaService: TurmaService,
     private materiaService: MateriaService,
-    private notaService: NotaService
+    private notaService: NotaService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -51,24 +53,21 @@ export class ListagemNotasComponent implements OnInit {
       this.listaDocentes = retorno;
     });
 
-    let idAluno = this.alunoByEmail?.id;
-    this.alunoService
-      .getAlunoByEmail(this.perfilAtivo.email)
-      .subscribe((retorno) => {
-        this.listaAlunos = retorno;
-        this.alunoByEmail = retorno.find((item) => {
+    this.alunoService.getAlunos().subscribe({
+      next: (retorno) => {
+        this.alunoAtivo = retorno.find((item) => {
           return item.email === this.perfilAtivo.email;
         });
-        idAluno = this.alunoByEmail?.id;
-        if (idAluno !== undefined) {
-          if (this.alunoByEmail?.id !== undefined) {
-            this.getNotasAluno();
-          }
-          if (this.alunoByEmail?.turma !== undefined) {
-            this.getTurmaAluno(this.alunoByEmail?.turma);
-          }
+        if (this.alunoAtivo !== undefined) {
+          this.getTurmaAluno(this.alunoAtivo.turma);
+          this.getNotasAluno();
         }
-      });
+      },
+      error: (erro) => {
+        this.toastr.error('Aluno não encontrado!');
+        console.error(erro);
+      },
+    });
   }
 
   getTurmaAluno(idTurma: number) {
@@ -92,7 +91,7 @@ export class ListagemNotasComponent implements OnInit {
 
   getNotasAluno() {
     this.notaService
-      .getNotasByAluno(this.alunoByEmail?.id)
+      .getNotasByAluno(this.alunoAtivo?.id)
       .subscribe((retorno) => {
         this.listaNotas = retorno;
         this.ordenarNotasPorDataAsc();

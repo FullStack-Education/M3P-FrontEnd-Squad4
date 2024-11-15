@@ -74,6 +74,7 @@
   <ng-container *ngIf="perfilAtivo.papel === 'ALUNO'">
     <section class="minhas-avaliacoes">
       <h3>Minhas Avaliações</h3>
+      @if (listaNotas.length > 0) {
       <table>
         <thead>
           <tr>
@@ -84,14 +85,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let nota of listaNotas" [routerLink]="'/notas'">
+          @for (nota of listaNotas; track nota.id) {
+          <tr>
             <td>{{ nota.avaliacao }}</td>
-            <td>{{ getNomeMaterias(nota.materia) }}</td>
             <td>{{ nota.data | date : "dd/MM/yyyy" }}</td>
+            <td>{{ getNomeMaterias(nota.materia) }}</td>
             <td>{{ nota.nota | number : "1.2-2" }}</td>
           </tr>
+          }
         </tbody>
       </table>
+      } @else {
+      <p>O aluno ainda não possui avaliações</p>
+      }
 
       <ul *ngFor="let nota of listaNotas" [routerLink]="'/notas'">
         <li><span>Avaliação: </span>{{ nota.avaliacao }}</li>

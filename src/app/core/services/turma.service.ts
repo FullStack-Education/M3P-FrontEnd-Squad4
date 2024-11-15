@@ -23,7 +23,7 @@ export class TurmaService {
 
   getTurmasByDocente(idDocente: number) {
     return this.httpClient.get<Array<TurmaInterface>>(
-      this.url + `/docentes/${idDocente}/turmas`
+      `http://localhost:8080/docentes/${idDocente}/turmas`
     );
   }
 
@@ -35,13 +35,13 @@ export class TurmaService {
 
   getDocentesByCurso(id: number): Observable<DocenteInterface[]> {
     return this.httpClient.get<Array<DocenteInterface>>(
-      `${this.url}/cursos/${id}/docentes`
+      `http://localhost:8080/cursos/${id}/docentes`
     );
   }
 
   getCursosByDocente(idDocente: number): Observable<CursoInterface[]> {
     return this.httpClient.get<Array<CursoInterface>>(
-      `${this.url}/docentes/${idDocente}/cursos`
+      `http://localhost:8080/docentes/${idDocente}/cursos`
     );
   }
 

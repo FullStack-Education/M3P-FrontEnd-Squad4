@@ -3,30 +3,27 @@
   <section class="aluno">
     <h3>Informações do Aluno</h3>
     <div>
-      <img
-        src="../../../assets/profile.png"
-        [alt]="alunoByEmail?.nomeCompleto"
-      />
+      <img src="../../../assets/profile.png" [alt]="alunoAtivo?.nomeCompleto" />
       <ul>
         <li>
           <span>Nome:</span>
-          <strong>{{ alunoByEmail?.nomeCompleto }}</strong>
+          <strong>{{ alunoAtivo?.nomeCompleto }}</strong>
         </li>
         <li>
           <span>CPF:</span>
-          <strong>{{ alunoByEmail?.cpf }}</strong>
+          <strong>{{ alunoAtivo?.cpf }}</strong>
         </li>
         <li>
           <span>Nascimento:</span>
-          <strong>{{ alunoByEmail?.nascimento | date : "dd/MM/yyyy" }}</strong>
+          <strong>{{ alunoAtivo?.nascimento | date : "dd/MM/yyyy" }}</strong>
         </li>
         <li>
           <span>Email:</span>
-          <strong>{{ alunoByEmail?.email }}</strong>
+          <strong>{{ alunoAtivo?.email }}</strong>
         </li>
         <li>
           <span>Telefone:</span>
-          <strong>{{ alunoByEmail?.telefone }}</strong>
+          <strong>{{ alunoAtivo?.telefone }}</strong>
         </li>
       </ul>
     </div>
@@ -61,6 +58,7 @@
 
   <section class="notas">
     <h3>Histórico de Notas</h3>
+    @if (listaNotas.length > 0) {
     <table>
       <thead>
         <tr>
@@ -83,7 +81,9 @@
         }
       </tbody>
     </table>
-    @for (nota of listaNotas; track nota.id) {
+    } @else {
+    <p>O aluno ainda não possui avaliações cadastradas.</p>
+    } @for (nota of listaNotas; track nota.id) {
     <ul>
       <li><span>Avaliação: </span>{{ nota.avaliacao }}</li>
       <li><span>Matéria: </span>{{ getNomeMaterias(nota.materia) }}</li>

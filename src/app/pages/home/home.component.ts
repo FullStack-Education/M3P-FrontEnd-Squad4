@@ -17,6 +17,7 @@ import { IdadePipe } from '../../core/pipes/idade.pipe';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { CursoInterface } from '../../core/interfaces/curso.interface';
 import { CursoService } from '../../core/services/curso.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ import { CursoService } from '../../core/services/curso.service';
 export class HomeComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
   perfilAtivo!: UsuarioInterface;
-  alunoByEmail: AlunoInterface | undefined;
+  alunoAtivo: AlunoInterface | undefined;
   cursoByAluno: CursoInterface | undefined;
   cursosExtras: any;
   listaNotas: NotaInterface[] = [];
@@ -54,6 +55,7 @@ export class HomeComponent implements OnInit {
     private materiaService: MateriaService,
     private cursoService: CursoService,
     private notaService: NotaService,
+    private toastr: ToastrService,
     private router: Router
   ) {}
 
@@ -71,36 +73,33 @@ export class HomeComponent implements OnInit {
         this.totalDocentes = retorno.quantidadeDeDocentes;
         this.totalAlunos = retorno.quantidadeDeAlunos;
       });
-    }
-
-    if (this.perfilAtivo.papel === 'PROFESSOR') {
+    } else {
       this.carregarAlunos();
-    }
-
-    if (this.perfilAtivo.papel === 'ALUNO') {
-      let idAluno = this.alunoByEmail?.id;
-      this.alunoService
-        .getAlunoByEmail(this.perfilAtivo.email)
-        .subscribe((retorno) => {
-          this.listaAlunos = retorno;
-          this.alunoByEmail = retorno.find((item) => {
-            return item.email === this.perfilAtivo.email;
-          });
-          idAluno = this.alunoByEmail?.id;
-
-          if (idAluno !== undefined) {
-            this.getCursoByAluno(idAluno);
-            this.getCursosExtras(idAluno);
-            this.getNotasAluno();
-          }
-        });
     }
   }
 
   carregarAlunos() {
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno;
-    });
+    if (this.perfilAtivo.papel === 'ALUNO') {
+      this.alunoService.getAlunos().subscribe({
+        next: (retorno) => {
+          this.listaAlunos = retorno.filter((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+
+          this.getCursoByAluno(this.listaAlunos[0].id);
+          this.getCursosExtras(this.listaAlunos[0].id);
+          this.getNotasAluno();
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
+          console.error(erro);
+        },
+      });
+    } else {
+      this.alunoService.getAlunos().subscribe((retorno) => {
+        this.listaAlunos = retorno;
+      });
+    }
   }
 
   getCursoByAluno(idAluno: number) {
@@ -148,7 +147,7 @@ export class HomeComponent implements OnInit {
 
   getNotasAluno() {
     this.notaService
-      .getNotasByAluno(this.alunoByEmail?.id)
+      .getNotasByAluno(this.listaAlunos[0].id)
       .subscribe((retorno) => {
         this.listaNotas = retorno;
         this.notasOrdenadasPorDataDesc();
