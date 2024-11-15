@@ -14,6 +14,7 @@ import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface'
 import { LoginService } from '../../../core/services/login.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { SidenavService } from '../../../core/services/sidenav.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -84,14 +85,21 @@ export class MenuLateralComponent implements OnInit {
     private loginService: LoginService,
     private dialog: MatDialog,
     private router: Router,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
-      if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado.papel;
-      }
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado.papel;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
     });
 
     this.itensMenuFiltrado = this.itensMenu.filter((item) => {
@@ -122,13 +130,19 @@ export class MenuLateralComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.loginService.deslogar();
-        this.router.navigate(['/login']);
-      } else {
-        return;
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (retorno) => {
+        if (retorno) {
+          this.loginService.deslogar();
+          this.router.navigate(['/login']);
+        } else {
+          return;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 }

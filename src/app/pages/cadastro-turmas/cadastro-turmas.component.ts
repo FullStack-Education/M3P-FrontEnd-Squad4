@@ -58,11 +58,17 @@ export class CadastroTurmasComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
-      if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado;
-        this.inicializaForm();
-      }
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado;
+          this.inicializaForm();
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
     });
 
     this.idTurma = this.activatedRoute.snapshot.params['id'];

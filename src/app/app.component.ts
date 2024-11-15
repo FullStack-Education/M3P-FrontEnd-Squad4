@@ -19,6 +19,7 @@ import { LoadingComponent } from './shared/components/loading/loading.component'
 import { LoginService } from './core/services/login.service';
 import { UsuarioInterface } from './core/interfaces/usuario.interface';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -50,47 +51,69 @@ export class AppComponent implements OnInit {
     private loadingService: LoadingService,
     private sidenavService: SidenavService,
     private breakpointObserver: BreakpointObserver,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private toastr: ToastrService
   ) {
-    this.router.events.subscribe((retorno) => {
-      if (retorno instanceof NavigationEnd) {
-        this.showMenuLateral = !this.router.url.includes('login');
-        this.showToolbar = !this.router.url.includes('login');
-      }
+    this.router.events.subscribe({
+      next: (retorno) => {
+        if (retorno instanceof NavigationEnd) {
+          this.showMenuLateral = !this.router.url.includes('login');
+          this.showToolbar = !this.router.url.includes('login');
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
 
-    this.sidenavService.opened$.subscribe((isOpened) => {
-      this.opened = isOpened;
+    this.sidenavService.opened$.subscribe({
+      next: (isOpened) => {
+        this.opened = isOpened;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 
   ngOnInit(): void {
-    this.usuarioSubscription = this.loginService.usuarioLogado$.subscribe(
-      (usuario) => {
+    this.usuarioSubscription = this.loginService.usuarioLogado$.subscribe({
+      next: (usuario) => {
         this.usuarioLogado = usuario;
-      }
-    );
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        this.navigationCount++;
-        this.loadingService.show();
-      }
-      if (
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      ) {
-        this.navigationCount--;
-        if (this.navigationCount === 0) {
-          this.loadingService.hide();
-        }
-      }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
     });
 
-    this.breakpointObserver
-      .observe(['(max-width: 1024px)'])
-      .subscribe((result) => {
+    this.router.events.subscribe({
+      next: (event) => {
+        if (event instanceof NavigationStart) {
+          this.navigationCount++;
+          this.loadingService.show();
+        }
+        if (
+          event instanceof NavigationEnd ||
+          event instanceof NavigationCancel ||
+          event instanceof NavigationError
+        ) {
+          this.navigationCount--;
+          if (this.navigationCount === 0) {
+            this.loadingService.hide();
+          }
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
+    });
+
+    this.breakpointObserver.observe(['(max-width: 1024px)']).subscribe({
+      next: (result) => {
         if (result.breakpoints['(max-width: 1024px)']) {
           this.sidenavMode = 'over';
           this.opened = false;
@@ -99,7 +122,12 @@ export class AppComponent implements OnInit {
           this.opened = true;
         }
         this.sidenavService.setSidenavMode(this.sidenavMode);
-      });
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
+    });
   }
 
   ngOnDestroy(): void {
