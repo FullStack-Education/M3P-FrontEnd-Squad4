@@ -17,6 +17,7 @@ import { IdadePipe } from '../../core/pipes/idade.pipe';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { CursoInterface } from '../../core/interfaces/curso.interface';
 import { CursoService } from '../../core/services/curso.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ import { CursoService } from '../../core/services/curso.service';
 export class HomeComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
   perfilAtivo!: UsuarioInterface;
-  alunoByEmail: AlunoInterface | undefined;
+  alunoAtivo: AlunoInterface | undefined;
   cursoByAluno: CursoInterface | undefined;
   cursosExtras: any;
   listaNotas: NotaInterface[] = [];
@@ -54,86 +55,126 @@ export class HomeComponent implements OnInit {
     private materiaService: MateriaService,
     private cursoService: CursoService,
     private notaService: NotaService,
+    private toastr: ToastrService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
-      if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado;
-      }
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
     });
 
     if (this.perfilAtivo.papel === 'ADM') {
       this.carregarAlunos();
-      this.dashboardService.getEstatisticas().subscribe((retorno) => {
-        this.totalTurmas = retorno.quantidadeDeTurmas;
-        this.totalDocentes = retorno.quantidadeDeDocentes;
-        this.totalAlunos = retorno.quantidadeDeAlunos;
+      this.dashboardService.getEstatisticas().subscribe({
+        next: (retorno) => {
+          this.totalTurmas = retorno.quantidadeDeTurmas;
+          this.totalDocentes = retorno.quantidadeDeDocentes;
+          this.totalAlunos = retorno.quantidadeDeAlunos;
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao carregar estatísticas!');
+          console.error(erro);
+        },
       });
-    }
-
-    if (this.perfilAtivo.papel === 'PROFESSOR') {
+    } else {
       this.carregarAlunos();
-    }
-
-    if (this.perfilAtivo.papel === 'ALUNO') {
-      let idAluno = this.alunoByEmail?.id;
-      this.alunoService
-        .getAlunoByEmail(this.perfilAtivo.email)
-        .subscribe((retorno) => {
-          this.listaAlunos = retorno;
-          this.alunoByEmail = retorno.find((item) => {
-            return item.email === this.perfilAtivo.email;
-          });
-          idAluno = this.alunoByEmail?.id;
-
-          if (idAluno !== undefined) {
-            this.getCursoByAluno(idAluno);
-            this.getCursosExtras(idAluno);
-            this.getNotasAluno();
-          }
-        });
     }
   }
 
   carregarAlunos() {
-    this.alunoService.getAlunos().subscribe((retorno) => {
-      this.listaAlunos = retorno;
-    });
+    if (this.perfilAtivo.papel === 'ALUNO') {
+      this.alunoService.getAlunos().subscribe({
+        next: (retorno) => {
+          this.listaAlunos = retorno.filter((item) => {
+            return item.email === this.perfilAtivo.email;
+          });
+
+          this.getCursoByAluno(this.listaAlunos[0].id);
+          this.getCursosExtras(this.listaAlunos[0].id);
+          this.getNotasAluno();
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
+          console.error(erro);
+        },
+      });
+    } else {
+      this.alunoService.getAlunos().subscribe({
+        next: (retorno) => {
+          this.listaAlunos = retorno;
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao carregar alunos!');
+          console.error(erro);
+        },
+      });
+    }
   }
 
   getCursoByAluno(idAluno: number) {
-    this.cursoService.getCursoByAluno(idAluno).subscribe((retorno) => {
-      this.cursoByAluno = retorno;
+    this.cursoService.getCursoByAluno(idAluno).subscribe({
+      next: (retorno) => {
+        this.cursoByAluno = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar o curso do aluno!');
+        console.error(erro);
+      },
     });
   }
 
   getCursosExtras(idAluno: number) {
-    this.cursoService.getCursosExtras(idAluno).subscribe((retorno) => {
-      this.cursosExtras = retorno;
+    this.cursoService.getCursosExtras(idAluno).subscribe({
+      next: (retorno) => {
+        this.cursosExtras = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro carregar os cursos extras!');
+        console.error(erro);
+      },
     });
   }
 
   pesquisar() {
     if (this.textoPesquisa) {
-      this.alunoService.getAlunos().subscribe((retorno) => {
-        this.listaAlunos = retorno.filter(
-          (aluno) =>
-            aluno.nomeCompleto
-              .toUpperCase()
-              .includes(this.textoPesquisa!.toUpperCase()) ||
-            aluno.telefone
-              .toUpperCase()
-              .includes(this.textoPesquisa!.toUpperCase()) ||
-            aluno.email
-              .toUpperCase()
-              .includes(this.textoPesquisa!.toUpperCase())
-        );
+      this.alunoService.getAlunos().subscribe({
+        next: (retorno) => {
+          this.listaAlunos = retorno.filter(
+            (aluno) =>
+              aluno.nomeCompleto
+                .toUpperCase()
+                .includes(this.textoPesquisa!.toUpperCase()) ||
+              aluno.telefone
+                .toUpperCase()
+                .includes(this.textoPesquisa!.toUpperCase()) ||
+              aluno.email
+                .toUpperCase()
+                .includes(this.textoPesquisa!.toUpperCase())
+          );
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao pesquisar!');
+          console.error(erro);
+        },
       });
     } else {
-      this.alunoService.getAlunos().subscribe((retorno) => {
-        this.listaAlunos = retorno;
+      this.alunoService.getAlunos().subscribe({
+        next: (retorno) => {
+          this.listaAlunos = retorno;
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro carregar lista de alunos!');
+          console.error(erro);
+        },
       });
     }
   }
@@ -147,9 +188,8 @@ export class HomeComponent implements OnInit {
   }
 
   getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.alunoByEmail?.id)
-      .subscribe((retorno) => {
+    this.notaService.getNotasByAluno(this.listaAlunos[0].id).subscribe({
+      next: (retorno) => {
         this.listaNotas = retorno;
         this.notasOrdenadasPorDataDesc();
         this.listaNotas = this.obterUltimasNotas(3);
@@ -157,7 +197,12 @@ export class HomeComponent implements OnInit {
           return item.materia;
         });
         this.getMateriasAluno(idMaterias);
-      });
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar notas do aluno!');
+        console.error(erro);
+      },
+    });
   }
 
   notasOrdenadasPorDataDesc() {
@@ -171,9 +216,17 @@ export class HomeComponent implements OnInit {
   }
 
   getMateriasAluno(ids: Array<number>) {
-    this.materiaService.getMaterias().subscribe((retorno) => {
-      const materiasFiltradas = retorno.filter((item) => ids.includes(item.id));
-      this.listaMaterias = materiasFiltradas.slice(0, 3);
+    this.materiaService.getMaterias().subscribe({
+      next: (retorno) => {
+        const materiasFiltradas = retorno.filter((item) =>
+          ids.includes(item.id)
+        );
+        this.listaMaterias = materiasFiltradas.slice(0, 3);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar materias do aluno!');
+        console.error(erro);
+      },
     });
   }
 

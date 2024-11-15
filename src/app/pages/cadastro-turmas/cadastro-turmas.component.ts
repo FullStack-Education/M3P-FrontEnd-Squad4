@@ -58,11 +58,17 @@ export class CadastroTurmasComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
-      if (usuarioLogado) {
-        this.perfilAtivo = usuarioLogado;
-        this.inicializaForm();
-      }
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado;
+          this.inicializaForm();
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
     });
 
     this.idTurma = this.activatedRoute.snapshot.params['id'];
@@ -109,7 +115,7 @@ export class CadastroTurmasComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     } else {
@@ -119,7 +125,7 @@ export class CadastroTurmasComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar lista de cursos!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
@@ -132,7 +138,7 @@ export class CadastroTurmasComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao carregar os dados da turma!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
@@ -151,7 +157,7 @@ export class CadastroTurmasComponent {
       },
       error: (erro) => {
         this.toastr.error('Não há docentes cadastrados neste curso!');
-        console.log(erro);
+        console.error(erro);
       },
     });
   }
@@ -163,7 +169,7 @@ export class CadastroTurmasComponent {
       },
       error: (erro) => {
         this.toastr.error('Não há cursos cadastrados para este docente!');
-        console.log(erro);
+        console.error(erro);
       },
     });
   }
@@ -184,7 +190,7 @@ export class CadastroTurmasComponent {
       },
       error: (erro) => {
         this.toastr.error('Ocorreu um erro ao cadastrar a turma!');
-        console.log(erro);
+        console.error(erro);
         setTimeout(() => {
           this.cancelar();
         }, 2000);

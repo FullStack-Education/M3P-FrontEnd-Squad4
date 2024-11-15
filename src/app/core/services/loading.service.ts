@@ -9,7 +9,7 @@ export class LoadingService {
   private _hide = new Subject<void>();
   public readonly loading$ = this._loading.asObservable();
 
-  private minDisplayTime = 300; // Tempo mínimo de exibição em milissegundos
+  private minDisplayTime = 300;
   private hideTimer?: any;
 
   show(): void {

@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
     if (this.formLogin.valid) {
       const { email, senha } = this.formLogin.value;
 
-      this.loginService.logar({ email, senha }).subscribe(
-        (loginSucesso) => {
+      this.loginService.logar({ email, senha }).subscribe({
+        next: (loginSucesso) => {
           if (loginSucesso) {
             this.router.navigate(['/home']);
             this.toastr.success('Login efetuado com sucesso!');
@@ -60,13 +60,13 @@ export class LoginComponent implements OnInit {
             this.toastr.error('Usuário e/ou senha incorretos!');
           }
         },
-        (erro) => {
+        error: (erro) => {
           console.error('Erro na requisição de login:', erro);
           this.toastr.error(
             'Erro ao tentar fazer login. Tente novamente mais tarde.'
           );
-        }
-      );
+        },
+      });
     } else {
       this.toastr.warning('Por favor, preencha todos os campos!');
     }

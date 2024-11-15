@@ -114,9 +114,15 @@ export class CadastroDocentesComponent implements OnInit {
       materias: new FormControl('', Validators.required),
     });
 
-    this.materiaService
-      .getMaterias()
-      .subscribe((retorno) => (this.listaMaterias = retorno));
+    this.materiaService.getMaterias().subscribe({
+      next: (retorno) => {
+        this.listaMaterias = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar a lista de matérias!');
+        console.error(erro);
+      },
+    });
 
     if (this.idDocente) {
       this.docenteService.getDocente(this.idDocente).subscribe({
@@ -129,7 +135,7 @@ export class CadastroDocentesComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Docente não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -150,7 +156,7 @@ export class CadastroDocentesComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
@@ -209,17 +215,29 @@ export class CadastroDocentesComponent implements OnInit {
   }
 
   cadastrarDocente(docente: DocenteInterface) {
-    this.docenteService.postDocente(docente).subscribe(() => {
-      this.toastr.success('Docente cadastrado com sucesso!');
-      this.router.navigate(['/home']);
+    this.docenteService.postDocente(docente).subscribe({
+      next: () => {
+        this.toastr.success('Docente cadastrado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao cadastrar o docente!');
+        console.error(erro);
+      },
     });
   }
 
   editarDocente(docente: DocenteInterface) {
     docente.id = this.idDocente!;
-    this.docenteService.putDocente(docente).subscribe(() => {
-      this.toastr.success('Docente alterado com sucesso!');
-      this.router.navigate(['/home']);
+    this.docenteService.putDocente(docente).subscribe({
+      next: () => {
+        this.toastr.success('Docente alterado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao editar o docente!');
+        console.error(erro);
+      },
     });
   }
 
@@ -242,15 +260,27 @@ export class CadastroDocentesComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.docenteService.deleteDocente(docente).subscribe(() => {
-          this.toastr.success('Docente excluído com sucesso!');
-          this.router.navigate(['/home']);
-        });
-      } else {
-        return;
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (retorno) => {
+        if (retorno) {
+          this.docenteService.deleteDocente(docente).subscribe({
+            next: () => {
+              this.toastr.success('Docente excluído com sucesso!');
+              this.router.navigate(['/home']);
+            },
+            error: (erro) => {
+              this.toastr.error('Ocorreu um erro ao excluir o docente!');
+              console.error(erro);
+            },
+          });
+        } else {
+          return;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 

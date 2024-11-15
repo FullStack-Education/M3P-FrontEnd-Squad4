@@ -109,13 +109,17 @@ export class CadastroAlunosComponent {
       turma: new FormControl(null, Validators.required),
     });
 
-    this.turmaService
-      .getTurmas()
-      .subscribe((retorno) => (this.listaTurmas = retorno));
+    this.turmaService.getTurmas().subscribe({
+      next: (retorno) => {
+        this.listaTurmas = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao buscar turmas!');
+        console.error(erro);
+      },
+    });
 
     if (this.idAluno) {
-      this.getNotasAluno();
-      this.getTurmasAluno();
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
           retorno.cpf = this.formatarCPF(retorno.cpf);
@@ -126,7 +130,7 @@ export class CadastroAlunosComponent {
         },
         error: (erro) => {
           this.toastr.error('Aluno não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -136,15 +140,27 @@ export class CadastroAlunosComponent {
   }
 
   getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.idAluno)
-      .subscribe((retorno) => (this.listaNotas = retorno));
+    this.notaService.getNotasByAluno(this.idAluno).subscribe({
+      next: (retorno) => {
+        this.listaNotas = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('O aluno não possui notas cadastradas!');
+        console.error(erro);
+      },
+    });
   }
 
   getTurmasAluno() {
-    this.turmaService
-      .getTurmasByAluno(this.idAluno)
-      .subscribe((retorno) => (this.listaTurmas = retorno));
+    this.turmaService.getTurmasByAluno(this.idAluno).subscribe({
+      next: (retorno) => {
+        this.listaTurmas = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('O aluno não possui turmas!');
+        console.error(erro);
+      },
+    });
   }
 
   buscarCep() {
@@ -159,7 +175,7 @@ export class CadastroAlunosComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
@@ -218,17 +234,29 @@ export class CadastroAlunosComponent {
   }
 
   cadastrarAluno(aluno: AlunoInterface) {
-    this.alunoService.postAluno(aluno).subscribe(() => {
-      this.toastr.success('Aluno cadastrado com sucesso!');
-      this.router.navigate(['/home']);
+    this.alunoService.postAluno(aluno).subscribe({
+      next: () => {
+        this.toastr.success('Aluno cadastrado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Erro. Este email já está em uso!');
+        console.error(erro);
+      },
     });
   }
 
   editarAluno(aluno: AlunoInterface) {
     aluno.id = this.idAluno!;
-    this.alunoService.putAluno(aluno).subscribe(() => {
-      this.toastr.success('Aluno alterado com sucesso!');
-      this.router.navigate(['/home']);
+    this.alunoService.putAluno(aluno).subscribe({
+      next: () => {
+        this.toastr.success('Aluno alterado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao editar o aluno!');
+        console.error(erro);
+      },
     });
   }
 
@@ -251,15 +279,27 @@ export class CadastroAlunosComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.alunoService.deleteAluno(aluno).subscribe(() => {
-          this.toastr.success('Aluno excluído com sucesso!');
-          this.router.navigate(['/home']);
-        });
-      } else {
-        return;
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (retorno) => {
+        if (retorno) {
+          this.alunoService.deleteAluno(aluno).subscribe({
+            next: () => {
+              this.toastr.success('Aluno excluído com sucesso!');
+              this.router.navigate(['/home']);
+            },
+            error: (erro) => {
+              this.toastr.error('Ocorreu um erro ao excluir o aluno!');
+              console.error(erro);
+            },
+          });
+        } else {
+          return;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao excluir o aluno!');
+        console.error(erro);
+      },
     });
   }
 

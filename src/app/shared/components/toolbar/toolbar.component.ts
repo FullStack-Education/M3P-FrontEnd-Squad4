@@ -8,6 +8,7 @@ import { LoginService } from '../../../core/services/login.service';
 import { SidenavService } from '../../../core/services/sidenav.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-toolbar',
@@ -28,16 +29,23 @@ export class ToolbarComponent implements OnInit {
     private loginService: LoginService,
     private sidenavService: SidenavService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.subscription.add(
-      this.loginService.usuarioLogado$.subscribe((usuarioLogado) => {
-        if (usuarioLogado) {
-          this.usuarioAtivo.nome = usuarioLogado.nome;
-          // this.usuarioAtivo.avatar = usuarioLogado.avatar;
-        }
+      this.loginService.usuarioLogado$.subscribe({
+        next: (usuarioLogado) => {
+          if (usuarioLogado) {
+            this.usuarioAtivo.nome = usuarioLogado.nome;
+            // this.usuarioAtivo.avatar = usuarioLogado.avatar;
+          }
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao logar!');
+          console.error(erro);
+        },
       })
     );
   }
@@ -60,13 +68,19 @@ export class ToolbarComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.loginService.deslogar();
-        this.router.navigate(['/login']);
-      } else {
-        return;
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (retorno) => {
+        if (retorno) {
+          this.loginService.deslogar();
+          this.router.navigate(['/login']);
+        } else {
+          return;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 }
