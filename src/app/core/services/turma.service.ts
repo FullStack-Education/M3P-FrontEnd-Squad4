@@ -13,21 +13,21 @@ export class TurmaService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getTurmas() {
+  getTurmas(): Observable<TurmaInterface[]> {
     return this.httpClient.get<Array<TurmaInterface>>(this.url);
   }
 
-  getTurma(id: number) {
+  getTurma(id: number): Observable<TurmaInterface> {
     return this.httpClient.get<TurmaInterface>(this.url + `/${id}`);
   }
 
-  getTurmasByDocente(idDocente: number) {
+  getTurmasByDocente(idDocente: number): Observable<TurmaInterface[]> {
     return this.httpClient.get<Array<TurmaInterface>>(
       `http://localhost:8080/docentes/${idDocente}/turmas`
     );
   }
 
-  getTurmasByAluno(idAluno: number) {
+  getTurmasByAluno(idAluno: number): Observable<TurmaInterface[]> {
     return this.httpClient.get<Array<TurmaInterface>>(
       this.url + `?aluno=${idAluno}`
     );
@@ -45,7 +45,7 @@ export class TurmaService {
     );
   }
 
-  postTurma(turma: TurmaInterface) {
+  postTurma(turma: TurmaInterface): Observable<any> {
     return this.httpClient.post<any>(this.url, turma);
   }
 }

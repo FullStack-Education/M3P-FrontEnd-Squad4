@@ -11,11 +11,11 @@ export class UsuariosService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getUsuarios() {
+  getUsuarios(): Observable<UsuarioInterface[]> {
     return this.httpClient.get<Array<UsuarioInterface>>(this.url);
   }
 
-  getUsuario(id: number) {
+  getUsuario(id: number): Observable<UsuarioInterface> {
     return this.httpClient.get<UsuarioInterface>(this.url + `/${id}`);
   }
 
