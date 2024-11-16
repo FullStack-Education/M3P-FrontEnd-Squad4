@@ -22,6 +22,8 @@ import { Genero } from '../../core/enums/genero.enum';
 import { EstadoCivil } from '../../core/enums/estado-civil.enum';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { TurmaService } from '../../core/services/turma.service';
+import { NotaService } from '../../core/services/nota.service';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -63,6 +65,8 @@ export class CadastroDocentesComponent implements OnInit {
     private router: Router,
     private docenteService: DocenteService,
     private materiaService: MateriaService,
+    private turmaService: TurmaService,
+    private notaService: NotaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -71,7 +75,13 @@ export class CadastroDocentesComponent implements OnInit {
 
   ngOnInit(): void {
     this.idDocente = this.activatedRoute.snapshot.params['id'];
+    this.inicializaForm();
+    this.carregarMaterias();
+    this.carregarTurmasByDocente();
+    this.carregarNotasByDocente();
+  }
 
+  inicializaForm() {
     this.formDocente = new FormGroup({
       nomeCompleto: new FormControl('', [
         Validators.required,
@@ -114,16 +124,6 @@ export class CadastroDocentesComponent implements OnInit {
       materias: new FormControl('', Validators.required),
     });
 
-    this.materiaService.getMaterias().subscribe({
-      next: (retorno) => {
-        this.listaMaterias = retorno;
-      },
-      error: (erro) => {
-        this.toastr.error('Ocorreu um erro ao carregar a lista de matérias!');
-        console.error(erro);
-      },
-    });
-
     if (this.idDocente) {
       this.docenteService.getDocente(this.idDocente).subscribe({
         next: (retorno) => {
@@ -141,6 +141,38 @@ export class CadastroDocentesComponent implements OnInit {
           }, 2000);
         },
       });
+    }
+  }
+
+  carregarMaterias() {
+    this.materiaService.getMaterias().subscribe({
+      next: (retorno) => {
+        this.listaMaterias = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar a lista de matérias!');
+        console.error(erro);
+      },
+    });
+  }
+
+  carregarTurmasByDocente() {
+    if (this.idDocente) {
+      this.turmaService
+        .getTurmasByDocente(this.idDocente)
+        .subscribe((retorno) => {
+          this.listaTurmas = retorno;
+        });
+    }
+  }
+
+  carregarNotasByDocente() {
+    if (this.idDocente) {
+      this.notaService
+        .getNotasByDocente(this.idDocente)
+        .subscribe((retorno) => {
+          this.listaNotas = retorno;
+        });
     }
   }
 
@@ -244,12 +276,10 @@ export class CadastroDocentesComponent implements OnInit {
   excluirDocente(docente: DocenteInterface) {
     if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
-        'Docente não pode ser excluído, pois possui turmas ou notas vinculadas!'
+        'Docente não pode ser excluído pois possui informações vinculadas!'
       );
       return;
     }
-
-    docente.id = this.idDocente!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -261,21 +291,17 @@ export class CadastroDocentesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe({
-      next: (retorno) => {
-        if (retorno) {
-          this.docenteService.deleteDocente(docente).subscribe({
-            next: () => {
-              this.toastr.success('Docente excluído com sucesso!');
-              this.router.navigate(['/home']);
-            },
-            error: (erro) => {
-              this.toastr.error('Ocorreu um erro ao excluir o docente!');
-              console.error(erro);
-            },
-          });
-        } else {
-          return;
-        }
+      next: () => {
+        this.docenteService.deleteDocente(docente).subscribe({
+          next: () => {
+            this.toastr.success('Docente excluído com sucesso!');
+            this.router.navigate(['/home']);
+          },
+          error: (erro) => {
+            this.toastr.error('Ocorreu um erro ao excluir o docente!');
+            console.error(erro);
+          },
+        });
       },
       error: (erro) => {
         this.toastr.error('Ocorreu um erro!');
