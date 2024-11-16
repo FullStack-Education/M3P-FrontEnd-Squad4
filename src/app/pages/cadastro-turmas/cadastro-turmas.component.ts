@@ -111,7 +111,7 @@ export class CadastroTurmasComponent {
           this.listaDocentes = retorno.filter((item) => {
             return item.email === this.perfilAtivo.email;
           });
-          this.getCursosByDocente(this.listaDocentes[0].id);
+          this.carregarCursosByDocente(this.listaDocentes[0].id);
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
@@ -144,7 +144,7 @@ export class CadastroTurmasComponent {
     }
   }
 
-  getDocentesByCurso(idCurso: number) {
+  carregarDocentesByCurso(idCurso: number) {
     this.formTurma.patchValue({
       docenteId: '',
     });
@@ -162,7 +162,7 @@ export class CadastroTurmasComponent {
     });
   }
 
-  getCursosByDocente(idDocente: number) {
+  carregarCursosByDocente(idDocente: number) {
     this.turmaService.getCursosByDocente(idDocente).subscribe({
       next: (retorno) => {
         this.listaCursos = retorno;

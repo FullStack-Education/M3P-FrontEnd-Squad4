@@ -26,7 +26,7 @@
         bindLabel="nomeCompleto"
         bindValue="id"
         labelForId="docente"
-        (change)="getTurmasAndMateriasByDocente($event)"
+        (change)="carregarTurmasAndMateriasByDocente($event)"
         placeholder="Selecione..."
         formControlName="docente"
       >
@@ -46,7 +46,7 @@
         bindLabel="nomeTurma"
         bindValue="id"
         labelForId="turma"
-        (change)="getAlunosByTurma($event)"
+        (change)="carregarAlunosByTurma($event)"
         placeholder="Selecione..."
         formControlName="turma"
       >

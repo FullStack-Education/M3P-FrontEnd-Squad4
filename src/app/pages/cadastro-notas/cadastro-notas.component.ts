@@ -78,6 +78,7 @@ export class CadastroNotasComponent implements OnInit {
     });
 
     this.idAluno = this.activatedRoute.snapshot.params['id'];
+    this.carregarDocentes();
   }
 
   inicializaForm() {
@@ -101,8 +102,6 @@ export class CadastroNotasComponent implements OnInit {
     const now = new Date();
     const dataFormatada = now.toISOString().split('T')[0];
     this.formNota.get('data')?.setValue(dataFormatada);
-
-    this.carregarDocentes();
   }
 
   carregarDocentes() {
@@ -131,7 +130,7 @@ export class CadastroNotasComponent implements OnInit {
     }
   }
 
-  getTurmasAndMateriasByDocente(idDocente: DocenteInterface) {
+  carregarTurmasAndMateriasByDocente(idDocente: DocenteInterface) {
     this.formNota.patchValue({
       turma: '',
       materia: '',
@@ -161,7 +160,7 @@ export class CadastroNotasComponent implements OnInit {
     });
   }
 
-  getAlunosByTurma(idTurma: TurmaInterface) {
+  carregarAlunosByTurma(idTurma: TurmaInterface) {
     this.formNota.patchValue({
       aluno: '',
     });

@@ -67,7 +67,13 @@ export class CadastroAlunosComponent {
 
   ngOnInit(): void {
     this.idAluno = this.activatedRoute.snapshot.params['id'];
+    this.inicializaForm();
+    this.carregarTurmas();
+    this.carregarTurmasByAluno();
+    this.carregarNotasByAluno();
+  }
 
+  inicializaForm() {
     this.formAluno = new FormGroup({
       nomeCompleto: new FormControl('', [
         Validators.required,
@@ -109,16 +115,6 @@ export class CadastroAlunosComponent {
       turma: new FormControl(null, Validators.required),
     });
 
-    this.turmaService.getTurmas().subscribe({
-      next: (retorno) => {
-        this.listaTurmas = retorno;
-      },
-      error: (erro) => {
-        this.toastr.error('Ocorreu um erro ao buscar turmas!');
-        console.error(erro);
-      },
-    });
-
     if (this.idAluno) {
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
@@ -139,28 +135,32 @@ export class CadastroAlunosComponent {
     }
   }
 
-  getNotasAluno() {
-    this.notaService.getNotasByAluno(this.idAluno).subscribe({
+  carregarTurmas() {
+    this.turmaService.getTurmas().subscribe({
       next: (retorno) => {
-        this.listaNotas = retorno;
+        this.listaTurmas = retorno;
       },
       error: (erro) => {
-        this.toastr.error('O aluno não possui notas cadastradas!');
+        this.toastr.error('Ocorreu um erro ao buscar turmas!');
         console.error(erro);
       },
     });
   }
 
-  getTurmasAluno() {
-    this.turmaService.getTurmasByAluno(this.idAluno).subscribe({
-      next: (retorno) => {
+  carregarNotasByAluno() {
+    if (this.idAluno) {
+      this.notaService.getNotasByAluno(this.idAluno).subscribe((retorno) => {
+        this.listaNotas = retorno;
+      });
+    }
+  }
+
+  carregarTurmasByAluno() {
+    if (this.idAluno) {
+      this.turmaService.getTurmasByAluno(this.idAluno).subscribe((retorno) => {
         this.listaTurmas = retorno;
-      },
-      error: (erro) => {
-        this.toastr.error('O aluno não possui turmas!');
-        console.error(erro);
-      },
-    });
+      });
+    }
   }
 
   buscarCep() {
@@ -263,12 +263,10 @@ export class CadastroAlunosComponent {
   excluirAluno(aluno: AlunoInterface) {
     if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
-        'Aluno não pode ser excluído, pois possui turmas ou notas vinculadas!'
+        'Aluno não pode ser excluído pois possui informações vinculadas!'
       );
       return;
     }
-
-    aluno.id = this.idAluno!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -280,21 +278,17 @@ export class CadastroAlunosComponent {
     });
 
     dialogRef.afterClosed().subscribe({
-      next: (retorno) => {
-        if (retorno) {
-          this.alunoService.deleteAluno(aluno).subscribe({
-            next: () => {
-              this.toastr.success('Aluno excluído com sucesso!');
-              this.router.navigate(['/home']);
-            },
-            error: (erro) => {
-              this.toastr.error('Ocorreu um erro ao excluir o aluno!');
-              console.error(erro);
-            },
-          });
-        } else {
-          return;
-        }
+      next: () => {
+        this.alunoService.deleteAluno(aluno).subscribe({
+          next: () => {
+            this.toastr.success('Aluno excluído com sucesso!');
+            this.router.navigate(['/home']);
+          },
+          error: (erro) => {
+            this.toastr.error('Ocorreu um erro ao excluir o aluno!');
+            console.error(erro);
+          },
+        });
       },
       error: (erro) => {
         this.toastr.error('Ocorreu um erro ao excluir o aluno!');
