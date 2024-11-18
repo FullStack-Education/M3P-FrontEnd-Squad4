@@ -1,5 +1,7 @@
 # LabPCP: Sistema Web para Gestão Educacional
 
+![LabPCP](/LabPCP.png)
+
 ## Introdução
 
 Este repositório contém o projeto avaliativo do módulo final do curso Fullstack, turma Education do programa Floripa Mais Tec.
@@ -46,11 +48,11 @@ O Discord foi utilizado como canal de comunicação.
 
 ## Pré-Requisitos
 
+- Git
 - Node 20 ou superior
 - Angular 18 ou superior
-- Google Chrome
-- Visual Studio Code
-- Git
+- Navegador de internet de sua preferência
+- Editor de código (sugestão: VSCode)
 
 ## Dependências
 
@@ -116,22 +118,50 @@ npm install
 
 ### Executar o Backend
 
-Ainda no terminal, digite o comando abaixo:
+Para que a aplicação Frontend funcione corretamente, é necessário garantir que o Backend esteja em execução.
 
-```
-json-server ./src/app/shared/mocks/data.json
-```
+As instruções para configurar e rodar o Backend estão disponíveis no repositório correspondente, que foi desenvolvido como parte deste projeto. Você pode acessá-lo no seguinte link:
+[Repositório do Backend](https://github.com/FullStack-Education/M3P-BackEnd-Squad4.git)
 
 ### Executar o Frontend
 
-Abra um segundo terminal e digite o comando abaixo:
+Novamente no terminal do VSCode digite o comando abaixo:
 
 ```
 ng serve
+```
+
+### Acessar a aplicação
+
+Abra o navegador de internet da sua preferência e acesse o link:
+
+```
+http://localhost:4200/
+```
+
+#### Perfil ADM
+
+```
+Usuário: admin@mail.com
+Senha: senhaSegura123
+```
+
+#### Perfil PROFESSOR
+
+```
+Usuário: professor1@mail.com
+Senha: senhaSegura123
+```
+
+#### Perfil ALUNO
+
+```
+Usuário: aluno1@mail.com
+Senha: senhaSegura123
 ```
 
 ## Anexos:
 
 - [Documentação do Projeto](FullStack%20%5BEducation%5D%20-%20Módulo%203%20-%20Projeto%20Avaliativo.pdf)
 - [Quadro de Atividades do Trello](https://trello.com/invite/b/670996c64e01cf82926d2fbf/ATTIb0033af209a2fcc95e584847c61e13303FF286C2/m3p-frontend-squad-4)
-- [Módulo de Backend](https://github.com/FullStack-Education/M3P-BackEnd-Squad4.git)
+- [Repositório de Backend](https://github.com/FullStack-Education/M3P-BackEnd-Squad4.git)
