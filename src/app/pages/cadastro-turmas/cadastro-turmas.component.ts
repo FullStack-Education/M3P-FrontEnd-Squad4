@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -14,10 +14,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { UsuarioInterface } from '../../core/interfaces/usuario.interface';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
+import { CursoInterface } from '../../core/interfaces/curso.interface';
 import { LoginService } from '../../core/services/login.service';
 import { DocenteService } from '../../core/services/docente.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { CursoService } from '../../core/services/curso.service';
+import { MateriaInterface } from '../../core/interfaces/materia.interface';
 
 @Component({
   selector: 'app-cadastro-turmas',
@@ -28,15 +31,18 @@ import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.c
     NgSelectModule,
     MatIconModule,
     ErroFormComponent,
+    CommonModule,
   ],
   templateUrl: './cadastro-turmas.component.html',
   styleUrl: './cadastro-turmas.component.scss',
 })
 export class CadastroTurmasComponent {
-  formTurma!: FormGroup;
-  idTurma: string | undefined;
-  listaProfessores: DocenteInterface[] = [];
   perfilAtivo!: UsuarioInterface;
+  formTurma!: FormGroup;
+  idTurma: number | undefined;
+  listaDocentes: DocenteInterface[] = [];
+  listaCursos: CursoInterface[] = [];
+  listaMaterias: MateriaInterface[] = [];
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
 
@@ -45,15 +51,30 @@ export class CadastroTurmasComponent {
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private turmaService: TurmaService,
+    private cursoService: CursoService,
     private docenteService: DocenteService,
     private toastr: ToastrService,
     private location: Location
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.usuarioLogado;
-    this.idTurma = this.activatedRoute.snapshot.params['id'];
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado;
+          this.inicializaForm();
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
+    });
 
+    this.idTurma = this.activatedRoute.snapshot.params['id'];
+  }
+
+  inicializaForm() {
     this.formTurma = new FormGroup({
       nomeTurma: new FormControl('', [
         Validators.required,
@@ -69,7 +90,8 @@ export class CadastroTurmasComponent {
         Validators.pattern(this.dataRegex),
       ]),
       horario: new FormControl('', Validators.required),
-      professor: new FormControl('', Validators.required),
+      docenteId: new FormControl('', Validators.required),
+      cursoId: new FormControl('', Validators.required),
     });
 
     const now = new Date();
@@ -79,29 +101,77 @@ export class CadastroTurmasComponent {
     this.formTurma.get('dataTermino')?.setValue(dataFormatada);
     this.formTurma.get('horario')?.setValue(horaFormatada);
 
-    if (this.perfilAtivo.perfil === 'docente') {
-      this.docenteService
-        .getDocenteByEmail(this.perfilAtivo.email)
-        .subscribe((retorno) => {
-          this.listaProfessores = retorno;
-          this.formTurma.patchValue({
-            professor: retorno[0].id,
+    this.carregarCursos();
+  }
+
+  carregarCursos() {
+    if (this.perfilAtivo.papel === 'PROFESSOR') {
+      this.docenteService.getDocentes().subscribe({
+        next: (retorno) => {
+          this.listaDocentes = retorno.filter((item) => {
+            return item.email === this.perfilAtivo.email;
           });
-        });
+          this.carregarCursosByDocente(this.listaDocentes[0].id);
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de docentes!');
+          console.error(erro);
+        },
+      });
     } else {
-      this.docenteService.getDocentes().subscribe((retorno) => {
-        this.listaProfessores = retorno;
+      this.cursoService.getCursos().subscribe({
+        next: (retorno) => {
+          this.listaCursos = retorno;
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao buscar lista de cursos!');
+          console.error(erro);
+        },
       });
     }
 
     if (this.idTurma) {
-      this.turmaService.getTurma(this.idTurma).subscribe((retorno) => {
-        if (retorno) {
+      this.turmaService.getTurma(this.idTurma).subscribe({
+        next: (retorno) => {
           this.formTurma.disable();
           this.formTurma.patchValue(retorno);
-        }
+        },
+        error: (erro) => {
+          this.toastr.error('Ocorreu um erro ao carregar os dados da turma!');
+          console.error(erro);
+        },
       });
     }
+  }
+
+  carregarDocentesByCurso(idCurso: number) {
+    this.formTurma.patchValue({
+      docenteId: '',
+    });
+
+    this.listaDocentes = [];
+
+    this.turmaService.getDocentesByCurso(idCurso).subscribe({
+      next: (retorno) => {
+        this.listaDocentes = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Não há docentes cadastrados neste curso!');
+        console.error(erro);
+      },
+    });
+  }
+
+  carregarCursosByDocente(idDocente: number) {
+    this.turmaService.getCursosByDocente(idDocente).subscribe({
+      next: (retorno) => {
+        this.listaCursos = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Não há cursos cadastrados para este docente!');
+        console.error(erro);
+      },
+    });
   }
 
   submitForm() {
@@ -113,9 +183,18 @@ export class CadastroTurmasComponent {
   }
 
   cadastrarTurma(turma: TurmaInterface) {
-    this.turmaService.postTurma(turma).subscribe(() => {
-      this.toastr.success('Turma cadastrada com sucesso!');
-      this.router.navigate(['/home']);
+    this.turmaService.postTurma(turma).subscribe({
+      next: () => {
+        this.toastr.success('Turma cadastrada com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao cadastrar a turma!');
+        console.error(erro);
+        setTimeout(() => {
+          this.cancelar();
+        }, 2000);
+      },
     });
   }
 

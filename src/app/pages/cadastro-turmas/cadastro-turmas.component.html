@@ -32,21 +32,52 @@
       ></app-erro-form>
     </div>
 
-    <div class="col-66">
-      <label for="professor">Professor</label>
+    <div class="col-33">
+      <label for="curso">Curso</label>
       <ng-select
-        [items]="listaProfessores"
-        bindLabel="nomeCompleto"
+        *ngIf="perfilAtivo.papel === 'ADM'"
+        [items]="listaCursos"
+        bindLabel="nome"
         bindValue="id"
-        labelForId="professor"
+        labelForId="curso"
+        (change)="carregarDocentesByCurso($event.id)"
         placeholder="Selecione..."
-        formControlName="professor"
+        formControlName="cursoId"
+      >
+      </ng-select>
+      <ng-select
+        *ngIf="perfilAtivo.papel === 'PROFESSOR'"
+        [items]="listaCursos"
+        bindLabel="nome"
+        bindValue="id"
+        labelForId="curso"
+        placeholder="Selecione..."
+        formControlName="cursoId"
       >
       </ng-select>
       <app-erro-form
-        [control]="formTurma.controls['professor']"
+        [control]="formTurma.controls['cursoId']"
         [customMessages]="{
-            required: 'Professor é obrigatório',
+        required: 'Campo obrigatório, selecione um curso',
+      }"
+      ></app-erro-form>
+    </div>
+
+    <div class="col-33">
+      <label for="docente">Docente</label>
+      <ng-select
+        [items]="listaDocentes"
+        bindLabel="nomeCompleto"
+        bindValue="id"
+        labelForId="docente"
+        placeholder="Selecione..."
+        formControlName="docenteId"
+      >
+      </ng-select>
+      <app-erro-form
+        [control]="formTurma.controls['docenteId']"
+        [customMessages]="{
+            required: 'Docente é obrigatório',
           }"
       ></app-erro-form>
     </div>

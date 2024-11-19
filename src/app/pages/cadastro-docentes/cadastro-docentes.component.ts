@@ -12,17 +12,18 @@ import { ToastrService } from 'ngx-toastr';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective } from 'ngx-mask';
 import { DocenteInterface } from '../../core/interfaces/docente.interface';
 import { MateriaInterface } from '../../core/interfaces/materia.interface';
 import { DocenteService } from '../../core/services/docente.service';
-import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
-import { NotaService } from '../../core/services/nota.service';
 import { CepService } from '../../core/services/cep.service';
 import { Genero } from '../../core/enums/genero.enum';
 import { EstadoCivil } from '../../core/enums/estado-civil.enum';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.component';
+import { TurmaService } from '../../core/services/turma.service';
+import { NotaService } from '../../core/services/nota.service';
 
 @Component({
   selector: 'app-cadastro-docentes',
@@ -34,16 +35,17 @@ import { ErroFormComponent } from '../../shared/components/erro-form/erro-form.c
     NgSelectModule,
     CommonModule,
     ErroFormComponent,
+    NgxMaskDirective,
   ],
   templateUrl: './cadastro-docentes.component.html',
   styleUrl: './cadastro-docentes.component.scss',
 })
 export class CadastroDocentesComponent implements OnInit {
   formDocente!: FormGroup;
-  idDocente!: string;
+  idDocente!: number;
   listaMaterias!: MateriaInterface[];
-  listaNotasProfessor!: any[];
-  listaTurmasProfessor!: any[];
+  listaNotas: any[] = [];
+  listaTurmas: any[] = [];
   generos = Object.keys(Genero).map((key) => ({
     id: Genero[key as keyof typeof Genero],
     nome: Genero[key as keyof typeof Genero],
@@ -54,8 +56,8 @@ export class CadastroDocentesComponent implements OnInit {
   }));
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
-  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+  telefoneRegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
   cepRegex = /^\d{5}-\d{3}$/;
 
   constructor(
@@ -63,8 +65,8 @@ export class CadastroDocentesComponent implements OnInit {
     private router: Router,
     private docenteService: DocenteService,
     private materiaService: MateriaService,
-    private notaService: NotaService,
     private turmaService: TurmaService,
+    private notaService: NotaService,
     private cepService: CepService,
     private toastr: ToastrService,
     private dialog: MatDialog,
@@ -73,7 +75,13 @@ export class CadastroDocentesComponent implements OnInit {
 
   ngOnInit(): void {
     this.idDocente = this.activatedRoute.snapshot.params['id'];
+    this.inicializaForm();
+    this.carregarMaterias();
+    this.carregarTurmasByDocente();
+    this.carregarNotasByDocente();
+  }
 
+  inicializaForm() {
     this.formDocente = new FormGroup({
       nomeCompleto: new FormControl('', [
         Validators.required,
@@ -116,21 +124,18 @@ export class CadastroDocentesComponent implements OnInit {
       materias: new FormControl('', Validators.required),
     });
 
-    this.materiaService
-      .getMaterias()
-      .subscribe((retorno) => (this.listaMaterias = retorno));
-
     if (this.idDocente) {
-      this.getNotasProfessor();
-      this.getTurmasProfessor();
       this.docenteService.getDocente(this.idDocente).subscribe({
         next: (retorno) => {
-          this.formDocente.disable();
+          retorno.cpf = this.formatarCPF(retorno.cpf);
+          retorno.telefone = this.formatarTelefone(retorno.telefone);
+          retorno.cep = this.formatarCep(retorno.cep);
           this.formDocente.patchValue(retorno);
+          this.formDocente.disable();
         },
         error: (erro) => {
           this.toastr.error('Docente não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -139,16 +144,36 @@ export class CadastroDocentesComponent implements OnInit {
     }
   }
 
-  getNotasProfessor() {
-    this.notaService
-      .getNotasByProfessor(this.idDocente)
-      .subscribe((retorno) => (this.listaNotasProfessor = retorno));
+  carregarMaterias() {
+    this.materiaService.getMaterias().subscribe({
+      next: (retorno) => {
+        this.listaMaterias = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar a lista de matérias!');
+        console.error(erro);
+      },
+    });
   }
 
-  getTurmasProfessor() {
-    this.turmaService
-      .getTurmasByProfessor(this.idDocente)
-      .subscribe((retorno) => (this.listaTurmasProfessor = retorno));
+  carregarTurmasByDocente() {
+    if (this.idDocente) {
+      this.turmaService
+        .getTurmasByDocente(this.idDocente)
+        .subscribe((retorno) => {
+          this.listaTurmas = retorno;
+        });
+    }
+  }
+
+  carregarNotasByDocente() {
+    if (this.idDocente) {
+      this.notaService
+        .getNotasByDocente(this.idDocente)
+        .subscribe((retorno) => {
+          this.listaNotas = retorno;
+        });
+    }
   }
 
   buscarCep() {
@@ -163,18 +188,53 @@ export class CadastroDocentesComponent implements OnInit {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
   }
 
+  formatarCPF(cpf: string): string {
+    return cpf
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{2})$/, '$1-$2');
+  }
+
+  formatarTelefone(telefone: string): string {
+    return telefone
+      .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')
+      .replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+  }
+
+  formatarCep(cep: string): string {
+    return cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+  }
+
+  removerCaracteresEspeciais(valor: string): string {
+    return valor.replace(/\D/g, '');
+  }
+
   submitForm() {
     if (this.formDocente.valid) {
+      const docenteData = {
+        ...this.formDocente.value,
+        email: this.formDocente.get('email')?.value,
+        cpf: this.removerCaracteresEspeciais(
+          this.formDocente.get('cpf')?.value || ''
+        ),
+        telefone: this.removerCaracteresEspeciais(
+          this.formDocente.get('telefone')?.value || ''
+        ),
+        cep: this.removerCaracteresEspeciais(
+          this.formDocente.get('cep')?.value || ''
+        ),
+      };
+
       if (this.idDocente) {
-        this.editarDocente(this.formDocente.value);
+        this.editarDocente(docenteData);
       } else {
-        this.cadastrarDocente(this.formDocente.value);
+        this.cadastrarDocente(docenteData);
       }
     } else {
       this.formDocente.markAllAsTouched();
@@ -183,35 +243,43 @@ export class CadastroDocentesComponent implements OnInit {
 
   habilitarEdicao() {
     this.formDocente.enable();
+    this.formDocente.get('email')?.disable();
   }
 
   cadastrarDocente(docente: DocenteInterface) {
-    this.docenteService.postDocente(docente).subscribe(() => {
-      this.toastr.success('Docente cadastrado com sucesso!');
-      this.router.navigate(['/home']);
+    this.docenteService.postDocente(docente).subscribe({
+      next: () => {
+        this.toastr.success('Docente cadastrado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao cadastrar o docente!');
+        console.error(erro);
+      },
     });
   }
 
   editarDocente(docente: DocenteInterface) {
     docente.id = this.idDocente!;
-    this.docenteService.putDocente(docente).subscribe(() => {
-      this.toastr.success('Docente alterado com sucesso!');
-      this.router.navigate(['/home']);
+    this.docenteService.putDocente(docente).subscribe({
+      next: () => {
+        this.toastr.success('Docente alterado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao editar o docente!');
+        console.error(erro);
+      },
     });
   }
 
   excluirDocente(docente: DocenteInterface) {
-    if (
-      this.listaNotasProfessor.length > 0 ||
-      this.listaTurmasProfessor.length > 0
-    ) {
+    if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
-        'Docente não pode ser excluído, pois possui turmas ou notas vinculadas!'
+        'Docente não pode ser excluído pois possui informações vinculadas!'
       );
       return;
     }
-
-    docente.id = this.idDocente!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -222,15 +290,23 @@ export class CadastroDocentesComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.docenteService.deleteDocente(docente).subscribe(() => {
-          this.toastr.success('Docente excluído com sucesso!');
-          this.router.navigate(['/home']);
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        this.docenteService.deleteDocente(docente).subscribe({
+          next: () => {
+            this.toastr.success('Docente excluído com sucesso!');
+            this.router.navigate(['/home']);
+          },
+          error: (erro) => {
+            this.toastr.error('Ocorreu um erro ao excluir o docente!');
+            console.error(erro);
+          },
         });
-      } else {
-        return;
-      }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 

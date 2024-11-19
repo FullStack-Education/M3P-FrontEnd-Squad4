@@ -14,6 +14,7 @@ import { ItemMenuInterface } from '../../../core/interfaces/item-menu.interface'
 import { LoginService } from '../../../core/services/login.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { SidenavService } from '../../../core/services/sidenav.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -38,43 +39,43 @@ export class MenuLateralComponent implements OnInit {
       rotulo: 'Dashboard',
       icone: 'dashboard',
       rota: '/home',
-      perfis: ['admin', 'docente', 'aluno'],
+      perfis: ['ADM', 'PROFESSOR', 'ALUNO'],
     },
     {
       rotulo: 'Cadastro de Docente',
       icone: 'person',
       rota: '/docente',
-      perfis: ['admin'],
+      perfis: ['ADM'],
     },
     {
       rotulo: 'Cadastro de Aluno',
       icone: 'school',
       rota: '/aluno',
-      perfis: ['admin'],
+      perfis: ['ADM'],
     },
     {
       rotulo: 'Cadastro de Turma',
       icone: 'groups',
       rota: '/turma',
-      perfis: ['admin', 'docente'],
+      perfis: ['ADM', 'PROFESSOR'],
     },
     {
       rotulo: 'Cadastro de Avaliação',
       icone: 'verified',
       rota: '/nota',
-      perfis: ['admin', 'docente'],
+      perfis: ['ADM', 'PROFESSOR'],
     },
     {
       rotulo: 'Listagem de Docentes',
       icone: 'group',
       rota: '/docentes',
-      perfis: ['admin'],
+      perfis: ['ADM'],
     },
     {
       rotulo: 'Listagem de Notas',
       icone: 'article',
       rota: '/notas',
-      perfis: ['aluno'],
+      perfis: ['ALUNO'],
     },
   ];
 
@@ -84,11 +85,22 @@ export class MenuLateralComponent implements OnInit {
     private loginService: LoginService,
     private dialog: MatDialog,
     private router: Router,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.perfilAtivo = this.loginService.perfilUsuarioAtivo;
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado.papel;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao logar!');
+        console.error(erro);
+      },
+    });
 
     this.itensMenuFiltrado = this.itensMenu.filter((item) => {
       return this.validarPermissao(item);
@@ -118,13 +130,19 @@ export class MenuLateralComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.loginService.deslogar();
-        this.router.navigate(['/login']);
-      } else {
-        return;
-      }
+    dialogRef.afterClosed().subscribe({
+      next: (retorno) => {
+        if (retorno) {
+          this.loginService.deslogar();
+          this.router.navigate(['/login']);
+        } else {
+          return;
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro!');
+        console.error(erro);
+      },
     });
   }
 }

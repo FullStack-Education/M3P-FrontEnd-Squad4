@@ -20,21 +20,21 @@
   </div>
   <form [formGroup]="formNota" (ngSubmit)="submitForm()">
     <div class="col-66">
-      <label for="professor">Professor</label>
+      <label for="docente">Docente</label>
       <ng-select
-        [items]="listaProfessores"
+        [items]="listaDocentes"
         bindLabel="nomeCompleto"
         bindValue="id"
-        labelForId="professor"
-        (change)="getTurmasProfessor($event)"
+        labelForId="docente"
+        (change)="carregarTurmasAndMateriasByDocente($event)"
         placeholder="Selecione..."
-        formControlName="professor"
+        formControlName="docente"
       >
       </ng-select>
       <app-erro-form
-        [control]="formNota.controls['professor']"
+        [control]="formNota.controls['docente']"
         [customMessages]="{
-            required: 'Professor é obrigatório',
+            required: 'Docente é obrigatório',
           }"
       ></app-erro-form>
     </div>
@@ -42,11 +42,11 @@
     <div class="col-33">
       <label for="turma">Turma</label>
       <ng-select
-        [items]="listaTurmasProfessor"
+        [items]="listaTurmas"
         bindLabel="nomeTurma"
         bindValue="id"
         labelForId="turma"
-        (change)="getTurmaAlunos($event)"
+        (change)="carregarAlunosByTurma($event)"
         placeholder="Selecione..."
         formControlName="turma"
       >

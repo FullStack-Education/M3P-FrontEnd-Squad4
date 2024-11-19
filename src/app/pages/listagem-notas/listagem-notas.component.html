@@ -3,27 +3,27 @@
   <section class="aluno">
     <h3>Informações do Aluno</h3>
     <div>
-      <img src="../../../assets/profile.png" [alt]="alunoAtivo.nomeCompleto" />
+      <img src="../../../assets/profile.png" [alt]="alunoAtivo?.nomeCompleto" />
       <ul>
         <li>
           <span>Nome:</span>
-          <strong>{{ alunoAtivo.nomeCompleto }}</strong>
+          <strong>{{ alunoAtivo?.nomeCompleto }}</strong>
         </li>
         <li>
           <span>CPF:</span>
-          <strong>{{ alunoAtivo.cpf }}</strong>
+          <strong>{{ alunoAtivo?.cpf }}</strong>
         </li>
         <li>
           <span>Nascimento:</span>
-          <strong>{{ alunoAtivo.nascimento | date : "dd/MM/yyyy" }}</strong>
+          <strong>{{ alunoAtivo?.nascimento | date : "dd/MM/yyyy" }}</strong>
         </li>
         <li>
           <span>Email:</span>
-          <strong>{{ alunoAtivo.email }}</strong>
+          <strong>{{ alunoAtivo?.email }}</strong>
         </li>
         <li>
           <span>Telefone:</span>
-          <strong>{{ alunoAtivo.telefone }}</strong>
+          <strong>{{ alunoAtivo?.telefone }}</strong>
         </li>
       </ul>
     </div>
@@ -32,34 +32,33 @@
   <section class="turma">
     <h3>Informações da Turma</h3>
     <div class="cards">
-      @for (turma of listaTurmas; track turma.id) {
       <ul>
         <li>
           <span>Turma:</span>
-          <strong>{{ turma.nomeTurma }}</strong>
+          <strong>{{ turmaByAluno?.nomeTurma }}</strong>
         </li>
         <li>
-          <span>Professor:</span>
-          <strong>{{ getNomeProfessorTurma(turma.professor) }}</strong>
+          <span>Docente:</span>
+          <strong>{{ getNomeDocenteTurma(turmaByAluno?.docenteId) }}</strong>
         </li>
         <li>
           <span>Período:</span>
           <strong
-            >{{ turma.dataInicio | date : "dd/MM/yyyy" }} a
-            {{ turma.dataTermino | date : "dd/MM/yyyy" }}</strong
+            >{{ turmaByAluno?.dataInicio | date : "dd/MM/yyyy" }} a
+            {{ turmaByAluno?.dataTermino | date : "dd/MM/yyyy" }}</strong
           >
         </li>
         <li>
           <span>Horário:</span>
-          <strong>{{ turma.horario }}h</strong>
+          <strong>{{ turmaByAluno?.horario }}h</strong>
         </li>
       </ul>
-      }
     </div>
   </section>
 
   <section class="notas">
     <h3>Histórico de Notas</h3>
+    @if (listaNotas.length > 0) {
     <table>
       <thead>
         <tr>
@@ -82,7 +81,9 @@
         }
       </tbody>
     </table>
-    @for (nota of listaNotas; track nota.id) {
+    } @else {
+    <p>O aluno ainda não possui avaliações cadastradas.</p>
+    } @for (nota of listaNotas; track nota.id) {
     <ul>
       <li><span>Avaliação: </span>{{ nota.avaliacao }}</li>
       <li><span>Matéria: </span>{{ getNomeMaterias(nota.materia) }}</li>

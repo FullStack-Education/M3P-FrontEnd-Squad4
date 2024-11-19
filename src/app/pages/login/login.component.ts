@@ -47,15 +47,26 @@ export class LoginComponent implements OnInit {
   }
 
   entrar() {
-    if (this.formLogin.value) {
-      const retorno = this.loginService.logar(this.formLogin.value);
-      if (retorno) {
-        this.router.navigate(['/home']);
-        this.toastr.success('Login efetuado com sucesso!');
-      } else {
-        this.formLogin.reset();
-        this.toastr.error('Usuário e/ou senha incorretos!');
-      }
+    if (this.formLogin.valid) {
+      const { email, senha } = this.formLogin.value;
+
+      this.loginService.logar({ email, senha }).subscribe({
+        next: (loginSucesso) => {
+          if (loginSucesso) {
+            this.router.navigate(['/home']);
+            this.toastr.success('Login efetuado com sucesso!');
+          } else {
+            this.formLogin.reset();
+            this.toastr.error('Usuário e/ou senha incorretos!');
+          }
+        },
+        error: (erro) => {
+          console.error('Erro na requisição de login:', erro);
+          this.toastr.error(
+            'Erro ao tentar fazer login. Tente novamente mais tarde.'
+          );
+        },
+      });
     } else {
       this.toastr.warning('Por favor, preencha todos os campos!');
     }

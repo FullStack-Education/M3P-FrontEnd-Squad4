@@ -13,6 +13,7 @@ import { AlunoService } from '../../core/services/aluno.service';
 import { TurmaService } from '../../core/services/turma.service';
 import { MateriaService } from '../../core/services/materia.service';
 import { NotaService } from '../../core/services/nota.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-listagem-notas',
@@ -23,32 +24,13 @@ import { NotaService } from '../../core/services/nota.service';
 })
 export class ListagemNotasComponent implements OnInit {
   usuarioLogado!: UsuarioInterface;
-  alunoAtivo: AlunoInterface = {
-    id: '',
-    nomeCompleto: '',
-    genero: '',
-    nascimento: new Date(),
-    cpf: '',
-    rg: '',
-    telefone: '',
-    email: '',
-    senha: '',
-    naturalidade: '',
-    cep: 0,
-    localidade: '',
-    uf: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    referencia: '',
-    turmas: [],
-  };
-  listaAlunos!: AlunoInterface[];
+  perfilAtivo!: UsuarioInterface;
+  alunoAtivo: AlunoInterface | undefined;
+  turmaByAluno: TurmaInterface | undefined;
+  listaAlunos: AlunoInterface[] = [];
   listaDocentes: DocenteInterface[] = [];
-  listaTurmas!: TurmaInterface[];
   listaMaterias: MateriaInterface[] = [];
-  listaNotas!: NotaInterface[];
+  listaNotas: NotaInterface[] = [];
 
   constructor(
     private loginService: LoginService,
@@ -56,63 +38,90 @@ export class ListagemNotasComponent implements OnInit {
     private alunoService: AlunoService,
     private turmaService: TurmaService,
     private materiaService: MateriaService,
-    private notaService: NotaService
+    private notaService: NotaService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.usuarioLogado = this.loginService.usuarioLogado;
-    this.alunoService
-      .getAlunoByEmail(this.usuarioLogado.email)
-      .subscribe((retorno) => {
-        if (retorno.length > 0) this.alunoAtivo = retorno[0];
-
-        if (this.alunoAtivo) {
-          this.getNotasAluno();
-          this.getTurmasAluno();
+    this.loginService.usuarioLogado$.subscribe({
+      next: (usuarioLogado) => {
+        if (usuarioLogado) {
+          this.perfilAtivo = usuarioLogado;
         }
-      });
-  }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar o perfil do usuário!!');
+        console.error(erro);
+      },
+    });
 
-  getTurmasAluno() {
-    this.turmaService.getTurmas().subscribe((retorno) => {
-      this.listaTurmas = retorno.filter((item) => {
-        return this.alunoAtivo.turmas.includes(item.id);
-      });
-      let idProfessor = this.listaTurmas.map((item) => item.id);
-      this.getProfessores(idProfessor);
+    this.docenteService.getDocentes().subscribe({
+      next: (retorno) => {
+        this.listaDocentes = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar a lista de docentes!');
+        console.error(erro);
+      },
+    });
+
+    this.alunoService.getAlunos().subscribe({
+      next: (retorno) => {
+        this.alunoAtivo = retorno.find((item) => {
+          return item.email === this.perfilAtivo.email;
+        });
+        if (this.alunoAtivo !== undefined) {
+          this.getTurmaAluno(this.alunoAtivo.turma);
+          this.getNotasAluno();
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Aluno não encontrado!');
+        console.error(erro);
+      },
     });
   }
 
-  getProfessores(idProfessores: Array<string>) {
-    this.docenteService.getDocentes().subscribe(
-      (retorno) =>
-        (this.listaDocentes = retorno.filter((item) => {
-          return idProfessores.includes(item.id);
-        }))
-    );
+  getTurmaAluno(idTurma: number) {
+    this.turmaService.getTurma(idTurma).subscribe({
+      next: (retorno) => {
+        this.turmaByAluno = retorno;
+        if (this.turmaByAluno.id !== undefined) {
+          this.getNomeDocenteTurma(this.turmaByAluno.docenteId);
+        }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar a turma do aluno!');
+        console.error(erro);
+      },
+    });
   }
 
-  getNomeProfessorTurma(idProfessor: string) {
-    let professor = this.listaDocentes.filter((item) => {
-      return item.id == idProfessor;
+  getNomeDocenteTurma(idDocente: any) {
+    let docente = this.listaDocentes.filter((item) => {
+      return item.id == idDocente;
     });
-    if (professor.length == 0) {
-      return 'Professor não encontrado!';
+    if (docente.length == 0) {
+      return 'Docente não encontrado!';
     }
-    return professor[0].nomeCompleto;
+    return docente[0].nomeCompleto;
   }
 
   getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.alunoAtivo.id)
-      .subscribe((retorno) => {
+    this.notaService.getNotasByAluno(this.alunoAtivo?.id).subscribe({
+      next: (retorno) => {
         this.listaNotas = retorno;
         this.ordenarNotasPorDataAsc();
         let idMaterias = retorno.map((item) => {
           return item.materia;
         });
         this.getMateriasAluno(idMaterias);
-      });
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar as notas do aluno!');
+        console.error(erro);
+      },
+    });
   }
 
   ordenarNotasPorDataAsc() {
@@ -121,15 +130,21 @@ export class ListagemNotasComponent implements OnInit {
     });
   }
 
-  getMateriasAluno(ids: Array<string>) {
-    this.materiaService.getMaterias().subscribe((retorno) => {
-      this.listaMaterias = retorno.filter((item) => {
-        return ids.includes(item.id);
-      });
+  getMateriasAluno(ids: Array<number>) {
+    this.materiaService.getMaterias().subscribe({
+      next: (retorno) => {
+        this.listaMaterias = retorno.filter((item) => {
+          return ids.includes(item.id);
+        });
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao carregar as matérias do aluno!');
+        console.error(erro);
+      },
     });
   }
 
-  getNomeMaterias(idMateria: string) {
+  getNomeMaterias(idMateria: number) {
     let materia = this.listaMaterias.filter((item) => {
       return item.id == idMateria;
     });

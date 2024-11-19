@@ -1,8 +1,9 @@
 export interface TurmaInterface {
-  id: string;
+  id: number;
   nomeTurma: string;
   dataInicio: Date;
   dataTermino: Date;
   horario: string;
-  professor: string;
+  docenteId: number;
+  cursoId: number;
 }

@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective } from 'ngx-mask';
 import { AlunoInterface } from '../../core/interfaces/aluno.interface';
 import { TurmaInterface } from '../../core/interfaces/turma.interface';
 import { AlunoService } from '../../core/services/aluno.service';
@@ -32,13 +33,14 @@ import { NotaService } from '../../core/services/nota.service';
     NgSelectModule,
     CommonModule,
     ErroFormComponent,
+    NgxMaskDirective,
   ],
   templateUrl: './cadastro-alunos.component.html',
   styleUrl: './cadastro-alunos.component.scss',
 })
 export class CadastroAlunosComponent {
   formAluno!: FormGroup;
-  idAluno!: string;
+  idAluno!: number;
   listaTurmas: TurmaInterface[] = [];
   listaNotas!: any[];
   generos = Object.keys(Genero).map((key) => ({
@@ -47,8 +49,8 @@ export class CadastroAlunosComponent {
   }));
 
   dataRegex = /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-  cpfRegex = /^((\d{3}).(\d{3}).(\d{3})-(\d{2}))*$/;
-  telefoneRegex = /^\(\d{2}\) 9 \d{4}-\d{4}$/;
+  cpfRegex = /^(\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+  telefoneRegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
   cepRegex = /^\d{5}-\d{3}$/;
 
   constructor(
@@ -65,7 +67,13 @@ export class CadastroAlunosComponent {
 
   ngOnInit(): void {
     this.idAluno = this.activatedRoute.snapshot.params['id'];
+    this.inicializaForm();
+    this.carregarTurmas();
+    this.carregarTurmasByAluno();
+    this.carregarNotasByAluno();
+  }
 
+  inicializaForm() {
     this.formAluno = new FormGroup({
       nomeCompleto: new FormControl('', [
         Validators.required,
@@ -91,7 +99,7 @@ export class CadastroAlunosComponent {
         Validators.required,
         Validators.pattern(this.telefoneRegex),
       ]),
-      email: new FormControl('', Validators.email),
+      email: new FormControl('', [Validators.required, Validators.email]),
       senha: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
@@ -104,24 +112,21 @@ export class CadastroAlunosComponent {
       complemento: new FormControl(''),
       bairro: new FormControl(''),
       referencia: new FormControl(''),
-      turmas: new FormControl(null, Validators.required),
+      turma: new FormControl(null, Validators.required),
     });
 
-    this.turmaService
-      .getTurmas()
-      .subscribe((retorno) => (this.listaTurmas = retorno));
-
     if (this.idAluno) {
-      this.getNotasAluno();
-      this.getTurmasAluno();
       this.alunoService.getAluno(this.idAluno).subscribe({
         next: (retorno) => {
-          this.formAluno.disable();
+          retorno.cpf = this.formatarCPF(retorno.cpf);
+          retorno.telefone = this.formatarTelefone(retorno.telefone);
+          retorno.cep = this.formatarCep(retorno.cep);
           this.formAluno.patchValue(retorno);
+          this.formAluno.disable();
         },
         error: (erro) => {
           this.toastr.error('Aluno não encontrado!');
-          console.log(erro);
+          console.error(erro);
           setTimeout(() => {
             this.cancelar();
           }, 2000);
@@ -130,16 +135,32 @@ export class CadastroAlunosComponent {
     }
   }
 
-  getNotasAluno() {
-    this.notaService
-      .getNotasByAluno(this.idAluno)
-      .subscribe((retorno) => (this.listaNotas = retorno));
+  carregarTurmas() {
+    this.turmaService.getTurmas().subscribe({
+      next: (retorno) => {
+        this.listaTurmas = retorno;
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao buscar turmas!');
+        console.error(erro);
+      },
+    });
   }
 
-  getTurmasAluno() {
-    this.turmaService
-      .getTurmasByAluno(this.idAluno)
-      .subscribe((retorno) => (this.listaTurmas = retorno));
+  carregarNotasByAluno() {
+    if (this.idAluno) {
+      this.notaService.getNotasByAluno(this.idAluno).subscribe((retorno) => {
+        this.listaNotas = retorno;
+      });
+    }
+  }
+
+  carregarTurmasByAluno() {
+    if (this.idAluno) {
+      this.turmaService.getTurmasByAluno(this.idAluno).subscribe((retorno) => {
+        this.listaTurmas = retorno;
+      });
+    }
   }
 
   buscarCep() {
@@ -154,18 +175,53 @@ export class CadastroAlunosComponent {
         },
         error: (erro) => {
           this.toastr.error('Ocorreu um erro ao buscar o CEP digitado!');
-          console.log(erro);
+          console.error(erro);
         },
       });
     }
   }
 
+  formatarCPF(cpf: string): string {
+    return cpf
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{2})$/, '$1-$2');
+  }
+
+  formatarTelefone(telefone: string): string {
+    return telefone
+      .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')
+      .replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+  }
+
+  formatarCep(cep: string): string {
+    return cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+  }
+
+  removerCaracteresEspeciais(valor: string): string {
+    return valor.replace(/\D/g, '');
+  }
+
   submitForm() {
     if (this.formAluno.valid) {
+      const AlunoData = {
+        ...this.formAluno.value,
+        email: this.formAluno.get('email')?.value,
+        cpf: this.removerCaracteresEspeciais(
+          this.formAluno.get('cpf')?.value || ''
+        ),
+        telefone: this.removerCaracteresEspeciais(
+          this.formAluno.get('telefone')?.value || ''
+        ),
+        cep: this.removerCaracteresEspeciais(
+          this.formAluno.get('cep')?.value || ''
+        ),
+      };
+
       if (this.idAluno) {
-        this.editarAluno(this.formAluno.value);
+        this.editarAluno(AlunoData);
       } else {
-        this.cadastrarAluno(this.formAluno.value);
+        this.cadastrarAluno(AlunoData);
       }
     } else {
       this.formAluno.markAllAsTouched();
@@ -174,32 +230,43 @@ export class CadastroAlunosComponent {
 
   habilitarEdicao() {
     this.formAluno.enable();
+    this.formAluno.get('email')?.disable();
   }
 
   cadastrarAluno(aluno: AlunoInterface) {
-    this.alunoService.postAluno(aluno).subscribe(() => {
-      this.toastr.success('Aluno cadastrado com sucesso!');
-      this.router.navigate(['/home']);
+    this.alunoService.postAluno(aluno).subscribe({
+      next: () => {
+        this.toastr.success('Aluno cadastrado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Erro. Este email já está em uso!');
+        console.error(erro);
+      },
     });
   }
 
   editarAluno(aluno: AlunoInterface) {
     aluno.id = this.idAluno!;
-    this.alunoService.putAluno(aluno).subscribe(() => {
-      this.toastr.success('Aluno alterado com sucesso!');
-      this.router.navigate(['/home']);
+    this.alunoService.putAluno(aluno).subscribe({
+      next: () => {
+        this.toastr.success('Aluno alterado com sucesso!');
+        this.router.navigate(['/home']);
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao editar o aluno!');
+        console.error(erro);
+      },
     });
   }
 
   excluirAluno(aluno: AlunoInterface) {
     if (this.listaNotas.length > 0 || this.listaTurmas.length > 0) {
       this.toastr.warning(
-        'Aluno não pode ser excluído, pois possui turmas ou notas vinculadas!'
+        'Aluno não pode ser excluído pois possui informações vinculadas!'
       );
       return;
     }
-
-    aluno.id = this.idAluno!;
 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -210,15 +277,23 @@ export class CadastroAlunosComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((retorno) => {
-      if (retorno) {
-        this.alunoService.deleteAluno(aluno).subscribe(() => {
-          this.toastr.success('Aluno excluído com sucesso!');
-          this.router.navigate(['/home']);
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        this.alunoService.deleteAluno(aluno).subscribe({
+          next: () => {
+            this.toastr.success('Aluno excluído com sucesso!');
+            this.router.navigate(['/home']);
+          },
+          error: (erro) => {
+            this.toastr.error('Ocorreu um erro ao excluir o aluno!');
+            console.error(erro);
+          },
         });
-      } else {
-        return;
-      }
+      },
+      error: (erro) => {
+        this.toastr.error('Ocorreu um erro ao excluir o aluno!');
+        console.error(erro);
+      },
     });
   }
 

@@ -198,5 +198,15 @@
       "id": "4",
       "nome": "Angular"
     }
+  ],
+  "cursos": [
+    {
+      "id": "1",
+      "nome": "FullStack"
+    },
+    {
+      "id": "2",
+      "nome": "FuturoDev"
+    }
   ]
 }
