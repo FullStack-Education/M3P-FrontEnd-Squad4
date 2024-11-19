@@ -1,45 +1,46 @@
 # LabPCP: Sistema Web para Gestão Educacional
 
+![LabPCP](/LabPCP.png)
+
 ## Introdução
 
-Este é o projeto avaliativo do módulo de Frontend do curso Fullstack, da turma Education do Floripa Mais Tec.
-O objetivo do projeto é desenvolver uma aplicação Frontend voltada para a gestão de docentes, alunos, turmas e notas,
-que será futuramente integrada a API real.
-O projeto possui alguns requisitos:
+Este repositório contém o projeto avaliativo do módulo final do curso Fullstack, turma Education do programa Floripa Mais Tec.
 
-1. O sistema deve seguir o Roteiro da Aplicação.
-2. O sistema deverá ser desenvolvido utilizando o framework Angular.
+O objetivo do projeto foi criar uma aplicação Frontend voltada para a gestão de docentes, alunos, turmas e notas, totalmente integrada a uma API desenvolvida exclusivamente para este propósito. O resultado foi o LabPCP, uma plataforma moderna e intuitiva que centraliza todas as informações necessárias para o gerenciamento educacional.
 
-- Utilizar roteamento para gerenciamento de páginas.
-- Gerenciar o estado global quando necessário.
-- Utilizar consumo da API ViaCEP para cadastro de endereço.
+Com o LabPCP, é possível acessar e gerenciar dados de forma eficiente, oferecendo perfis de acesso com diferentes níveis de permissões. Além disso, a plataforma é responsiva, garantindo que possa ser utilizada de qualquer lugar e em qualquer dispositivo conectado à internet.
 
-3. Elaborar o layout da aplicação, levando em consideração, boas praticas de usabilidade e acessibilidade.
+O sistema foi desenvolvido utilizando o framework Angular, com as seguintes características:
 
-- Utilizar favicon, título de página e demais assets.
-- Atenção ao contraste de cores e tipografia utilizada.
-- Utilizar feedbacks visuais para o usuário (pop-ups, toasts)+
-- Utilizar animações de loading e ou transições entre páginas.
-- Realizar validações em formulários+
+- Utiliza roteamento para gerenciamento de páginas.
+- Gerencia o estado global quando necessário.
+- Utiliza consumo da API ViaCEP para cadastro de endereço.
+- Totalmente integrada com a API desenvolvida para este projeto.
+- Utiliza o sessionStorage para manter a sessão do usuário.
 
-4. O layout deverá ser responsivo.
-5. Utilizar o localStorage ou JSON Server para guardar as informações cadastradas.
-6. Utilizar o GitHub como versionador de código:
-   - Utilização do padrão baseado em GitFlow com main, develop e features.
-   - Utilização de commits curtos e concisos.
-7. Utilizar Trello para organização das tarefas a serem realizadas.
+O layout da aplicação foi desenvolvido levando em consideração, boas praticas de usabilidade e acessibilidade.
+
+- Utiliza favicon, título de página e demais assets.
+- Respeita o contraste de cores e utiliza tipografia específica.
+- Utiliza feedbacks visuais para o usuário (pop-ups, toasts).
+- Utiliza animações de loading e transições entre páginas.
+- Realiza validações em formulários.
+- O layout é totalmente responsivo.
+
+O GitHub foi utilizado como versionador de código no modelo Git Flow.
+O Trello foi utilizado para organização e gerenciamento das tarefas do projeto.
+O Discord foi utilizado como canal de comunicação.
 
 ## Tecnologias Utilizadas
 
 - HTML
 - CSS/SCSS
 - JavaScript
-- Angular
+- Angular com TypeScript
 
 ## Ferramentas Utilizadas
 
 - Visual Studio Code
-- JSON Server
 - Google Chrome
 - Figma
 - Trello
@@ -47,12 +48,11 @@ O projeto possui alguns requisitos:
 
 ## Pré-Requisitos
 
+- Git
 - Node 20 ou superior
 - Angular 18 ou superior
-- JSON Server
-- Google Chrome
-- Visual Studio Code
-- Git
+- Navegador de internet de sua preferência
+- Editor de código (sugestão: VSCode)
 
 ## Dependências
 
@@ -69,7 +69,9 @@ A aplicação utiliza várias bibliotecas e frameworks para garantir uma experi�
 - @angular/platform-browser-dynamic: Utilizado para compilar a aplicação diretamente no navegador.
 - @angular/router: Ferramenta de roteamento para navegação entre componentes e páginas.
 - @ng-select/ng-select: Um componente de seleção altamente personalizável para Angular.
+- jwt-decode: ^4.0.0 - Biblioteca para decodificar tokens JWT de maneira eficiente.
 - moment: Biblioteca para manipulação e formatação de datas e horários.
+- ngx-mask: ^18.0.0 - Biblioteca Angular para máscaras de entrada customizáveis.
 - ngx-toastr: Serviço para exibir notificações de forma elegante e customizável.
 - rxjs: Biblioteca para programação reativa, usada para trabalhar com fluxos de dados assíncronos.
 - tslib: Utilizado para ajudar na compilação TypeScript, fornecendo funções auxiliares.
@@ -77,7 +79,7 @@ A aplicação utiliza várias bibliotecas e frameworks para garantir uma experi�
 
 ## Roteiro da Aplicação
 
-Possuir as seguintes páginas e funcionalidades:
+O sistema possui as seguintes páginas e funcionalidades:
 
 - Login
 - Menu Lateral
@@ -90,6 +92,12 @@ Possuir as seguintes páginas e funcionalidades:
 - Listagem de Docentes
 - Listagem de Avaliações
 
+O sistema apresenta 3 versões de exibição de acordo com o perfil do usuário ativo:
+
+- ADM: Acesso total ao sistema
+- PROFESSOR: Acesso a listagem de alunos, cadastro de turmas e cadastro de avaliações
+- ALUNO: Acesso a dados do aluno e listagem de notas
+
 Todos as regras de negócio encontram-se no anexo **Documentação do Projeto**.
 
 ## Como Começar
@@ -97,7 +105,7 @@ Todos as regras de negócio encontram-se no anexo **Documentação do Projeto**.
 ### Clonando o Repositório
 
 ```
-git clone https://github.com/scheiladev/senai-fullstack-education-projeto-final-modulo02.git
+git clone https://github.com/FullStack-Education/M3P-FrontEnd-Squad4.git
 ```
 
 ### Instalando o Projeto
@@ -110,21 +118,50 @@ npm install
 
 ### Executar o Backend
 
-Ainda no terminal, digite o comando abaixo:
+Para que a aplicação Frontend funcione corretamente, é necessário garantir que o Backend esteja em execução.
 
-```
-json-server ./src/app/shared/mocks/data.json
-```
+As instruções para configurar e rodar o Backend estão disponíveis no repositório correspondente, que foi desenvolvido como parte deste projeto. Você pode acessá-lo no seguinte link:
+[Repositório do Backend](https://github.com/FullStack-Education/M3P-BackEnd-Squad4.git)
 
 ### Executar o Frontend
 
-Abra um segundo terminal e digite o comando abaixo:
+Novamente no terminal do VSCode digite o comando abaixo:
 
 ```
 ng serve
 ```
 
+### Acessar a aplicação
+
+Abra o navegador de internet da sua preferência e acesse o link:
+
+```
+http://localhost:4200/
+```
+
+#### Perfil ADM
+
+```
+Usuário: admin@mail.com
+Senha: senhaSegura123
+```
+
+#### Perfil PROFESSOR
+
+```
+Usuário: professor1@mail.com
+Senha: senhaSegura123
+```
+
+#### Perfil ALUNO
+
+```
+Usuário: aluno1@mail.com
+Senha: senhaSegura123
+```
+
 ## Anexos:
 
-- [Documentação do Projeto](FullStack%20%5BEducation%5D%20-%20Módulo%202%20-%20Projeto%20Avaliativo.pdf)
-- [Quadro de Atividades do Trello](https://trello.com/invite/b/66a2cf2faaaf3e9279d59779/ATTI284c04d91ebfa0393d0687cf8fc90c4505C2016B/projeto-final-modulo-02)
+- [Documentação do Projeto](FullStack%20%5BEducation%5D%20-%20Módulo%203%20-%20Projeto%20Avaliativo.pdf)
+- [Quadro de Atividades do Trello](https://trello.com/invite/b/670996c64e01cf82926d2fbf/ATTIb0033af209a2fcc95e584847c61e13303FF286C2/m3p-frontend-squad-4)
+- [Repositório de Backend](https://github.com/FullStack-Education/M3P-BackEnd-Squad4.git)
